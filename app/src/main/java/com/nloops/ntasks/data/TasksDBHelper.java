@@ -3,6 +3,7 @@ package com.nloops.ntasks.data;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class TasksDBHelper extends SQLiteOpenHelper {
 
@@ -10,15 +11,15 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "tasks.db";
 
-    private static final String TEXT_TYPE = "TEXT";
+    private static final String TEXT_TYPE = " TEXT";
 
-    private static final String INTEGER_TYPE = "INTEGER";
+    private static final String INTEGER_TYPE = " INTEGER";
 
     private static final String COMMA = ",";
 
     private static final String SQL_CREATE_TASK_ENTRY =
             "CREATE TABLE " + TasksDBContract.TaskEntry.TABLE_NAME + " (" +
-                    TasksDBContract.TaskEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT," +
+                    TasksDBContract.TaskEntry._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     TasksDBContract.TaskEntry.COLUMN_NAME_TITLE + TEXT_TYPE + COMMA +
                     TasksDBContract.TaskEntry.COLUMN_NAME_BODY + TEXT_TYPE + COMMA +
                     TasksDBContract.TaskEntry.COLUMN_NAME_PATH + TEXT_TYPE + COMMA +
@@ -30,9 +31,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
 
     private static final String SQL_CREATE_TODO_ENTRY =
             "CREATE TABLE " + TasksDBContract.TodoEntry.TABLE_NAME + " (" +
-                    TasksDBContract.TodoEntry._ID + INTEGER_TYPE + "PRIMARY KEY AUTOINCREMENT," +
+                    TasksDBContract.TodoEntry._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
                     TasksDBContract.TodoEntry.COLUMN_NAME_TODO + TEXT_TYPE +
-                    ") ";
+                    ")";
 
 
     public TasksDBHelper(Context context) {
