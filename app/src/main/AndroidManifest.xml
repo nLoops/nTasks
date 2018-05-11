@@ -16,6 +16,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name=".data.TasksProvider"
+            android:authorities="com.nloops.ntasks"
+            android:exported="false" />
     </application>
 
 </manifest>
