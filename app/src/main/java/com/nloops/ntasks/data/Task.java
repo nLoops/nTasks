@@ -46,4 +46,48 @@ public class Task {
         this.mPath = path;
         this.mTodos = todo;
     }
+
+    public long getID() {
+        return mID;
+    }
+
+    @NonNull
+    public String getTitle() {
+        return mTitle;
+    }
+
+    @NonNull
+    public String getBody() {
+        return mBody;
+    }
+
+    @NonNull
+    public int getType() {
+        return mType;
+    }
+
+    @NonNull
+    public int getPriorty() {
+        return mPriorty;
+    }
+
+    @NonNull
+    public long getDate() {
+        return mDate;
+    }
+
+    @Nullable
+    public int getCompleted() {
+        return mCompleted;
+    }
+
+    @Nullable
+    public String getPath() {
+        return mPath;
+    }
+
+    @Nullable
+    public List<Todo> getTodos() {
+        return mTodos;
+    }
 }
