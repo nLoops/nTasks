@@ -2,6 +2,7 @@ package com.nloops.ntasks.data;
 
 
 import android.content.ContentUris;
+import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -58,5 +59,18 @@ public class TasksDBContract {
         public static final Uri CONTENT_TODO_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(TABLE_NAME).build();
 
+    }
+
+    /* Helpers to retrieve column values */
+    public static String getColumnString(Cursor cursor, String columnName) {
+        return cursor.getString(cursor.getColumnIndex(columnName));
+    }
+
+    public static int getColumnInt(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndex(columnName));
+    }
+
+    public static long getColumnLong(Cursor cursor, String columnName) {
+        return cursor.getLong(cursor.getColumnIndex(columnName));
     }
 }

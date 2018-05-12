@@ -2,6 +2,7 @@ package com.nloops.ntasks.data;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
 import com.nloops.ntasks.utils.DatabaseValues;
@@ -64,5 +65,16 @@ public class TasksLocalDataSource implements TasksDataSource {
     @Override
     public void deleteTask(@NonNull int taskID) {
 
+    }
+
+
+    public interface LoadDataCallback {
+        void onDataLoaded(Cursor data);
+
+        void onDataEmpty();
+
+        void onDataNotAvailable();
+
+        void onDataReset();
     }
 }

@@ -1,9 +1,11 @@
 package com.nloops.ntasks.data;
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.ArrayList;
+import static com.nloops.ntasks.data.TasksDBContract.*;
+
 import java.util.List;
 
 /**
@@ -45,6 +47,22 @@ public class Task {
         this.mCompleted = completed;
         this.mPath = path;
         this.mTodos = todo;
+    }
+
+    /**
+     * Create A Task from Cursor.
+     *
+     * @param cursor
+     */
+    public Task(Cursor cursor) {
+        this.mID = getColumnLong(cursor, TaskEntry._ID);
+        this.mTitle = getColumnString(cursor, TaskEntry.COLUMN_NAME_TITLE);
+        this.mBody = getColumnString(cursor, TaskEntry.COLUMN_NAME_BODY);
+        this.mCompleted = getColumnInt(cursor, TaskEntry.COLUMN_NAME_COMPLETE);
+        this.mDate = getColumnLong(cursor, TaskEntry.COLUMN_NAME_DATE);
+        this.mPath = getColumnString(cursor, TaskEntry.COLUMN_NAME_PATH);
+        this.mPriorty = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
+        this.mType = getColumnInt(cursor, TaskEntry.COLUMN_NAME_TYPE);
     }
 
     public long getID() {
@@ -89,5 +107,9 @@ public class Task {
     @Nullable
     public List<Todo> getTodos() {
         return mTodos;
+    }
+
+    public boolean isComplete() {
+        return mCompleted == 1;
     }
 }
