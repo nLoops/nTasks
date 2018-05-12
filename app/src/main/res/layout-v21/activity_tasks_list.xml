@@ -31,8 +31,8 @@
         app:fabGravity="bottom_end"
         app:fabMenu="@menu/task_fab_menu"
         app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="@color/colorPrimaryDark"
-        app:miniFabTitleTextColor="@color/colorPrimaryDark" />
+        app:miniFabDrawableTint="?android:attr/colorPrimaryDark"
+        app:miniFabTitleTextColor="?android:attr/colorPrimaryDark" />
 
 
 </android.support.design.widget.CoordinatorLayout>

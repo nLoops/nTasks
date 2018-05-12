@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">nTasks</string>
+    <!--Fab Menu Action items Strings-->
+    <string name="action_note">Note</string>
+    <string name="action_todo">ToDoList</string>
+    <string name="action_mic">AudioNote</string>
 </resources>
