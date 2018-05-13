@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <!--TODO: add content description for all images.-->
+    <ImageView
+        android:id="@+id/empty_calender"
+        android:layout_width="@dimen/empty_view_image"
+        android:layout_height="@dimen/empty_view_image"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_empty_calender"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_empty_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
+        android:gravity="center"
+        android:text="@string/str_empty_tasks"
+        android:textColor="@android:color/black"
+        android:textSize="@dimen/empty_text_size"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/empty_calender" />
+
+    <TextView
+        android:id="@+id/tv_empty_two"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:gravity="center"
+        android:text="@string/str_empty_tasks_two"
+        app:layout_constraintLeft_toLeftOf="@id/tv_empty_one"
+        app:layout_constraintRight_toRightOf="@id/tv_empty_one"
+        app:layout_constraintTop_toBottomOf="@id/tv_empty_one" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_empty_one"
+        android:layout_marginLeft="@dimen/dimen_eight_dp"
+        android:layout_marginStart="@dimen/dimen_eight_dp"
+        android:src="@drawable/ic_coffee_cup"
+        app:layout_constraintLeft_toRightOf="@id/tv_empty_two"
+        app:layout_constraintTop_toBottomOf="@id/tv_empty_one" />
+
+
+</android.support.constraint.ConstraintLayout>

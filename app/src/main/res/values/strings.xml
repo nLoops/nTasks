@@ -1,7 +1,10 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">nTasks</string>
     <!--Fab Menu Action items Strings-->
     <string name="action_note">Note</string>
     <string name="action_todo">ToDoList</string>
     <string name="action_mic">AudioNote</string>
+    <!--General Strings -->
+    <string name="str_empty_tasks">You\'re done for today</string>
+    <string name="str_empty_tasks_two">Enjoy the rest</string>
 </resources>
