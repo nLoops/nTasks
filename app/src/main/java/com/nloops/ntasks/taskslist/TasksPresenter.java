@@ -55,7 +55,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
 
-        if (data != null) {
+        if (data != null && data.getCount() > 0) {
             onDataLoaded(data);
         } else {
             onDataEmpty();
@@ -73,6 +73,12 @@ public class TasksPresenter implements TasksListContract.Presenter,
     }
 
     @Override
+    public void showEmptyView() {
+        mTaskView.setLoadingIndecator(false);
+        mTaskView.showNoData();
+    }
+
+    @Override
     public void onDataLoaded(Cursor data) {
         mTaskView.setLoadingIndecator(false);
         mTaskView.showTasks(data);
@@ -80,7 +86,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void onDataEmpty() {
-        mTaskView.showNoData();
+        showEmptyView();
     }
 
     @Override

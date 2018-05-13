@@ -21,6 +21,8 @@ public interface TasksListContract {
     interface Presenter {
 
         void loadTasks();
+
+        void showEmptyView();
     }
 
 

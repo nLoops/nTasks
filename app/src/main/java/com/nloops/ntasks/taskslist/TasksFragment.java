@@ -73,7 +73,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
     @Override
     public void showNoData() {
-
+        View view = getActivity().findViewById(R.id.empty_view);
+        view.setVisibility(View.VISIBLE);
     }
 
     @Override
