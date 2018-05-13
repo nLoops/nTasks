@@ -20,6 +20,8 @@ public class TasksList extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.tasks_list_toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setLogo(R.mipmap.ic_app_name);
 
         TaskLoader loader = new TaskLoader(this);
         TasksLocalDataSource dataSource = TasksLocalDataSource.getInstance(getContentResolver());
