@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.nloops.ntasks.BuildConfig;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
@@ -39,6 +40,10 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
      * Empty Constructor required by system.
      */
     public TasksFragment() {
+    }
+
+    public static TasksFragment newInstance() {
+        return new TasksFragment();
     }
 
 
