@@ -1,9 +1,12 @@
 package com.nloops.ntasks.data;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.nloops.ntasks.utils.DatabaseValues;
 
@@ -65,6 +68,16 @@ public class TasksLocalDataSource implements TasksDataSource {
     @Override
     public void deleteTask(@NonNull int taskID) {
 
+    }
+
+    @Override
+    public void completeTask(@NonNull boolean state, @NonNull long rawID) {
+        Uri rawUri = ContentUris.withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
+                rawID);
+        ContentValues values = new ContentValues(1);
+        values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
+        int count = mContentResolver.update(rawUri, values, null, null);
+        Log.i("TAG", "you updated " + count + " raw");
     }
 
 

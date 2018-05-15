@@ -83,6 +83,11 @@ public class TasksPresenter implements TasksListContract.Presenter,
         mTaskView.showAddEditUI(taskID);
     }
 
+    @Override
+    public void updateComplete(@NonNull boolean state, @NonNull long rawID) {
+        mLocalDataSource.completeTask(state, rawID);
+    }
+
 
     @Override
     public void onDataLoaded(Cursor data) {

@@ -1,6 +1,7 @@
 package com.nloops.ntasks.taskslist;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
 
 import com.nloops.ntasks.data.BaseView;
 
@@ -27,6 +28,8 @@ public interface TasksListContract {
         void showEmptyView();
 
         void loadAddEditActivity(long taskID);
+
+        void updateComplete(@NonNull boolean state, @NonNull long rawID);
     }
 
 

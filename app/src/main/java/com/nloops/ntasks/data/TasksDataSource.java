@@ -41,4 +41,6 @@ public interface TasksDataSource {
 
     void deleteTask(@NonNull int taskID);
 
+    void completeTask(@NonNull boolean state, @NonNull long rawID);
+
 }

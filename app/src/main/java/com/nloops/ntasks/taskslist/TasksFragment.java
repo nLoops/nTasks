@@ -114,7 +114,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
         @Override
         public void onItemToggled(boolean active, int position) {
-
+            long rawID = mAdapter.getItemId(position);
+            mPresenter.updateComplete(active, rawID);
         }
     };
 }

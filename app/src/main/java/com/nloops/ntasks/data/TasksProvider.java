@@ -136,7 +136,7 @@ public class TasksProvider extends ContentProvider {
                 String[] where = {uri.getLastPathSegment()};
                 rowAffected = db.delete(
                         TasksDBContract.TaskEntry.TABLE_NAME,
-                        TasksDBContract.TaskEntry._ID + " = ?",
+                        TasksDBContract.TaskEntry._ID + "=?",
                         where
                 );
                 break;
@@ -167,12 +167,13 @@ public class TasksProvider extends ContentProvider {
         int rawUpdated;
         switch (match) {
             case TASK_ITEM:
-                String[] where = {uri.getLastPathSegment()};
+                selection = TasksDBContract.TaskEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
                 rawUpdated = db.update(
                         TasksDBContract.TaskEntry.TABLE_NAME,
                         values,
-                        TasksDBContract.TaskEntry._ID + " = ?",
-                        where
+                        selection,
+                        selectionArgs
                 );
                 break;
             default:
