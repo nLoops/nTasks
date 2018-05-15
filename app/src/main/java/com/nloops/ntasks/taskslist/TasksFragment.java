@@ -1,8 +1,11 @@
 package com.nloops.ntasks.taskslist;
 
 
+import android.content.ContentUris;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,9 +15,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.adapters.TaskListAdapter;
+import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.TasksDBContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,6 +49,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         Context context = container.getContext();
         ButterKnife.bind(this, rootView);
         mAdapter = new TaskListAdapter(null);
+        mAdapter.setOnClickListener(onItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -83,7 +90,28 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     }
 
     @Override
+    public void showAddEditUI(long taskID) {
+        Intent addEditIntent = new Intent(getContext(), AddEditTasks.class);
+        Uri taskUri = ContentUris.withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI, taskID);
+        addEditIntent.setData(taskUri);
+        startActivity(addEditIntent);
+    }
+
+    @Override
     public void setPresenter(TasksListContract.Presenter presenter) {
         mPresenter = presenter;
     }
+
+    TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
+        @Override
+        public void onItemClick(View v, int position) {
+            long rawID = mAdapter.getItemId(position);
+            mPresenter.loadAddEditActivity(rawID);
+        }
+
+        @Override
+        public void onItemToggled(boolean active, int position) {
+
+        }
+    };
 }

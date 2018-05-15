@@ -15,6 +15,8 @@ public interface TasksListContract {
         void showNoData();
 
         void showDataReset();
+
+        void showAddEditUI(long taskID);
     }
 
 
@@ -23,6 +25,8 @@ public interface TasksListContract {
         void loadTasks();
 
         void showEmptyView();
+
+        void loadAddEditActivity(long taskID);
     }
 
 

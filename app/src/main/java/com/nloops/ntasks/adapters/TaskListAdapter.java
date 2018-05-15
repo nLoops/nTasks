@@ -18,10 +18,34 @@ import butterknife.ButterKnife;
 public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskListViewHolder> {
 
 
+    /*Callbacks for List Click Listener*/
+    public interface OnItemClickListener {
+        void onItemClick(View v, int position);
+
+        void onItemToggled(boolean active, int position);
+    }
+
     private Cursor mCursor;
+    private OnItemClickListener mOnClickListener;
 
     public TaskListAdapter(Cursor cursor) {
         this.mCursor = cursor;
+    }
+
+    public void setOnClickListener(OnItemClickListener clickListener) {
+        this.mOnClickListener = clickListener;
+    }
+
+    private void completionToggled(TaskListViewHolder holder) {
+        if (mOnClickListener != null) {
+            mOnClickListener.onItemToggled(holder.mCheckBox.isChecked(), holder.getAdapterPosition());
+        }
+    }
+
+    private void posItemClick(TaskListViewHolder holder) {
+        if (mOnClickListener != null) {
+            mOnClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+        }
     }
 
     @NonNull
@@ -77,7 +101,8 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         return getItem(position).getID();
     }
 
-    class TaskListViewHolder extends RecyclerView.ViewHolder {
+    class TaskListViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener {
 
         @BindView(R.id.tasks_list_title)
         TextView mTitleView;
@@ -88,6 +113,17 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         public TaskListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            mTitleView.setOnClickListener(this);
+            mCheckBox.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (v == mCheckBox) {
+                completionToggled(this);
+            } else {
+                posItemClick(this);
+            }
         }
     }
 }

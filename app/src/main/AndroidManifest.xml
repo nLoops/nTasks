@@ -21,6 +21,8 @@
             android:name=".data.TasksProvider"
             android:authorities="com.nloops.ntasks"
             android:exported="false" />
+
+        <activity android:name=".addedittasks.AddEditTasks"></activity>
     </application>
 
 </manifest>

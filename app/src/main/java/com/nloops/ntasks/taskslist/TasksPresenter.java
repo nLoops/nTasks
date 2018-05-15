@@ -79,6 +79,12 @@ public class TasksPresenter implements TasksListContract.Presenter,
     }
 
     @Override
+    public void loadAddEditActivity(long taskID) {
+        mTaskView.showAddEditUI(taskID);
+    }
+
+
+    @Override
     public void onDataLoaded(Cursor data) {
         mTaskView.setLoadingIndecator(false);
         mTaskView.showTasks(data);
@@ -91,7 +97,6 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void onDataNotAvailable() {
-
     }
 
     @Override
