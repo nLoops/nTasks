@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:paddingTop="@dimen/dimen_eight_dp">
 
     <CheckBox
         android:id="@+id/tasks_list_check"
@@ -20,5 +21,14 @@
         app:layout_constraintLeft_toRightOf="@id/tasks_list_check"
         app:layout_constraintTop_toBottomOf="@id/tasks_list_check"
         tools:text="Get Some Milk" />
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/divider_height"
+        android:layout_marginTop="@dimen/dimen_sixteen_dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tasks_list_title" />
 
 </android.support.constraint.ConstraintLayout>
