@@ -44,7 +44,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     private void posItemClick(TaskListViewHolder holder) {
         if (mOnClickListener != null) {
-            mOnClickListener.onItemClick(holder.itemView, holder.getAdapterPosition());
+            mOnClickListener.onItemClick(holder.fullView, holder.getAdapterPosition());
         }
     }
 
@@ -89,9 +89,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     }
 
     public void swapCursor(Cursor cursor) {
-        if (mCursor != null) {
+       /* if (mCursor != null) {
             mCursor.close();
-        }
+        }*/
         mCursor = cursor;
         notifyDataSetChanged();
     }
@@ -109,12 +109,15 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
         @BindView(R.id.tasks_list_check)
         CheckBox mCheckBox;
+        // help to listen to OnClickListener for full view
+        View fullView;
 
         public TaskListViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            mTitleView.setOnClickListener(this);
+            fullView = itemView;
             mCheckBox.setOnClickListener(this);
+            fullView.setOnClickListener(this);
         }
 
         @Override
