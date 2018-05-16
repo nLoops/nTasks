@@ -2,6 +2,7 @@ package com.nloops.ntasks.data;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -30,13 +31,13 @@ public class TaskLoader {
         );
     }
 
-    public Loader<Cursor> createTaskLoader(long id) {
+    public Loader<Cursor> createTaskLoader(Uri uri) {
         return new CursorLoader(
                 mContext,
-                TasksDBContract.TaskEntry.buildTasksUriWith(id),
+                uri,
                 null,
                 null,
-                new String[]{String.valueOf(id)},
+                null,
                 null
         );
     }
