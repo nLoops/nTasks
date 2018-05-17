@@ -80,6 +80,14 @@ public class TasksLocalDataSource implements TasksDataSource {
         Log.i("TAG", "you updated " + count + " raw");
     }
 
+    @Override
+    public void updateTask(@NonNull Task task, @NonNull Uri uri) {
+        ContentValues values = DatabaseValues.from(task);
+        mContentResolver.update(uri,
+                values,
+                null, null);
+    }
+
 
     public interface LoadDataCallback {
         void onDataLoaded(Cursor data);

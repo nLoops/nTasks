@@ -1,6 +1,7 @@
 package com.nloops.ntasks.data;
 
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 
 import java.util.List;
@@ -42,5 +43,7 @@ public interface TasksDataSource {
     void deleteTask(@NonNull int taskID);
 
     void completeTask(@NonNull boolean state, @NonNull long rawID);
+
+    void updateTask(@NonNull Task task, @NonNull Uri uri);
 
 }
