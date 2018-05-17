@@ -12,8 +12,6 @@ import com.nloops.ntasks.data.TasksLocalDataSource;
 
 public class TasksList extends AppCompatActivity {
 
-    private TasksPresenter mTasksPresenter;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,7 +35,7 @@ public class TasksList extends AppCompatActivity {
             transaction.commit();
         }
 
-        mTasksPresenter = new TasksPresenter(
+        TasksPresenter mTasksPresenter = new TasksPresenter(
                 loader,
                 getSupportLoaderManager(),
                 tasksFragment,
