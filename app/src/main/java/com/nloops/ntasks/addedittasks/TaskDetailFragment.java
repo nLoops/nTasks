@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -48,6 +49,8 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // using to inflate fragment menu.
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.frag_task_detail, container, false);
         ButterKnife.bind(this, rootView);
         FloatingActionButton detailFAB = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
@@ -86,4 +89,20 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         mPresenter = presenter;
     }
 
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.task_detail_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_detail_delete:
+                break;
+            case R.id.action_detail_reminder:
+                break;
+        }
+
+        return true;
+    }
 }

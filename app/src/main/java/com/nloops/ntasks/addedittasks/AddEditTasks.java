@@ -26,9 +26,13 @@ public class AddEditTasks extends AppCompatActivity {
         // get passed intent if available to load task data.
         taskUri = getIntent().getData();
         if (taskUri != null) {
+            // object of Loader that will return data using Cursor Adapter
             TaskLoader loader = new TaskLoader(this);
+            // LocalDataSource that will apply operations on DB using ContentResolver.
             TasksLocalDataSource localDataSource = TasksLocalDataSource
                     .getInstance(getContentResolver());
+            // Check if we don't have instance of the fragment we will request a new one and link
+            // it with the container on AddEditTasks layout.
             TaskDetailFragment taskDetailFragment =
                     (TaskDetailFragment) getSupportFragmentManager().findFragmentById(R.id.task_detail_container);
             if (taskDetailFragment == null) {

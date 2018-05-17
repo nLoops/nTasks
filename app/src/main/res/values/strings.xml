@@ -7,4 +7,7 @@
     <!--General Strings -->
     <string name="str_empty_tasks">You\'re done for today</string>
     <string name="str_empty_tasks_two">Enjoy the rest</string>
+    <!--Detail Menu Items-->
+    <string name="str_action_detail_delete">Delete</string>
+    <string name="str_action_detail_reminder">Set Reminder</string>
 </resources>
