@@ -112,4 +112,55 @@ public class Task {
     public boolean isComplete() {
         return mCompleted == 1;
     }
+
+    public void setTitle(@NonNull String mTitle) {
+        this.mTitle = mTitle;
+    }
+
+    public void setBody(@NonNull String mBody) {
+        this.mBody = mBody;
+    }
+
+    public void setID(long mID) {
+        this.mID = mID;
+    }
+
+    public void setType(@NonNull int mType) {
+        this.mType = mType;
+    }
+
+    public void setPriorty(@NonNull int mPriorty) {
+        this.mPriorty = mPriorty;
+    }
+
+    public void setDate(@NonNull long mDate) {
+        this.mDate = mDate;
+    }
+
+    public void setCompleted(@Nullable int mCompleted) {
+        this.mCompleted = mCompleted;
+    }
+
+    public void setPath(@Nullable String mPath) {
+        this.mPath = mPath;
+    }
+
+    public void setTodos(@Nullable List<Todo> mTodos) {
+        this.mTodos = mTodos;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "mID=" + mID +
+                ", mTitle='" + mTitle + '\'' +
+                ", mBody='" + mBody + '\'' +
+                ", mType=" + mType +
+                ", mPriorty=" + mPriorty +
+                ", mDate=" + mDate +
+                ", mCompleted=" + mCompleted +
+                ", mPath='" + mPath + '\'' +
+                ", mTodos=" + mTodos +
+                '}';
+    }
 }
