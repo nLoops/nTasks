@@ -13,6 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -24,6 +25,8 @@ import com.nloops.ntasks.data.TasksDBContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.yavski.fabspeeddial.FabSpeedDial;
+import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
 public class TasksFragment extends Fragment implements TasksListContract.View {
 
@@ -59,6 +62,23 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
         mRecyclerView.setHasFixedSize(true);
+        // ref of Activity menu_fab
+        FabSpeedDial fabSpeedDial = (FabSpeedDial) getActivity().findViewById(R.id.tasks_list_fab);
+        fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
+            @Override
+            public boolean onMenuItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.action_note:
+                        mPresenter.loadAddEditActivity(NO_TASK_ID);
+                        break;
+                    case R.id.action_todo:
+                        break;
+                    case R.id.action_mic:
+                        break;
+                }
+                return true;
+            }
+        });
 
         return rootView;
     }

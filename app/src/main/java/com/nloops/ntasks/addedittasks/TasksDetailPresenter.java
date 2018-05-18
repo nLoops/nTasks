@@ -29,8 +29,6 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
     @NonNull
     private final TasksLocalDataSource mLocalDataSource;
 
-    @NonNull
-    private final boolean isExistingTask;
 
     @Nullable
     private final Uri taskUri;
@@ -42,7 +40,6 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
      * @param taskLoader
      * @param localDataSource
      * @param taskView
-     * @param existing
      * @param uri
      */
     public TasksDetailPresenter(
@@ -50,14 +47,12 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
             @NonNull TaskLoader taskLoader,
             @NonNull TasksLocalDataSource localDataSource,
             @NonNull TaskDetailContract.View taskView,
-            @NonNull boolean existing,
             @Nullable Uri uri) {
 
         this.mLoaderManager = loaderManager;
         this.mTaskLoader = taskLoader;
         this.mLocalDataSource = localDataSource;
         this.mTasksView = taskView;
-        this.isExistingTask = existing;
         this.taskUri = uri;
         mTasksView.setPresenter(this);
     }
@@ -93,7 +88,9 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
 
     @Override
     public void loadTaskData() {
-        initLoaderManager();
+        if (taskUri != null) {
+            initLoaderManager();
+        }
     }
 
     @Override
