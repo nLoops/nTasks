@@ -2,6 +2,7 @@ package com.nloops.ntasks.taskslist;
 
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 import com.nloops.ntasks.data.BaseView;
 
@@ -18,10 +19,18 @@ public interface TasksListContract {
         void showDataReset();
 
         void showAddEditUI(long taskID);
+
+        void showDeletedMessage();
+
+        void showUpdatedMessage();
+
+        void showAddedMessage();
     }
 
 
     interface Presenter {
+
+        void result(int requestCode, int resultCode);
 
         void loadTasks();
 
@@ -29,7 +38,7 @@ public interface TasksListContract {
 
         void loadAddEditActivity(long taskID);
 
-        void updateComplete(@NonNull boolean state, @NonNull long rawID);
+        void updateComplete(boolean state, long rawID);
     }
 
 

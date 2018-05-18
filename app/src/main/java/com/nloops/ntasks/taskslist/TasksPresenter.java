@@ -1,5 +1,6 @@
 package com.nloops.ntasks.taskslist;
 
+import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -7,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 
+import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
@@ -68,6 +70,20 @@ public class TasksPresenter implements TasksListContract.Presenter,
     }
 
     @Override
+    public void result(int requestCode, int resultCode) {
+        if (AddEditTasks.REQUEST_ADD_TASK == requestCode
+                && AddEditTasks.RESULT_ADD_TASK == resultCode) {
+            mTaskView.showAddedMessage();
+        } else if (AddEditTasks.REQUEST_EDIT_TASK == requestCode) {
+            if (AddEditTasks.RESULT_UPDATE_TASK == resultCode) {
+                mTaskView.showUpdatedMessage();
+            } else if (AddEditTasks.RESULT_DELETE_TASK == resultCode) {
+                mTaskView.showDeletedMessage();
+            }
+        }
+    }
+
+    @Override
     public void loadTasks() {
         initLoaderManager();
     }
@@ -84,7 +100,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
     }
 
     @Override
-    public void updateComplete(@NonNull boolean state, @NonNull long rawID) {
+    public void updateComplete(boolean state, long rawID) {
         mLocalDataSource.completeTask(state, rawID);
     }
 

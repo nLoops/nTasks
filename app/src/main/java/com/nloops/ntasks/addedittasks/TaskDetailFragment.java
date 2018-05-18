@@ -1,5 +1,6 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.speech.RecognizerIntent;
@@ -80,7 +81,20 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     }
 
     @Override
-    public void setUpdateTaskMessage() {
+    public void showTasksListUpdated() {
+        getActivity().setResult(AddEditTasks.RESULT_UPDATE_TASK);
+        getActivity().finish();
+    }
+
+    @Override
+    public void showTasksListDelete() {
+        getActivity().setResult(AddEditTasks.RESULT_DELETE_TASK);
+        getActivity().finish();
+    }
+
+    @Override
+    public void showTasksListAdded() {
+        getActivity().setResult(AddEditTasks.RESULT_ADD_TASK);
         getActivity().finish();
     }
 
@@ -98,6 +112,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
+                mPresenter.deleteTask(AddEditTasks.taskUri);
                 break;
             case R.id.action_detail_reminder:
                 break;

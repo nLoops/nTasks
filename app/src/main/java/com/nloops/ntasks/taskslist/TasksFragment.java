@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -27,6 +28,7 @@ import butterknife.ButterKnife;
 public class TasksFragment extends Fragment implements TasksListContract.View {
 
     private TasksListContract.Presenter mPresenter;
+    private final int NO_TASK_ID = -1;
 
     private TaskListAdapter mAdapter;
     @BindView(R.id.tasks_list_recycle)
@@ -95,9 +97,38 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     @Override
     public void showAddEditUI(long taskID) {
         Intent addEditIntent = new Intent(getContext(), AddEditTasks.class);
-        Uri taskUri = ContentUris.withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI, taskID);
-        addEditIntent.setData(taskUri);
-        startActivity(addEditIntent);
+        if (taskID != NO_TASK_ID) {
+            Uri taskUri = ContentUris.withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI, taskID);
+            addEditIntent.setData(taskUri);
+            startActivityForResult(addEditIntent, AddEditTasks.REQUEST_EDIT_TASK);
+        } else {
+            startActivityForResult(addEditIntent, AddEditTasks.REQUEST_ADD_TASK);
+        }
+
+    }
+
+    @Override
+    public void showDeletedMessage() {
+        showMessage(getString(R.string.msg_task_deleted));
+    }
+
+    @Override
+    public void showUpdatedMessage() {
+        showMessage(getString(R.string.msg_task_updated));
+    }
+
+    @Override
+    public void showAddedMessage() {
+        showMessage(getString(R.string.msg_task_added));
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mPresenter.result(requestCode, resultCode);
+    }
+
+    private void showMessage(String message) {
+        Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
     }
 
     @Override

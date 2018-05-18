@@ -66,9 +66,10 @@ public class TasksLocalDataSource implements TasksDataSource {
     }
 
     @Override
-    public void deleteTask(@NonNull int taskID) {
-
+    public void deleteTask(@NonNull Uri taskUri) {
+        mContentResolver.delete(taskUri, null, null);
     }
+
 
     @Override
     public void completeTask(@NonNull boolean state, @NonNull long rawID) {
@@ -77,7 +78,6 @@ public class TasksLocalDataSource implements TasksDataSource {
         ContentValues values = new ContentValues(1);
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
         int count = mContentResolver.update(rawUri, values, null, null);
-        Log.i("TAG", "you updated " + count + " raw");
     }
 
     @Override

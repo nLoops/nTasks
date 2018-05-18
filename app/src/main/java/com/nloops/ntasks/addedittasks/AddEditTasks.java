@@ -14,6 +14,12 @@ public class AddEditTasks extends AppCompatActivity {
 
 
     public static Uri taskUri;
+    // constants for OnActivityResults to call the right SnackBar message.
+    public static final int REQUEST_EDIT_TASK = 2;
+    public static final int REQUEST_ADD_TASK = 3;
+    public static final int RESULT_DELETE_TASK = 100;
+    public static final int RESULT_UPDATE_TASK = 101;
+    public static final int RESULT_ADD_TASK = 102;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

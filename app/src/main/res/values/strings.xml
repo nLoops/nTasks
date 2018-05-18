@@ -10,4 +10,8 @@
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
+    <!--Task Operations Messages-->
+    <string name="msg_task_updated">Task updated successfully</string>
+    <string name="msg_task_deleted">Task deleted successfully</string>
+    <string name="msg_task_added">Task added successfully</string>
 </resources>

@@ -40,7 +40,7 @@ public interface TasksDataSource {
 
     void deleteAllTasks();
 
-    void deleteTask(@NonNull int taskID);
+    void deleteTask(@NonNull Uri taskUri);
 
     void completeTask(@NonNull boolean state, @NonNull long rawID);
 

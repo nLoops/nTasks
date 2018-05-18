@@ -99,7 +99,19 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
     @Override
     public void updateTask(Task task, Uri uri) {
         mLocalDataSource.updateTask(task, uri);
-        mTasksView.setUpdateTaskMessage();
+        mTasksView.showTasksListUpdated();
+    }
+
+    @Override
+    public void deleteTask(@NonNull Uri taskUri) {
+        mLocalDataSource.deleteTask(taskUri);
+        mTasksView.showTasksListDelete();
+    }
+
+    @Override
+    public void saveTask(@NonNull Task task) {
+        mLocalDataSource.saveTask(task);
+        mTasksView.showTasksListAdded();
     }
 
 
