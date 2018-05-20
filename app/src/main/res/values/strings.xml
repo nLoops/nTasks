@@ -7,6 +7,12 @@
     <!--General Strings -->
     <string name="str_empty_tasks">You\'re done for today</string>
     <string name="str_empty_tasks_two">Enjoy the rest</string>
+    <string name="title_hint">Title</string>
+    <string name="body_hint">Description</string>
+    <string name="task_priority">Task Priority</string>
+    <string name="content_desc_mic">Speech To Text mic icon</string>
+    <string name="content_desc_empty_calender">Empty Calender image</string>
+    <string name="content_desc_cup">Coffee cup drawable</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
@@ -14,4 +20,5 @@
     <string name="msg_task_updated">Task updated successfully</string>
     <string name="msg_task_deleted">Task deleted successfully</string>
     <string name="msg_task_added">Task added successfully</string>
+
 </resources>
