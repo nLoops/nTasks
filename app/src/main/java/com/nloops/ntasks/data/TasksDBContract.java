@@ -47,6 +47,15 @@ public class TasksDBContract {
             return ContentUris.withAppendedId(CONTENT_TASK_URI, id);
         }
 
+        //Constant Values for Tasks type,state,priority
+        public static final int TYPE_NORMAL_NOTE = 0;
+        public static final int TYPE_TODO_NOTE = 1;
+        public static final int TYPE_AUDIO_NOTE = 2;
+        public static final int STATE_NOT_COMPLETED = 0;
+        public static final int STATE_COMPLETED = 1;
+        public static final int PRIORTY_NORMAL = 0;
+        public static final int PRIORTY_HIGH = 1;
+
     }
 
     /**
