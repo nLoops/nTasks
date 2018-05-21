@@ -61,9 +61,16 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mTask.setTitle(mTitle.getText().toString());
-                mTask.setBody(mBody.getText().toString());
-                mPresenter.updateTask(mTask, AddEditTasks.taskUri);
+                if (AddEditTasks.taskUri == null) {
+                    Task task = new Task(mTitle.getText().toString(),
+                            mBody.getText().toString(),
+                            0, 0, System.currentTimeMillis(), 0, "", null);
+                    mPresenter.saveTask(task);
+                } else {
+                    mTask.setTitle(mTitle.getText().toString());
+                    mTask.setBody(mBody.getText().toString());
+                    mPresenter.updateTask(mTask, AddEditTasks.taskUri);
+                }
             }
         });
         return rootView;

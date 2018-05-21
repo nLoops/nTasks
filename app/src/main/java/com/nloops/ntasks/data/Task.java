@@ -37,7 +37,7 @@ public class Task {
     private List<Todo> mTodos;
 
     public Task(@NonNull String title, @NonNull String body, @NonNull int type, @NonNull int priorty,
-                @NonNull long date, int completed, String path, List<Todo> todo) {
+                @NonNull long date, int completed, String path, @Nullable List<Todo> todo) {
         this.mID = NO_ID;
         this.mTitle = title;
         this.mBody = body;
