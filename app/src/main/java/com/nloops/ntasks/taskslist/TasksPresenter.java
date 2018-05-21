@@ -96,8 +96,8 @@ public class TasksPresenter implements TasksListContract.Presenter,
     }
 
     @Override
-    public void loadAddEditActivity(long taskID) {
-        mTaskView.showAddEditUI(taskID);
+    public void loadAddEditActivity(long taskID, int taskType) {
+        mTaskView.showAddEditUI(taskID, taskType);
     }
 
     @Override

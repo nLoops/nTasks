@@ -1,9 +1,6 @@
 package com.nloops.ntasks.addedittasks;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +17,6 @@ import android.widget.EditText;
 import com.nloops.ntasks.R;
 
 import com.nloops.ntasks.data.Task;
-
-import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,7 +56,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddEditTasks.taskUri == null) {
+                if (AddEditTasks.TASK_URI == null) {
                     Task task = new Task(mTitle.getText().toString(),
                             mBody.getText().toString(),
                             0, 0, System.currentTimeMillis(), 0, "", null);
@@ -69,7 +64,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 } else {
                     mTask.setTitle(mTitle.getText().toString());
                     mTask.setBody(mBody.getText().toString());
-                    mPresenter.updateTask(mTask, AddEditTasks.taskUri);
+                    mPresenter.updateTask(mTask, AddEditTasks.TASK_URI);
                 }
             }
         });
@@ -122,7 +117,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
-                mPresenter.deleteTask(AddEditTasks.taskUri);
+                mPresenter.deleteTask(AddEditTasks.TASK_URI);
                 break;
             case R.id.action_detail_reminder:
                 break;

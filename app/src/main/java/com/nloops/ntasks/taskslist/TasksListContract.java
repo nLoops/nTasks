@@ -18,7 +18,7 @@ public interface TasksListContract {
 
         void showDataReset();
 
-        void showAddEditUI(long taskID);
+        void showAddEditUI(long taskID, int taskType);
 
         void showDeletedMessage();
 
@@ -36,7 +36,7 @@ public interface TasksListContract {
 
         void showEmptyView();
 
-        void loadAddEditActivity(long taskID);
+        void loadAddEditActivity(long taskID, int taskType);
 
         void updateComplete(boolean state, long rawID);
 

@@ -3,6 +3,7 @@ package com.nloops.ntasks.adapters;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,8 @@ import android.widget.TextView;
 
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
+import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDataSource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,7 +23,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     /*Callbacks for List Click Listener*/
     public interface OnItemClickListener {
-        void onItemClick(View v, int position);
+        void onItemClick(View v, int position, int taskType);
 
         void onItemToggled(boolean active, int position);
     }
@@ -44,7 +47,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     private void posItemClick(TaskListViewHolder holder) {
         if (mOnClickListener != null) {
-            mOnClickListener.onItemClick(holder.fullView, holder.getAdapterPosition());
+            int taskType = TasksDBContract.TaskEntry.NO_TASK_TYPE;
+            if (mCursor.moveToPosition(holder.getAdapterPosition())) {
+                taskType = TasksDBContract.getColumnInt(mCursor, TasksDBContract.TaskEntry.COLUMN_NAME_TYPE);
+            }
+            mOnClickListener.onItemClick(holder.fullView, holder.getAdapterPosition(), taskType);
         }
     }
 

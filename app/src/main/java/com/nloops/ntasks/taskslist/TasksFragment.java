@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
@@ -88,11 +90,13 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
             public boolean onMenuItemSelected(MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     case R.id.action_note:
-                        mPresenter.loadAddEditActivity(NO_TASK_ID);
+                        mPresenter.loadAddEditActivity(NO_TASK_ID, TaskEntry.TYPE_NORMAL_NOTE);
                         break;
                     case R.id.action_todo:
+                        mPresenter.loadAddEditActivity(NO_TASK_ID, TaskEntry.TYPE_TODO_NOTE);
                         break;
                     case R.id.action_mic:
+                        mPresenter.loadAddEditActivity(NO_TASK_ID, TaskEntry.TYPE_AUDIO_NOTE);
                         break;
                 }
                 return true;
@@ -142,13 +146,17 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     }
 
     @Override
-    public void showAddEditUI(long taskID) {
+    public void showAddEditUI(long taskID, int taskType) {
         Intent addEditIntent = new Intent(getContext(), AddEditTasks.class);
+        // if we have TaskID available that means user clicked on Task and in this case
+        // we need to pass uri to Detail Activity to load data.
         if (taskID != NO_TASK_ID) {
             Uri taskUri = ContentUris.withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI, taskID);
+            addEditIntent.putExtra(AddEditTasks.EXTRAS_TASK_TYPE, taskType);
             addEditIntent.setData(taskUri);
             startActivityForResult(addEditIntent, AddEditTasks.REQUEST_EDIT_TASK);
         } else {
+            addEditIntent.putExtra(AddEditTasks.EXTRAS_TASK_TYPE, taskType);
             startActivityForResult(addEditIntent, AddEditTasks.REQUEST_ADD_TASK);
         }
 
@@ -185,9 +193,9 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
     TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
         @Override
-        public void onItemClick(View v, int position) {
+        public void onItemClick(View v, int position, int taskType) {
             long rawID = mAdapter.getItemId(position);
-            mPresenter.loadAddEditActivity(rawID);
+            mPresenter.loadAddEditActivity(rawID, taskType);
         }
 
         @Override

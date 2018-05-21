@@ -48,6 +48,7 @@ public class TasksDBContract {
         }
 
         //Constant Values for Tasks type,state,priority
+        public static final int NO_TASK_TYPE = -1;
         public static final int TYPE_NORMAL_NOTE = 0;
         public static final int TYPE_TODO_NOTE = 1;
         public static final int TYPE_AUDIO_NOTE = 2;
