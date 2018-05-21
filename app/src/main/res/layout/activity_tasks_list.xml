@@ -13,14 +13,15 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/tasks_list_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize" />
+            android:layout_height="?android:attr/actionBarSize"
+            android:elevation="2dp" />
 
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout
         android:id="@+id/tasks_list_container"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="match_parent"
         android:layout_marginTop="?android:attr/actionBarSize" />
 
     <include
