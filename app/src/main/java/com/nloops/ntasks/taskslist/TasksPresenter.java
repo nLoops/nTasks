@@ -1,6 +1,5 @@
 package com.nloops.ntasks.taskslist;
 
-import android.app.Activity;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -34,8 +33,6 @@ public class TasksPresenter implements TasksListContract.Presenter,
         this.mLoaderManager = loaderManager;
         this.mLocalDataSource = dataSource;
         this.mTaskView = tasksView;
-        mTaskView.setPresenter(this);
-
     }
 
 
@@ -56,12 +53,16 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-
-        if (data != null && data.getCount() > 0) {
-            onDataLoaded(data);
+        if (data != null) {
+            if (data.moveToLast() & data.getCount() > 0) {
+                onDataLoaded(data);
+            } else {
+                onDataEmpty();
+            }
         } else {
-            onDataEmpty();
+            onDataNotAvailable();
         }
+
     }
 
     @Override
@@ -102,6 +103,13 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @Override
     public void updateComplete(boolean state, long rawID) {
         mLocalDataSource.completeTask(state, rawID);
+    }
+
+    @Override
+    public void removeLoader() {
+        if (mLoaderManager.getLoader(LOADER_ID) != null) {
+            mLoaderManager.destroyLoader(LOADER_ID);
+        }
     }
 
 

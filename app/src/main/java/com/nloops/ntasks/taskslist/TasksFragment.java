@@ -12,16 +12,20 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksLocalDataSource;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +42,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     RecyclerView mRecyclerView;
     @BindView(R.id.tasks_list_progress)
     ProgressBar mProgressBar;
+    View mEmptyView;
 
     /**
      * Empty Constructor required by system.
@@ -50,12 +55,26 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     }
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // Create new object of Cursor Loader
+        TaskLoader loader = new TaskLoader(getActivity());
+        // Create new instance of LocalDataSource
+        TasksLocalDataSource dataSource = TasksLocalDataSource.getInstance(getActivity().getContentResolver());
+        // define Tasks.Presenter
+        mPresenter = new TasksPresenter(loader, getActivity().getSupportLoaderManager(), this, dataSource);
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.frag_tasks_list, container, false);
         Context context = container.getContext();
+        //Bind fragment layout elements
         ButterKnife.bind(this, rootView);
+        // get ref of empty view lives into Activity.
+        mEmptyView = (View) getActivity().findViewById(R.id.empty_view);
         mAdapter = new TaskListAdapter(null);
         mAdapter.setOnClickListener(onItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
@@ -90,6 +109,12 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mPresenter.removeLoader();
+    }
+
+    @Override
     public void setLoadingIndecator(boolean state) {
         if (state) {
             mProgressBar.setVisibility(View.VISIBLE);
@@ -100,13 +125,15 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
     @Override
     public void showTasks(Cursor tasks) {
+        if (mEmptyView.getVisibility() == View.VISIBLE) {
+            mEmptyView.setVisibility(View.INVISIBLE);
+        }
         mAdapter.swapCursor(tasks);
     }
 
     @Override
     public void showNoData() {
-        View view = getActivity().findViewById(R.id.empty_view);
-        view.setVisibility(View.VISIBLE);
+        mEmptyView.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -153,7 +180,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
     @Override
     public void setPresenter(TasksListContract.Presenter presenter) {
-        mPresenter = presenter;
+
     }
 
     TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {

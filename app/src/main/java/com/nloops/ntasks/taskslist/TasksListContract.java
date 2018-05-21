@@ -39,6 +39,8 @@ public interface TasksListContract {
         void loadAddEditActivity(long taskID);
 
         void updateComplete(boolean state, long rawID);
+
+        void removeLoader();
     }
 
 
