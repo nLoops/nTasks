@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,6 +18,7 @@ import android.widget.EditText;
 import com.nloops.ntasks.R;
 
 import com.nloops.ntasks.data.Task;
+import com.nloops.ntasks.data.TasksDBContract;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,7 +32,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @BindView(R.id.task_detail_body)
     EditText mBody;
     @BindView(R.id.task_detail_priority_switch)
-    SwitchCompat mPriortySwitch;
+    SwitchCompat mPrioritySwitch;
 
     private Task mTask;
 
@@ -59,7 +61,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 if (AddEditTasks.TASK_URI == null) {
                     Task task = new Task(mTitle.getText().toString(),
                             mBody.getText().toString(),
-                            0, 0, System.currentTimeMillis(), 0, "", null);
+                            AddEditTasks.TASK_TYPE,
+                            getTaskPriority(),
+                            System.currentTimeMillis(),
+                            TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
+                            , "", null);
                     mPresenter.saveTask(task);
                 } else {
                     mTask.setTitle(mTitle.getText().toString());
@@ -69,6 +75,16 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
             }
         });
         return rootView;
+    }
+
+    private int getTaskPriority() {
+        int taskPriority;
+        if (mPrioritySwitch.isChecked()) {
+            taskPriority = TasksDBContract.TaskEntry.PRIORTY_HIGH;
+        } else {
+            taskPriority = TasksDBContract.TaskEntry.PRIORTY_NORMAL;
+        }
+        return taskPriority;
     }
 
     @Override
