@@ -1,11 +1,14 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -13,12 +16,22 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.nloops.ntasks.R;
 
+import com.nloops.ntasks.UI.DatePickerFragment;
+import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+
+import org.w3c.dom.Text;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,8 +46,13 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     EditText mBody;
     @BindView(R.id.task_detail_priority_switch)
     SwitchCompat mPrioritySwitch;
+    @BindView(R.id.task_detail_date)
+    TextView mDateText;
 
-    private Task mTask;
+    private long mDueDate = Long.MAX_VALUE;
+    private int mYear;
+    private int mMonth;
+    private int mDay;
 
 
     /**
@@ -59,18 +77,9 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
             @Override
             public void onClick(View v) {
                 if (AddEditTasks.TASK_URI == null) {
-                    Task task = new Task(mTitle.getText().toString(),
-                            mBody.getText().toString(),
-                            AddEditTasks.TASK_TYPE,
-                            getTaskPriority(),
-                            System.currentTimeMillis(),
-                            TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
-                            , "", null);
-                    mPresenter.saveTask(task);
+                    mPresenter.saveTask(getTask());
                 } else {
-                    mTask.setTitle(mTitle.getText().toString());
-                    mTask.setBody(mBody.getText().toString());
-                    mPresenter.updateTask(mTask, AddEditTasks.TASK_URI);
+                    mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
                 }
             }
         });
@@ -95,9 +104,12 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
 
     @Override
     public void displayTaskData(Task task) {
-        mTask = task;
         mTitle.setText(task.getTitle());
         mBody.setText(task.getBody());
+        setDateSelection(task.getDate());
+        if (task.isPriority()) {
+            mPrioritySwitch.setChecked(true);
+        }
 
     }
 
@@ -120,6 +132,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     }
 
     @Override
+    public void showDateTimePicker() {
+        getDatePicker();
+    }
+
+    @Override
     public void setPresenter(TaskDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -136,9 +153,75 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 mPresenter.deleteTask(AddEditTasks.TASK_URI);
                 break;
             case R.id.action_detail_reminder:
+                mPresenter.launchDatePicker();
                 break;
         }
 
         return true;
     }
+
+    private void getDatePicker() {
+        DatePickerFragment pickerFragment = new DatePickerFragment();
+        pickerFragment.setDateListener(mSetDatePicker);
+        pickerFragment.show(getActivity().getSupportFragmentManager(), "DateFragment");
+
+    }
+
+    public void setDateSelection(long selectedTimestamp) {
+        mDueDate = selectedTimestamp;
+        updateDateDisplay();
+
+    }
+
+    public long getDateSelection() {
+        return mDueDate;
+    }
+
+    private void updateDateDisplay() {
+        if (getDateSelection() == Long.MAX_VALUE) {
+            mDateText.setText("No Set");
+        } else {
+            CharSequence formatted = DateUtils.getRelativeTimeSpanString(getActivity(), mDueDate);
+            mDateText.setText(formatted);
+        }
+    }
+
+    private Task getTask() {
+        Task task = new Task(mTitle.getText().toString(),
+                mBody.getText().toString(),
+                AddEditTasks.TASK_TYPE,
+                getTaskPriority(),
+                mDueDate,
+                TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
+                , "", null);
+        return task;
+    }
+
+    DatePickerDialog.OnDateSetListener mSetDatePicker = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+            mYear = year;
+            mMonth = month;
+            mDay = dayOfMonth;
+            TimePickerFragment pickerFragment = new TimePickerFragment();
+            pickerFragment.setOnTimeSetListenr(mSetTimePicker);
+            pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener mSetTimePicker = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+            Calendar c = Calendar.getInstance();
+            c.set(Calendar.YEAR, mYear);
+            c.set(Calendar.MONTH, mMonth);
+            c.set(Calendar.DAY_OF_MONTH, mDay);
+            c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            c.set(Calendar.MINUTE, minute);
+
+            setDateSelection(c.getTimeInMillis());
+        }
+    };
+
+
 }

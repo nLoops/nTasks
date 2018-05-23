@@ -111,6 +111,11 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
         mTasksView.showTasksListAdded();
     }
 
+    @Override
+    public void launchDatePicker() {
+        mTasksView.showDateTimePicker();
+    }
+
 
     @Override
     public void onDataLoaded(Cursor data) {

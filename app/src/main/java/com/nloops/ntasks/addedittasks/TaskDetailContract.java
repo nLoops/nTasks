@@ -18,6 +18,8 @@ public interface TaskDetailContract {
 
         void showTasksListAdded();
 
+        void showDateTimePicker();
+
     }
 
 
@@ -30,6 +32,8 @@ public interface TaskDetailContract {
         void deleteTask(@NonNull Uri taskUri);
 
         void saveTask(@NonNull Task task);
+
+        void launchDatePicker();
 
 
     }
