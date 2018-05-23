@@ -23,21 +23,22 @@ public class Task {
     private String mTitle;
     @NonNull
     private String mBody;
-    @NonNull
+
     private int mType;
-    @NonNull
+
     private int mPriorty;
-    @NonNull
+
     private long mDate;
-    @Nullable
+
     private int mCompleted;
+
     @Nullable
     private String mPath;
     @Nullable
     private List<Todo> mTodos;
 
-    public Task(@NonNull String title, @NonNull String body, @NonNull int type, @NonNull int priorty,
-                @NonNull long date, int completed, String path, @Nullable List<Todo> todo) {
+    public Task(@NonNull String title, @NonNull String body, int type, int priorty,
+                long date, int completed, String path, @Nullable List<Todo> todo) {
         this.mID = NO_ID;
         this.mTitle = title;
         this.mBody = body;
@@ -79,22 +80,18 @@ public class Task {
         return mBody;
     }
 
-    @NonNull
     public int getType() {
         return mType;
     }
 
-    @NonNull
     public int getPriorty() {
         return mPriorty;
     }
 
-    @NonNull
     public long getDate() {
         return mDate;
     }
 
-    @Nullable
     public int getCompleted() {
         return mCompleted;
     }
@@ -110,7 +107,11 @@ public class Task {
     }
 
     public boolean isComplete() {
-        return mCompleted == 1;
+        return mCompleted == TaskEntry.STATE_COMPLETED;
+    }
+
+    public boolean isPriority() {
+        return mPriorty == TaskEntry.PRIORTY_HIGH;
     }
 
     public void setTitle(@NonNull String mTitle) {
@@ -125,19 +126,19 @@ public class Task {
         this.mID = mID;
     }
 
-    public void setType(@NonNull int mType) {
+    public void setType(int mType) {
         this.mType = mType;
     }
 
-    public void setPriorty(@NonNull int mPriorty) {
+    public void setPriorty(int mPriorty) {
         this.mPriorty = mPriorty;
     }
 
-    public void setDate(@NonNull long mDate) {
+    public void setDate(long mDate) {
         this.mDate = mDate;
     }
 
-    public void setCompleted(@Nullable int mCompleted) {
+    public void setCompleted(int mCompleted) {
         this.mCompleted = mCompleted;
     }
 
