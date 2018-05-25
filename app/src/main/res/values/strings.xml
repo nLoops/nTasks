@@ -13,6 +13,10 @@
     <string name="content_desc_mic">Speech To Text mic icon</string>
     <string name="content_desc_empty_calender">Empty Calender image</string>
     <string name="content_desc_cup">Coffee cup drawable</string>
+    <string name="permissions_required">App requires RECORD_AUDIO permission to access mic and
+    WRITE_EXTERNAL_STORAGE to save recorded audio
+  </string>
+    <string name="permissions_alert_title">Permissions Required</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
