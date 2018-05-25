@@ -1,21 +1,23 @@
 package com.nloops.ntasks.addedittasks;
 
 import android.net.Uri;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.utils.GeneralUtils;
 
 public class AddEditTasks extends AppCompatActivity {
 
 
     public static Uri TASK_URI;
+    private TasksDetailPresenter mPresenter;
     // constants for OnActivityResults to call the right SnackBar message.
     public static final int REQUEST_EDIT_TASK = 2;
     public static final int REQUEST_ADD_TASK = 3;
@@ -47,18 +49,30 @@ public class AddEditTasks extends AppCompatActivity {
         // LocalDataSource that will apply operations on DB using ContentResolver.
         TasksLocalDataSource localDataSource = TasksLocalDataSource
                 .getInstance(getContentResolver());
-        // Check if we don't have instance of the fragment we will request a new one and link
-        // it with the container on AddEditTasks layout.
+        switch (TASK_TYPE) {
+            case TaskEntry.TYPE_NORMAL_NOTE:
+                setupNormalNote(loader, localDataSource);
+                break;
+        }
+    }
+
+    /**
+     * Helper method to setup a new Object of Normal Note however passed TASK has URI or NOT.
+     *
+     * @param loader
+     * @param localDataSource
+     */
+    private void setupNormalNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+        // check if we have instance from the fragment it's okay
+        // if not we get a new instance.
         TaskDetailFragment taskDetailFragment =
                 (TaskDetailFragment) getSupportFragmentManager().findFragmentById(R.id.task_detail_container);
         if (taskDetailFragment == null) {
             taskDetailFragment = TaskDetailFragment.newInstance();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            transaction.add(R.id.task_detail_container, taskDetailFragment);
-            transaction.commit();
+            GeneralUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    taskDetailFragment, R.id.task_detail_container);
         }
-
-        TasksDetailPresenter mPresenter;
+        // if statement to determine if passed task is for edit or a new one.
         if (TASK_URI != null) {
             mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
                     loader,
