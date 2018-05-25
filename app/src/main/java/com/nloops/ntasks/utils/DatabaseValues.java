@@ -6,7 +6,7 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 
 /**
- * Helper Class that Contain Methods that get data from {@link Task} and {@link com.nloops.ntasks.data.Todo}
+ * Helper Class that Contain Methods that get data from {@link Task} and mTodo
  * to return ContentValues used into Insert and Update Database Operations.
  */
 public class DatabaseValues {

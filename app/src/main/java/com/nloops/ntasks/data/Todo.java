@@ -12,7 +12,7 @@ public class Todo {
      * public constructor
      *
      * @param id
-     * @param todo
+     * @param
      */
     public Todo(int id, String todo) {
         this.mID = id;
