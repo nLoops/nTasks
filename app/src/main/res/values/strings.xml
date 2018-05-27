@@ -17,6 +17,10 @@
     WRITE_EXTERNAL_STORAGE to save recorded audio
   </string>
     <string name="permissions_alert_title">Permissions Required</string>
+    <string name="content_playback_btn">Play Back Button</string>
+    <string name="label_due_date">Due Date</string>
+    <string name="label_date_not_set">Not Set</string>
+
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>

@@ -6,4 +6,5 @@
     <dimen name="dimen_eight_dp">8dp</dimen>
     <dimen name="dimen_sixteen_dp">16dp</dimen>
     <dimen name="divider_height">1dp</dimen>
+    <dimen name="tasks_card_elevtion">3dp</dimen>
 </resources>

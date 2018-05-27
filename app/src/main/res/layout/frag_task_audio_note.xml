@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/dimen_sixteen_dp"
+    android:focusableInTouchMode="true">
+
+    <EditText
+        android:id="@+id/task_audio_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="@string/title_hint"
+        android:inputType="textAutoComplete|text"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <android.support.v7.widget.SwitchCompat
+        android:id="@+id/audio_note_switch_priority"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="@dimen/dimen_eight_dp"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:text="@string/task_priority"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:textColor="?android:textColorSecondary"
+        app:layout_constraintLeft_toLeftOf="@id/task_audio_title"
+        app:layout_constraintRight_toRightOf="@id/task_audio_title"
+        app:layout_constraintTop_toBottomOf="@id/task_audio_title"
+
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_sixteen_dp"
+        android:layout_marginStart="@dimen/dimen_sixteen_dp"
+        android:text="@string/label_due_date"
+        app:layout_constraintLeft_toLeftOf="@id/audio_note_switch_priority"
+        app:layout_constraintTop_toBottomOf="@id/audio_note_switch_priority" />
+
+    <TextView
+        android:id="@+id/audionote_detail_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/dimen_sixteen_dp"
+        android:layout_marginLeft="@dimen/dimen_sixteen_dp"
+        android:layout_marginRight="@dimen/dimen_sixteen_dp"
+        android:text="@string/label_date_not_set"
+        app:layout_constraintRight_toRightOf="@id/audio_note_switch_priority"
+        app:layout_constraintTop_toBottomOf="@id/audio_note_switch_priority" />
+
+
+    <include
+        android:id="@+id/item_playback"
+        layout="@layout/item_notes_playback"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_sixteen_dp"
+        app:layout_constraintLeft_toLeftOf="@id/audio_note_switch_priority"
+        app:layout_constraintRight_toRightOf="@id/audio_note_switch_priority"
+        app:layout_constraintTop_toBottomOf="@id/audionote_detail_date" />
+
+</android.support.constraint.ConstraintLayout>
