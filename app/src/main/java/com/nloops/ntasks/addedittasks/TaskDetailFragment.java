@@ -28,6 +28,7 @@ import com.nloops.ntasks.UI.DatePickerFragment;
 import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.utils.GeneralUtils;
 
 import org.w3c.dom.Text;
 
@@ -84,16 +85,6 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
             }
         });
         return rootView;
-    }
-
-    private int getTaskPriority() {
-        int taskPriority;
-        if (mPrioritySwitch.isChecked()) {
-            taskPriority = TasksDBContract.TaskEntry.PRIORTY_HIGH;
-        } else {
-            taskPriority = TasksDBContract.TaskEntry.PRIORTY_NORMAL;
-        }
-        return taskPriority;
     }
 
     @Override
@@ -179,7 +170,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
 
     private void updateDateDisplay() {
         if (getDateSelection() == Long.MAX_VALUE) {
-            mDateText.setText("No Set");
+            mDateText.setText(getString(R.string.label_date_not_set));
         } else {
             CharSequence formatted = DateUtils.getRelativeTimeSpanString(getActivity(), mDueDate);
             mDateText.setText(formatted);
@@ -190,7 +181,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         Task task = new Task(mTitle.getText().toString(),
                 mBody.getText().toString(),
                 AddEditTasks.TASK_TYPE,
-                getTaskPriority(),
+                GeneralUtils.getTaskPriority(mPrioritySwitch),
                 mDueDate,
                 TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
                 , "", null);

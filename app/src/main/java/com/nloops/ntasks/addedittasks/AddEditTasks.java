@@ -13,6 +13,13 @@ import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 import com.nloops.ntasks.utils.GeneralUtils;
 
+/**
+ * This Activity will hold all app Tasks Type
+ * {@link TaskDetailFragment}
+ * {@link AudioNoteFragment}
+ * {@link TaskTodoFragment}
+ * the fragment depends on what type passed from {@link com.nloops.ntasks.taskslist.TasksList}
+ */
 public class AddEditTasks extends AppCompatActivity {
 
 
@@ -53,11 +60,14 @@ public class AddEditTasks extends AppCompatActivity {
             case TaskEntry.TYPE_NORMAL_NOTE:
                 setupNormalNote(loader, localDataSource);
                 break;
+            case TaskEntry.TYPE_AUDIO_NOTE:
+                setupAudioNote(loader, localDataSource);
+                break;
         }
     }
 
     /**
-     * Helper method to setup a new Object of Normal Note however passed TASK has URI or NOT.
+     * Helper method to setup a new Object of {@link TaskDetailFragment} however passed TASK has URI or NOT.
      *
      * @param loader
      * @param localDataSource
@@ -84,6 +94,38 @@ public class AddEditTasks extends AppCompatActivity {
                     loader,
                     localDataSource,
                     taskDetailFragment,
+                    null);
+        }
+    }
+
+    /**
+     * Helper method to setup a new Object of {@link AudioNoteFragment} however passed TASK has URI or NOT.
+     *
+     * @param loader
+     * @param localDataSource
+     */
+    private void setupAudioNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+        // check if we have instance from the fragment it's okay
+        // if not we get a new instance.
+        AudioNoteFragment audioNoteFragment =
+                (AudioNoteFragment) getSupportFragmentManager().findFragmentById(R.id.task_detail_container);
+        if (audioNoteFragment == null) {
+            audioNoteFragment = AudioNoteFragment.newInstance();
+            GeneralUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    audioNoteFragment, R.id.task_detail_container);
+        }
+        // if statement to determine if passed task is for edit or a new one.
+        if (TASK_URI != null) {
+            mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
+                    loader,
+                    localDataSource,
+                    audioNoteFragment,
+                    TASK_URI);
+        } else {
+            mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
+                    loader,
+                    localDataSource,
+                    audioNoteFragment,
                     null);
         }
     }
