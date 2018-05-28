@@ -35,5 +35,8 @@ dependencies {
     implementation 'io.github.yavski:fab-speed-dial:1.0.6'
     // Add EasyPermissions
     implementation 'pub.devrel:easypermissions:1.2.0'
+    //import leak canary to detect memory leaks
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
 
 }
