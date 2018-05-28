@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/dimen_sixteen_dp"
-                android:background="@android:color/transparent"
+                android:background="@drawable/touch_selector"
                 android:contentDescription="@string/content_playback_btn"
                 android:src="@drawable/ic_red_mic"
                 app:layout_constraintLeft_toRightOf="@id/playback_seek_bar"
