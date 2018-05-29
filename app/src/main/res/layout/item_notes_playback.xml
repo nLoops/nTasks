@@ -2,9 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="center_vertical"
+    android:background="@color/cardview_shadow_end_color"
     android:orientation="vertical">
 
     <android.support.v7.widget.CardView
@@ -13,6 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center"
+        android:background="@color/cardview_shadow_end_color"
+        app:cardCornerRadius="@dimen/tasks_corner_radius"
         app:cardElevation="@dimen/tasks_card_elevtion">
 
         <android.support.constraint.ConstraintLayout
@@ -36,7 +39,7 @@
                 android:layout_marginRight="@dimen/dimen_eight_dp"
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toTopOf="@id/play_back_btn"
-                tool:text="00:00" />
+                tool:text="0:00" />
 
             <ImageButton
                 android:id="@+id/play_back_btn"
