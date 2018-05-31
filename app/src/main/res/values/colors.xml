@@ -5,4 +5,6 @@
     <color name="colorAccent">#F9AA33</color>
     <color name="colorPrimaryLight">#4A6572</color>
     <color name="activated">#E0E0E0</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorRed">#F44336</color>
 </resources>

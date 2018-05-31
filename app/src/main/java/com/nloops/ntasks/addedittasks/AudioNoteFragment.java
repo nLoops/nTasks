@@ -3,6 +3,8 @@ package com.nloops.ntasks.addedittasks;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -29,8 +31,10 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.views.AudioCounterView;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,12 +56,17 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     @BindView(R.id.play_back_btn)
     ImageButton mPlayBackBtn;
     @BindView(R.id.playback_txt_counter)
-    TextView mPlayTimer;
+    AudioCounterView mPlayTimer;
 
     private long mDueDate = Long.MAX_VALUE;
     private int mYear;
     private int mMonth;
     private int mDay;
+
+    private final Handler customHandler = new Handler();
+    private long startHTime = 0L;
+    private long timeInMilliseconds = 0L;
+    private long timeSwapBuff = 0L;
 
     /**
      * Empty Constructor required by Platform
@@ -72,7 +81,15 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAudioPresenter = new AudioRecordingPresenter(this);
+        mAudioPresenter = new AudioRecordingPresenter(this, getActivity());
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        customHandler.removeCallbacks(refreshPlayingTimer);
+        mAudioPresenter.stopPlaying();
     }
 
     @Nullable
@@ -84,13 +101,19 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         if (AddEditTasks.TASK_URI != null) {
             mPlayBackBtn.setImageResource(R.drawable.ic_play_btn);
         }
-        FloatingActionButton mActivityFab = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
+        final FloatingActionButton mActivityFab = getActivity().findViewById(R.id.task_detail_fab);
         mActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (AddEditTasks.TASK_URI == null) {
+                    if (mAudioPresenter.isRecording()) {
+                        mAudioPresenter.stopRecording();
+                    }
                     mPresenter.saveTask(getTask());
                 } else {
+                    if (mAudioPresenter.isPlaying()) {
+                        mAudioPresenter.stopPlaying();
+                    }
                     mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
                 }
             }
@@ -100,15 +123,25 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
             public void onClick(View v) {
                 if (AddEditTasks.TASK_URI != null) {
                     if (mAudioPresenter.isPlaying()) {
-                        mAudioPresenter.pausePlaying();
+                        mAudioPresenter.stopPlaying();
+                        customHandler.removeCallbacks(refreshPlayingTimer);
                     } else {
                         mAudioPresenter.playRecording();
+                        mPlayTimer.setState(AudioCounterView.IS_PLAYING);
+                        mPlayBackBar.setMax(mAudioPresenter.getTrackDuration());
+                        updateSeekBar();
+
                     }
                 } else {
                     if (mAudioPresenter.isRecording()) {
                         mAudioPresenter.stopRecording();
+                        timeSwapBuff += timeInMilliseconds;
+                        customHandler.removeCallbacks(updateTimerThread);
                     } else {
                         mAudioPresenter.startRecording();
+                        mPlayTimer.setState(AudioCounterView.IS_RECORDING);
+                        startHTime = SystemClock.uptimeMillis();
+                        customHandler.postDelayed(updateTimerThread, 0);
                     }
                 }
             }
@@ -171,6 +204,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
+                mAudioPresenter.deleteAudioFile();
                 mPresenter.deleteTask(AddEditTasks.TASK_URI);
                 break;
             case R.id.action_detail_reminder:
@@ -188,13 +222,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
 
     }
 
-    public void setDateSelection(long selectedTimestamp) {
+    private void setDateSelection(long selectedTimestamp) {
         mDueDate = selectedTimestamp;
         updateDateDisplay();
 
     }
 
-    public long getDateSelection() {
+    private long getDateSelection() {
         return mDueDate;
     }
 
@@ -208,17 +242,16 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     }
 
     private Task getTask() {
-        Task task = new Task(mTitleView.getText().toString(),
+        return new Task(mTitleView.getText().toString(),
                 "",
                 AddEditTasks.TASK_TYPE,
                 GeneralUtils.getTaskPriority(mPrioritySwitch),
                 mDueDate,
                 TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
                 , mAudioPresenter.getFileName(), null);
-        return task;
     }
 
-    DatePickerDialog.OnDateSetListener mSetDatePicker = new DatePickerDialog.OnDateSetListener() {
+    private final DatePickerDialog.OnDateSetListener mSetDatePicker = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
             mYear = year;
@@ -230,7 +263,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         }
     };
 
-    TimePickerDialog.OnTimeSetListener mSetTimePicker = new TimePickerDialog.OnTimeSetListener() {
+    private final TimePickerDialog.OnTimeSetListener mSetTimePicker = new TimePickerDialog.OnTimeSetListener() {
         @Override
         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
             Calendar c = Calendar.getInstance();
@@ -254,4 +287,46 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
                     mAudioPresenter.isRecording() ? R.drawable.ic_stop_btn : R.drawable.ic_red_mic);
         }
     }
+
+    // this will handle track recording timer.
+    private final Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - startHTime;
+
+            long updatedTime = timeSwapBuff + timeInMilliseconds;
+
+            int seconds = (int) (updatedTime / 1000);
+            int minutes = seconds / 60;
+            seconds = seconds % 60;
+            if (mPlayTimer != null)
+                mPlayTimer.setText(getString(R.string.audio_counter_format, minutes, seconds));
+            customHandler.postDelayed(this, 0);
+        }
+    };
+
+
+    private final Runnable refreshPlayingTimer = new Runnable() {
+        @Override
+        public void run() {
+            if (mAudioPresenter.isPlaying()) {
+                int mCurrentPosition = mAudioPresenter.getCurrentPosition();
+                mPlayBackBar.setProgress(mCurrentPosition);
+                long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
+                long seconds =
+                        TimeUnit.MILLISECONDS.toSeconds
+                                (mCurrentPosition) - TimeUnit.MINUTES.toSeconds(minutes);
+                mPlayTimer.setText(
+                        getString(R.string.audio_counter_format, minutes, seconds));
+
+                updateSeekBar();
+            }
+        }
+    };
+
+    private void updateSeekBar() {
+        customHandler.postDelayed(refreshPlayingTimer, 1000);
+    }
+
 }

@@ -31,7 +31,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintTop_toBottomOf="parent" />
 
-            <TextView
+            <com.nloops.ntasks.views.AudioCounterView
                 android:id="@+id/playback_txt_counter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

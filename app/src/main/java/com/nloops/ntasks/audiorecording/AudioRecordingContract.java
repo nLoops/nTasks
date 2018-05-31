@@ -16,9 +16,12 @@ public interface AudioRecordingContract {
 
         void playRecording();
 
-        void pausePlaying();
-
         void stopPlaying();
+
+        void deleteAudioFile();
+
+        void releaseMediaPlayer();
+
 
     }
 }

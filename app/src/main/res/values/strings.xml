@@ -28,5 +28,7 @@
     <string name="msg_task_updated">Task updated successfully</string>
     <string name="msg_task_deleted">Task deleted successfully</string>
     <string name="msg_task_added">Task added successfully</string>
+    <!--Audio Notes Strings-->
+    <string name="audio_counter_format">%02d:%02d</string>
 
 </resources>
