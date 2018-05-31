@@ -1,8 +1,11 @@
 package com.nloops.ntasks.adapters;
 
+import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -30,9 +33,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     private Cursor mCursor;
     private OnItemClickListener mOnClickListener;
+    private Context mContext;
 
-    public TaskListAdapter(Cursor cursor) {
+    public TaskListAdapter(Cursor cursor, Context context) {
         this.mCursor = cursor;
+        this.mContext = context;
     }
 
     public void setOnClickListener(OnItemClickListener clickListener) {
@@ -69,6 +74,12 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
         Task currentTask = getItem(position);
         holder.mTitleView.setText(currentTask.getTitle());
+        if (currentTask.isPriority()) {
+            holder.mPriorityView.
+                    setBackgroundColor(mContext.getResources().getColor(R.color.colorRed));
+        }
+        CharSequence formatted = DateUtils.getRelativeTimeSpanString(mContext, currentTask.getDate());
+        holder.mDueDateView.setText(formatted);
         if (currentTask.isComplete()) {
             holder.mCheckBox.setChecked(true);
         } else {
@@ -113,8 +124,16 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
         @BindView(R.id.tasks_list_check)
         CheckBox mCheckBox;
+
+        @BindView(R.id.task_priority_view)
+        View mPriorityView;
+
+        @BindView(R.id.task_list_due_date)
+        TextView mDueDateView;
+
         // help to listen to OnClickListener for full view
         View fullView;
+
 
         public TaskListViewHolder(View itemView) {
             super(itemView);

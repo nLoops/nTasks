@@ -77,7 +77,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         ButterKnife.bind(this, rootView);
         // get ref of empty view lives into Activity.
         mEmptyView = (View) getActivity().findViewById(R.id.empty_view);
-        mAdapter = new TaskListAdapter(null);
+        mAdapter = new TaskListAdapter(null, getContext());
         mAdapter.setOnClickListener(onItemClickListener);
         mRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);

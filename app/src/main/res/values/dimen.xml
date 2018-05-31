@@ -3,6 +3,7 @@
 
     <dimen name="empty_view_image">150dp</dimen>
     <dimen name="empty_text_size">20sp</dimen>
+    <dimen name="dimen_four_dp">4dp</dimen>
     <dimen name="dimen_eight_dp">8dp</dimen>
     <dimen name="dimen_sixteen_dp">16dp</dimen>
     <dimen name="divider_height">1dp</dimen>
