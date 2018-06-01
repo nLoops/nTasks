@@ -20,6 +20,8 @@
     <string name="content_playback_btn">Play Back Button</string>
     <string name="label_due_date">Due Date</string>
     <string name="label_date_not_set">Not Set</string>
+    <string name="reminder_title">Task Reminder</string>
+    <string name="notify_action_complete">Done</string>
 
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>

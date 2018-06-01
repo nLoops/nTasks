@@ -12,13 +12,11 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 
@@ -63,7 +61,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         // Create new object of Cursor Loader
         TaskLoader loader = new TaskLoader(getActivity());
         // Create new instance of LocalDataSource
-        TasksLocalDataSource dataSource = TasksLocalDataSource.getInstance(getActivity().getContentResolver());
+        TasksLocalDataSource dataSource = TasksLocalDataSource.getInstance(getActivity().getContentResolver(), getContext());
         // define Tasks.Presenter
         mPresenter = new TasksPresenter(loader, getActivity().getSupportLoaderManager(), this, dataSource);
     }

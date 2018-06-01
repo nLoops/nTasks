@@ -30,7 +30,7 @@ public interface TasksDataSource {
 
     void getTasks(@NonNull LoadTasksCallback callback);
 
-    void getTask(@NonNull int taskID, @NonNull GetTaskCallback callback);
+    void getTask(int taskID, @NonNull GetTaskCallback callback);
 
     void saveTask(@NonNull Task task);
 
@@ -42,7 +42,7 @@ public interface TasksDataSource {
 
     void deleteTask(@NonNull Uri taskUri);
 
-    void completeTask(@NonNull boolean state, @NonNull long rawID);
+    void completeTask(boolean state, long rawID);
 
     void updateTask(@NonNull Task task, @NonNull Uri uri);
 
