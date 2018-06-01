@@ -78,8 +78,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
             holder.mPriorityView.
                     setBackgroundColor(mContext.getResources().getColor(R.color.colorRed));
         }
-        CharSequence formatted = DateUtils.getRelativeTimeSpanString(mContext, currentTask.getDate());
-        holder.mDueDateView.setText(formatted);
+        if (currentTask.getDate() != Long.MAX_VALUE) {
+            holder.mDueDateView.setVisibility(View.VISIBLE);
+            CharSequence formatted = DateUtils.getRelativeTimeSpanString(mContext, currentTask.getDate());
+            holder.mDueDateView.setText(formatted);
+        } else {
+            holder.mDueDateView.setVisibility(View.INVISIBLE);
+        }
         if (currentTask.isComplete()) {
             holder.mCheckBox.setChecked(true);
         } else {
