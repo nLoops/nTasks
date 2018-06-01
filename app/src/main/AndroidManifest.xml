@@ -4,6 +4,7 @@
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".TasksApplication"
@@ -23,12 +24,24 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".addedittasks.AddEditTasks" />
+
         <provider
             android:name=".data.TasksProvider"
             android:authorities="com.nloops.ntasks"
             android:exported="false" />
 
-        <activity android:name=".addedittasks.AddEditTasks"></activity>
+        <service
+            android:name=".reminders.TaskOperationService"
+            android:exported="false" />
+
+        <receiver
+            android:name=".reminders.AlarmReceiver"
+            android:enabled="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
