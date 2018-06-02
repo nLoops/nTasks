@@ -22,6 +22,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="3"
+            android:paddingEnd="@dimen/dimen_four_dp"
+            android:paddingRight="@dimen/dimen_four_dp"
             tools:text="Get Some Milk" />
 
         <View

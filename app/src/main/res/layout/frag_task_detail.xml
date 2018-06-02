@@ -16,22 +16,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
-        android:id="@+id/task_detail_mic_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_sixteen_dp"
-        android:layout_marginRight="@dimen/dimen_sixteen_dp"
-        android:background="@android:color/transparent"
-        android:contentDescription="@string/content_desc_mic"
-        android:src="@drawable/ic_mic"
-        app:layout_constraintBottom_toTopOf="@id/task_detail_title"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintLeft_toRightOf="@id/task_detail_title"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/task_detail_title"
-        app:layout_constraintVertical_bias="0.50" />
-
     <EditText
         android:id="@+id/task_detail_body"
         android:layout_width="match_parent"
