@@ -63,6 +63,9 @@ public class AddEditTasks extends AppCompatActivity {
             case TaskEntry.TYPE_AUDIO_NOTE:
                 setupAudioNote(loader, localDataSource);
                 break;
+            case TaskEntry.TYPE_TODO_NOTE:
+                setupTodoNote(loader, localDataSource);
+                break;
         }
     }
 
@@ -126,6 +129,38 @@ public class AddEditTasks extends AppCompatActivity {
                     loader,
                     localDataSource,
                     audioNoteFragment,
+                    null);
+        }
+    }
+
+    /**
+     * Helper method to setup a new Object of {@link TaskTodoFragment} however passed TASK has URI or NOT.
+     *
+     * @param loader
+     * @param localDataSource
+     */
+    private void setupTodoNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+        // check if we have instance from the fragment it's okay
+        // if not we get a new instance.
+        TaskTodoFragment taskTodoFragment =
+                (TaskTodoFragment) getSupportFragmentManager().findFragmentById(R.id.task_detail_container);
+        if (taskTodoFragment == null) {
+            taskTodoFragment = TaskTodoFragment.newInstance();
+            GeneralUtils.addFragmentToActivity(getSupportFragmentManager(),
+                    taskTodoFragment, R.id.task_detail_container);
+        }
+        // if statement to determine if passed task is for edit or a new one.
+        if (TASK_URI != null) {
+            mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
+                    loader,
+                    localDataSource,
+                    taskTodoFragment,
+                    TASK_URI);
+        } else {
+            mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
+                    loader,
+                    localDataSource,
+                    taskTodoFragment,
                     null);
         }
     }
