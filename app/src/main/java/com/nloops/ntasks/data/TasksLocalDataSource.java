@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.reminders.AlarmReceiver;
@@ -23,8 +22,6 @@ import com.nloops.ntasks.utils.DatabaseValues;
  */
 public class TasksLocalDataSource implements TasksDataSource {
 
-    // singleton instance.
-    private static TasksLocalDataSource INSTANCE;
     // need to access ContentProvider CRUD operations.
     private ContentResolver mContentResolver;
     // passed context
@@ -32,16 +29,9 @@ public class TasksLocalDataSource implements TasksDataSource {
 
 
     // prevent direct instantiation.
-    private TasksLocalDataSource(@NonNull ContentResolver resolver, @NonNull Context context) {
+    public TasksLocalDataSource(@NonNull ContentResolver resolver, @NonNull Context context) {
         this.mContentResolver = resolver;
         this.mContext = context;
-    }
-
-    public static TasksLocalDataSource getInstance(@NonNull ContentResolver resolver, @NonNull Context context) {
-        if (INSTANCE == null) {
-            INSTANCE = new TasksLocalDataSource(resolver, context);
-        }
-        return INSTANCE;
     }
 
     @Override

@@ -54,8 +54,8 @@ public class AddEditTasks extends AppCompatActivity {
         // object of Loader that will return data using Cursor Adapter
         TaskLoader loader = new TaskLoader(this);
         // LocalDataSource that will apply operations on DB using ContentResolver.
-        TasksLocalDataSource localDataSource = TasksLocalDataSource
-                .getInstance(getContentResolver(), AddEditTasks.this);
+        TasksLocalDataSource localDataSource = new TasksLocalDataSource
+                (getContentResolver(), AddEditTasks.this);
         switch (TASK_TYPE) {
             case TaskEntry.TYPE_NORMAL_NOTE:
                 setupNormalNote(loader, localDataSource);

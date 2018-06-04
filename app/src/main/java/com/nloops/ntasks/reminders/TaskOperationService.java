@@ -27,7 +27,7 @@ public class TaskOperationService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         assert intent != null;
         if (intent.getAction().equals(ACTION_COMPLETE_TASK)) {
-            mTasksDataSource = TasksLocalDataSource.getInstance(getContentResolver(),
+            mTasksDataSource = new TasksLocalDataSource(getContentResolver(),
                     this);
             NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
             long rawID = ContentUris.parseId(intent.getData());

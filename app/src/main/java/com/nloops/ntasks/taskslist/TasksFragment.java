@@ -61,7 +61,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         // Create new object of Cursor Loader
         TaskLoader loader = new TaskLoader(getActivity());
         // Create new instance of LocalDataSource
-        TasksLocalDataSource dataSource = TasksLocalDataSource.getInstance(getActivity().getContentResolver(), getContext());
+        TasksLocalDataSource dataSource = new TasksLocalDataSource(getActivity().getContentResolver(), getContext());
         // define Tasks.Presenter
         mPresenter = new TasksPresenter(loader, getActivity().getSupportLoaderManager(), this, dataSource);
     }
