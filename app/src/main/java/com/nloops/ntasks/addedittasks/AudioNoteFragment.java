@@ -108,6 +108,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
                 if (AddEditTasks.TASK_URI == null) {
                     if (mAudioPresenter.isRecording()) {
                         mAudioPresenter.stopRecording();
+                        customHandler.removeCallbacks(updateTimerThread);
                     }
                     mPresenter.saveTask(getTask());
                 } else {
