@@ -22,7 +22,7 @@
     <string name="label_date_not_set">Not Set</string>
     <string name="reminder_title">Task Reminder</string>
     <string name="notify_action_complete">Done</string>
-
+    <string name="todo_list_button">Add New Item</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>

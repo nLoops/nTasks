@@ -9,13 +9,22 @@ public class Todo {
     private String mTodo;
 
     /**
-     * public constructor
+     * public Constructor.
      *
      * @param id
      * @param
      */
     public Todo(int id, String todo) {
         this.mID = id;
+        this.mTodo = todo;
+    }
+
+    /**
+     * Public Constructor.
+     *
+     * @param todo
+     */
+    public Todo(String todo) {
         this.mTodo = todo;
     }
 
