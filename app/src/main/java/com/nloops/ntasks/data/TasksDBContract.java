@@ -41,12 +41,6 @@ public class TasksDBContract {
         public static final Uri CONTENT_TASK_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(TABLE_NAME).build();
 
-        // Helper method with Content URI
-
-        public static Uri buildTasksUriWith(long id) {
-            return ContentUris.withAppendedId(CONTENT_TASK_URI, id);
-        }
-
         //Constant Values for Tasks type,state,priority
         public static final int NO_TASK_TYPE = -1;
         public static final int TYPE_NORMAL_NOTE = 0;
@@ -70,6 +64,15 @@ public class TasksDBContract {
                 .appendPath(TABLE_NAME).build();
 
     }
+
+    /* Sort order constants */
+    //Priority first, Completed last, the rest by date
+    public static final String DEFAULT_SORT = String.format("%s ASC, %s DESC, %s ASC",
+            TaskEntry.COLUMN_NAME_COMPLETE, TaskEntry.COLUMN_NAME_PRIORTY, TaskEntry.COLUMN_NAME_DATE);
+
+    //Completed last, then by date, followed by priority
+    public static final String DATE_SORT = String.format("%s ASC, %s ASC, %s DESC",
+            TaskEntry.COLUMN_NAME_COMPLETE, TaskEntry.COLUMN_NAME_DATE, TaskEntry.COLUMN_NAME_PRIORTY);
 
     /* Helpers to retrieve column values */
     public static String getColumnString(Cursor cursor, String columnName) {
