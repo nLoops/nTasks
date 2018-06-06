@@ -4,10 +4,13 @@ import android.app.IntentService;
 import android.app.NotificationManager;
 import android.content.ContentUris;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.nloops.ntasks.data.Task;
+import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
 public class TaskOperationService extends IntentService {
@@ -27,13 +30,19 @@ public class TaskOperationService extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         assert intent != null;
         if (intent.getAction().equals(ACTION_COMPLETE_TASK)) {
-            mTasksDataSource = new TasksLocalDataSource(getContentResolver(),
-                    this);
-            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-            long rawID = ContentUris.parseId(intent.getData());
-            mTasksDataSource.completeTask(true, rawID);
-            assert manager != null;
-            manager.cancel(intent.getIntExtra(EXTRAS_NOTIFICATION_ID, 0));
+            performCompleteTask(intent);
         }
     }
+
+
+    private void performCompleteTask(Intent intent) {
+        mTasksDataSource = new TasksLocalDataSource(getContentResolver(),
+                this);
+        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        long rawID = ContentUris.parseId(intent.getData());
+        mTasksDataSource.completeTask(true, rawID);
+        assert manager != null;
+        manager.cancel(intent.getIntExtra(EXTRAS_NOTIFICATION_ID, 0));
+    }
+
 }
