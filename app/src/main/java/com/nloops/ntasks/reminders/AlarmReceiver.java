@@ -4,7 +4,10 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
+import android.util.Log;
 
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 
 
@@ -19,31 +22,34 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         // when the device reboot all scheduling Alarms will be canceling and we need to be sure that
         // we keep reminding our user with his value tasks.
-        if (intent.getAction() != null && context != null) {
+        if (intent.getAction() != null) {
             if (intent.getAction().equalsIgnoreCase(Intent.ACTION_BOOT_COMPLETED)) {
 
-                Cursor cursor = context.getContentResolver().query(intent.getData(),
-                        null, null, null, null);
-                long alarmTime = System.currentTimeMillis();
-                int taskType = TasksDBContract.TaskEntry.NO_TASK_TYPE;
-
+                String selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=? AND "
+                        + TasksDBContract.TaskEntry.COLUMN_NAME_DATE + ">?";
+                String[] selectionArgs = new String[]{String.valueOf(TasksDBContract.TaskEntry.STATE_NOT_COMPLETED)
+                        , String.valueOf(System.currentTimeMillis())};
+                Cursor cursor = context.getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
+                        null,
+                        selection,
+                        selectionArgs,
+                        null);
+                assert cursor != null;
                 try {
-                    if (cursor != null && cursor.moveToFirst()) {
-                        alarmTime = TasksDBContract.getColumnLong(cursor, TasksDBContract.TaskEntry.COLUMN_NAME_DATE);
-                        taskType = TasksDBContract.getColumnInt(cursor, TasksDBContract.TaskEntry.COLUMN_NAME_TYPE);
+                    while (cursor.moveToNext()) {
+                        Task task = new Task(cursor);
+                        AlarmScheduler.scheduleAlarm(context, task.getDate(), task.getTaskUri(),
+                                AlarmReceiver.class, task.getType());
                     }
                 } finally {
-                    if (cursor != null) {
-                        cursor.close();
-                    }
+                    cursor.close();
                 }
-
-                AlarmScheduler.scheduleAlarm(context, alarmTime, intent.getData(), AlarmReceiver.class, taskType);
-
             }
+        } else {
+            // show the notification with TaskUri, to open task Detail fragment.
+            AlarmScheduler.notifyUser(context, intent.getData(),
+                    intent.getIntExtra("task_type", -1));
         }
-        // show the notification with TaskUri, to open task Detail fragment.
-        AlarmScheduler.notifyUser(context, intent.getData(),
-                intent.getIntExtra("task_type", -1));
+
     }
 }
