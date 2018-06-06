@@ -27,7 +27,7 @@ public class TaskLoader {
                 null,
                 null,
                 null,
-                null
+                TasksDBContract.DEFAULT_SORT
         );
     }
 
