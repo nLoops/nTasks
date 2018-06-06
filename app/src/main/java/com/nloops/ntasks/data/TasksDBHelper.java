@@ -32,7 +32,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
     private static final String SQL_CREATE_TODO_ENTRY =
             "CREATE TABLE " + TasksDBContract.TodoEntry.TABLE_NAME + " (" +
                     TasksDBContract.TodoEntry._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
-                    TasksDBContract.TodoEntry.COLUMN_NAME_TODO + TEXT_TYPE +
+                    TasksDBContract.TodoEntry.COLUMN_NAME_TODO + TEXT_TYPE + COMMA +
+                    TasksDBContract.TodoEntry.COLUMN_NAME_TASK_ID + INTEGER_TYPE + COMMA +
+                    TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE + INTEGER_TYPE +
                     ")";
 
 

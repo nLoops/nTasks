@@ -59,9 +59,15 @@ public class TasksDBContract {
     public static abstract class TodoEntry implements BaseColumns {
         public static final String TABLE_NAME = "todo";
         public static final String COLUMN_NAME_TODO = "txttodo";
+        public static final String COLUMN_NAME_TASK_ID = "taskid";
+        public static final String COLUMN_NAME_COMPLETE = "is_complete";
         //Content Uri for table_todo
         public static final Uri CONTENT_TODO_URI = BASE_CONTENT_URI.buildUpon()
                 .appendPath(TABLE_NAME).build();
+
+        // public constants for todotable
+        public static final int STATE_NOT_COMPLETED = 0;
+        public static final int STATE_COMPLETED = 1;
 
     }
 
