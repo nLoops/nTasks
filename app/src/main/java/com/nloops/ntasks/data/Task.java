@@ -1,6 +1,8 @@
 package com.nloops.ntasks.data;
 
+import android.content.ContentUris;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -26,7 +28,7 @@ public class Task {
 
     private int mType;
 
-    private int mPriorty;
+    private int mPriority;
 
     private long mDate;
 
@@ -43,7 +45,7 @@ public class Task {
         this.mTitle = title;
         this.mBody = body;
         this.mType = type;
-        this.mPriorty = priorty;
+        this.mPriority = priorty;
         this.mDate = date;
         this.mCompleted = completed;
         this.mPath = path;
@@ -62,7 +64,7 @@ public class Task {
         this.mCompleted = getColumnInt(cursor, TaskEntry.COLUMN_NAME_COMPLETE);
         this.mDate = getColumnLong(cursor, TaskEntry.COLUMN_NAME_DATE);
         this.mPath = getColumnString(cursor, TaskEntry.COLUMN_NAME_PATH);
-        this.mPriorty = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
+        this.mPriority = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
         this.mType = getColumnInt(cursor, TaskEntry.COLUMN_NAME_TYPE);
     }
 
@@ -85,7 +87,7 @@ public class Task {
     }
 
     public int getPriorty() {
-        return mPriorty;
+        return mPriority;
     }
 
     public long getDate() {
@@ -111,7 +113,7 @@ public class Task {
     }
 
     public boolean isPriority() {
-        return mPriorty == TaskEntry.PRIORTY_HIGH;
+        return mPriority == TaskEntry.PRIORTY_HIGH;
     }
 
     public void setTitle(@NonNull String mTitle) {
@@ -131,7 +133,7 @@ public class Task {
     }
 
     public void setPriorty(int mPriorty) {
-        this.mPriorty = mPriorty;
+        this.mPriority = mPriorty;
     }
 
     public void setDate(long mDate) {
@@ -150,6 +152,15 @@ public class Task {
         this.mTodos = mTodos;
     }
 
+    /**
+     * We will using this method to help re-schedule the pending Alarms after reboot
+     *
+     * @return Task Uri.
+     */
+    public Uri getTaskUri() {
+        return ContentUris.withAppendedId(TaskEntry.CONTENT_TASK_URI, mID);
+    }
+
     @Override
     public String toString() {
         return "Task{" +
@@ -157,7 +168,7 @@ public class Task {
                 ", mTitle='" + mTitle + '\'' +
                 ", mBody='" + mBody + '\'' +
                 ", mType=" + mType +
-                ", mPriorty=" + mPriorty +
+                ", mPriority=" + mPriority +
                 ", mDate=" + mDate +
                 ", mCompleted=" + mCompleted +
                 ", mPath='" + mPath + '\'' +
