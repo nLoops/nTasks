@@ -10,6 +10,7 @@ import android.support.v4.content.Loader;
 
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
+import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
 public class TasksDetailPresenter implements TaskDetailContract.Presenter,
@@ -36,11 +37,12 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
     /**
      * Public Constructor.
      *
-     * @param loaderManager
-     * @param taskLoader
-     * @param localDataSource
-     * @param taskView
-     * @param uri
+     * @param loaderManager   {@link LoaderManager}
+     * @param taskLoader      {@link TaskLoader}
+     * @param localDataSource {@link TasksLocalDataSource}
+     * @param taskView        implementation of {@link TaskDetailContract.View} which fragment
+     *                        in our situation.
+     * @param uri             {@link Task} Uri.
      */
     public TasksDetailPresenter(
             @NonNull LoaderManager loaderManager,
