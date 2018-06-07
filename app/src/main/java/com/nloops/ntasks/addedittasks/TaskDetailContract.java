@@ -35,6 +35,8 @@ public interface TaskDetailContract {
 
         void launchDatePicker();
 
+        void completeTODO(boolean state, long rawID);
+
 
     }
 }

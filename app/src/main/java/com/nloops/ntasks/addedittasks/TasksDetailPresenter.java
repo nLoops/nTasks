@@ -118,6 +118,11 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
         mTasksView.showDateTimePicker();
     }
 
+    @Override
+    public void completeTODO(boolean state, long rawID) {
+        mLocalDataSource.completeTODO(state, rawID);
+    }
+
 
     @Override
     public void onDataLoaded(Cursor data) {

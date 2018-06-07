@@ -48,6 +48,17 @@ public class TasksLocalDataSource implements TasksDataSource {
     public void saveTask(@NonNull Task task) {
         ContentValues values = DatabaseValues.from(task);
         Uri uri = mContentResolver.insert(TasksDBContract.TaskEntry.CONTENT_TASK_URI, values);
+        // add todolist items
+        if (task.getTodos() != null) {
+            assert uri != null;
+            int taskID = Integer.valueOf(uri.getLastPathSegment());
+            for (int i = 0; i < task.getTodos().size(); i++) {
+                Todo todo = task.getTodos().get(i);
+                todo.setTaskID(taskID);
+                ContentValues todoValues = DatabaseValues.from(todo);
+                mContentResolver.insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+            }
+        }
         // setup Alarm For this Reminder.
         if (task.getDate() != Long.MAX_VALUE) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
@@ -75,6 +86,8 @@ public class TasksLocalDataSource implements TasksDataSource {
     @Override
     public void deleteTask(@NonNull Uri taskUri) {
         mContentResolver.delete(taskUri, null, null);
+        String[] selectionArgs = new String[]{taskUri.getLastPathSegment()};
+        mContentResolver.delete(TasksDBContract.TodoEntry.CONTENT_TODO_URI, null, selectionArgs);
         PendingIntent operation =
                 AlarmScheduler.getReminderPendingIntent(mContext, taskUri, AlarmReceiver.class);
         AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
@@ -88,7 +101,7 @@ public class TasksLocalDataSource implements TasksDataSource {
                 rawID);
         ContentValues values = new ContentValues(1);
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
-        int count = mContentResolver.update(rawUri, values, null, null);
+        mContentResolver.update(rawUri, values, null, null);
 
         PendingIntent operation =
                 AlarmScheduler.getReminderPendingIntent(mContext, rawUri, AlarmReceiver.class);
@@ -97,16 +110,39 @@ public class TasksLocalDataSource implements TasksDataSource {
     }
 
     @Override
+    public void completeTODO(boolean state, long rawID) {
+        Uri rawUri = ContentUris.withAppendedId(TasksDBContract.TodoEntry.CONTENT_TODO_URI, rawID);
+        ContentValues values = new ContentValues(1);
+        values.put(TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
+        mContentResolver.update(rawUri, values, null, null);
+    }
+
+    @Override
     public void updateTask(@NonNull Task task, @NonNull Uri uri) {
         ContentValues values = DatabaseValues.from(task);
         mContentResolver.update(uri,
                 values,
                 null, null);
-        // setup Alarm For this Reminder.
-        if (task.getDate() != Long.MAX_VALUE) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                AlarmScheduler.scheduleAlarm(mContext,
-                        task.getDate(), AddEditTasks.TASK_URI, AlarmReceiver.class, task.getType());
+
+        // add todolist items
+        if (task.getTodos() != null) {
+            int taskID = Integer.valueOf(uri.getLastPathSegment());
+            String[] selectionArgs = new String[]{String.valueOf(taskID)};
+            // first we will delete old TODOs
+            mContentResolver.delete(TasksDBContract.TodoEntry.CONTENT_TODO_URI, null, selectionArgs);
+            // here we will insert the updates TODOs
+            for (int i = 0; i < task.getTodos().size(); i++) {
+                Todo todo = task.getTodos().get(i);
+                todo.setTaskID(taskID);
+                ContentValues todoValues = DatabaseValues.from(todo);
+                mContentResolver.insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+            }
+            // setup Alarm For this Reminder.
+            if (task.getDate() != Long.MAX_VALUE) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    AlarmScheduler.scheduleAlarm(mContext,
+                            task.getDate(), AddEditTasks.TASK_URI, AlarmReceiver.class, task.getType());
+                }
             }
         }
     }
