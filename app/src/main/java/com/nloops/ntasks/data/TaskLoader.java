@@ -41,6 +41,18 @@ public class TaskLoader {
                 null
         );
     }
+
+    public Loader<Cursor> createTODOLoader(String taskID) {
+        String[] selectionArgs = new String[]{taskID};
+        return new CursorLoader(
+                mContext,
+                TasksDBContract.TodoEntry.CONTENT_TODO_URI,
+                null,
+                null,
+                selectionArgs,
+                null
+        );
+    }
 }
 
 
