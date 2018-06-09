@@ -1,0 +1,59 @@
+{
+  "project_info": {
+    "project_number": "134491240637",
+    "firebase_url": "https://ntasks-2c593.firebaseio.com",
+    "project_id": "ntasks-2c593",
+    "storage_bucket": "ntasks-2c593.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:134491240637:android:c74f19a1762c8d9b",
+        "android_client_info": {
+          "package_name": "com.nloops.ntasks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "134491240637-kp5a9jadrqko17u69c8l99jhog95o96f.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.nloops.ntasks",
+            "certificate_hash": "ef4a65352c2bf4ccf8422a6ad18ff832f467aee1"
+          }
+        },
+        {
+          "client_id": "134491240637-l70uceugdkhft5ka2q89ir8o45nkr8g2.apps.googleusercontent.com",
+          "client_type": 3
+        },
+        {
+          "client_id": "134491240637-l70uceugdkhft5ka2q89ir8o45nkr8g2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbbPujmU02E5vMLkRcv3LcNr6S_BY56W0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "134491240637-l70uceugdkhft5ka2q89ir8o45nkr8g2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
