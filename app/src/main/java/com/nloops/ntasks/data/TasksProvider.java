@@ -17,6 +17,7 @@ public class TasksProvider extends ContentProvider {
     private static final int TASK = 100;
     private static final int TASK_ITEM = 101;
     private static final int TODOs = 200;
+    private static final int TODOS_ITEM = 201;
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private TasksDBHelper mDbHelper;
 
@@ -33,6 +34,7 @@ public class TasksProvider extends ContentProvider {
         matcher.addURI(authority, TasksDBContract.TaskEntry.TABLE_NAME, TASK);
         matcher.addURI(authority, TasksDBContract.TaskEntry.TABLE_NAME + "/#", TASK_ITEM);
         matcher.addURI(authority, TasksDBContract.TodoEntry.TABLE_NAME, TODOs);
+        matcher.addURI(authority, TasksDBContract.TodoEntry.TABLE_NAME + "/#", TODOS_ITEM);
 
         return matcher;
     }
@@ -72,6 +74,7 @@ public class TasksProvider extends ContentProvider {
                         sortOrder);
                 break;
             case TODOs:
+                selection = TasksDBContract.TodoEntry.COLUMN_NAME_TASK_ID + "=?";
                 retCursor = mDbHelper.getReadableDatabase().query(
                         TasksDBContract.TodoEntry.TABLE_NAME,
                         projection,
@@ -142,6 +145,7 @@ public class TasksProvider extends ContentProvider {
                 break;
 
             case TODOs:
+                selection = TasksDBContract.TodoEntry.COLUMN_NAME_TASK_ID + "=?";
                 rowAffected = db.delete(
                         TasksDBContract.TodoEntry.TABLE_NAME,
                         selection,
@@ -175,6 +179,12 @@ public class TasksProvider extends ContentProvider {
                         selection,
                         selectionArgs
                 );
+                break;
+            case TODOS_ITEM:
+                selection = TasksDBContract.TodoEntry._ID + "=?";
+                selectionArgs = new String[]{String.valueOf(ContentUris.parseId(uri))};
+                rawUpdated = db.update(TasksDBContract.TodoEntry.TABLE_NAME,
+                        values, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("Updated not supported for " + uri);
