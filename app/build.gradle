@@ -38,5 +38,9 @@ dependencies {
     //import leak canary to detect memory leaks
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5.4'
     releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5.4'
+    // import Firebase real time database
+    implementation'com.google.firebase:firebase-database:16.0.1'
+    implementation 'com.google.firebase:firebase-core:16.0.0'
 
 }
+apply plugin: 'com.google.gms.google-services'
