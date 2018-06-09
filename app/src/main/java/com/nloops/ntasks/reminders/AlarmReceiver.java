@@ -38,7 +38,8 @@ public class AlarmReceiver extends BroadcastReceiver {
                 try {
                     while (cursor.moveToNext()) {
                         Task task = new Task(cursor);
-                        AlarmScheduler.scheduleAlarm(context, task.getDate(), task.getTaskUri(),
+                        AlarmScheduler.scheduleAlarm(context, task.getDate(),
+                                TasksDBContract.getTaskUri(task),
                                 AlarmReceiver.class, task.getType());
                     }
                 } finally {

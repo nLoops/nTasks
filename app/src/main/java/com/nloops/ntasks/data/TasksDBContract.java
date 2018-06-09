@@ -92,4 +92,13 @@ public class TasksDBContract {
     public static long getColumnLong(Cursor cursor, String columnName) {
         return cursor.getLong(cursor.getColumnIndex(columnName));
     }
+
+    /**
+     * We will using this method to help re-schedule the pending Alarms after reboot
+     *
+     * @return Task Uri.
+     */
+    public static Uri getTaskUri(Task task) {
+        return ContentUris.withAppendedId(TaskEntry.CONTENT_TASK_URI, task.getID());
+    }
 }

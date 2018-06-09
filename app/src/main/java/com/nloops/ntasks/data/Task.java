@@ -1,8 +1,6 @@
 package com.nloops.ntasks.data;
 
-import android.content.ContentUris;
 import android.database.Cursor;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -150,15 +148,6 @@ public class Task {
 
     public void setTodos(@Nullable List<Todo> mTodos) {
         this.mTodos = mTodos;
-    }
-
-    /**
-     * We will using this method to help re-schedule the pending Alarms after reboot
-     *
-     * @return Task Uri.
-     */
-    public Uri getTaskUri() {
-        return ContentUris.withAppendedId(TaskEntry.CONTENT_TASK_URI, mID);
     }
 
     @Override
