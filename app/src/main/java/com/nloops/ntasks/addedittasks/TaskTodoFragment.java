@@ -3,7 +3,6 @@ package com.nloops.ntasks.addedittasks;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,7 +14,6 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.text.format.DateUtils;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -224,8 +222,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         if (getDateSelection() == Long.MAX_VALUE) {
             mDateText.setText(getString(R.string.label_date_not_set));
         } else {
-            CharSequence formatted = DateUtils.getRelativeTimeSpanString(getActivity(), mDueDate);
-            mDateText.setText(formatted);
+            mDateText.setText(GeneralUtils.formatDate(mDueDate));
         }
     }
 

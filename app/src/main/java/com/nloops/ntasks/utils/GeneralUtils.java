@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SwitchCompat;
+import android.text.format.DateUtils;
 
 import com.nloops.ntasks.data.TasksDBContract;
 
@@ -56,7 +57,6 @@ public class GeneralUtils {
      * @return savedPath
      */
     public static String getSavedPath() {
-        String savedPath = null;
         String storeLocation = Environment.getExternalStorageDirectory().getAbsolutePath();
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
                 Locale.getDefault()).format(new Date());
@@ -66,7 +66,23 @@ public class GeneralUtils {
         if (!storageDir.exists()) {
             storageDir.mkdirs();
         }
-        return savedPath = storeLocation + "/nTasks/" + audioFileName;
+        return storeLocation + "/nTasks/" + audioFileName;
+    }
+
+    /**
+     * This helper method takes stored Millis and return into String shape.
+     *
+     * @param time Stored Date
+     * @return Formatted Date into String
+     */
+    public static CharSequence formatDate(Long time) {
+        CharSequence formatted = DateUtils.getRelativeTimeSpanString(time,
+                System.currentTimeMillis(),
+                0L,
+                DateUtils.FORMAT_ABBREV_RELATIVE
+        );
+
+        return formatted;
     }
 
 }

@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,12 +22,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
+import com.nloops.ntasks.R;
 import com.nloops.ntasks.UI.DatePickerFragment;
 import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.audiorecording.AudioRecordingContract;
 import com.nloops.ntasks.audiorecording.AudioRecordingPresenter;
 import com.nloops.ntasks.data.Task;
-import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.views.AudioCounterView;
@@ -237,8 +236,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         if (getDateSelection() == Long.MAX_VALUE) {
             mDueDateTV.setText(getString(R.string.label_date_not_set));
         } else {
-            CharSequence formatted = DateUtils.getRelativeTimeSpanString(getActivity(), mDueDate);
-            mDueDateTV.setText(formatted);
+            mDueDateTV.setText(GeneralUtils.formatDate(mDueDate));
         }
     }
 

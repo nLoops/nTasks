@@ -17,6 +17,7 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDataSource;
+import com.nloops.ntasks.utils.GeneralUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -80,8 +81,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         }
         if (currentTask.getDate() != Long.MAX_VALUE) {
             holder.mDueDateView.setVisibility(View.VISIBLE);
-            CharSequence formatted = DateUtils.getRelativeTimeSpanString(mContext, currentTask.getDate());
-            holder.mDueDateView.setText(formatted);
+            holder.mDueDateView.setText(GeneralUtils.formatDate(currentTask.getDate()));
         } else {
             holder.mDueDateView.setVisibility(View.INVISIBLE);
         }

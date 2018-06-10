@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,7 +20,6 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 
 import com.nloops.ntasks.R;
-
 import com.nloops.ntasks.UI.DatePickerFragment;
 import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.data.Task;
@@ -168,8 +166,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         if (getDateSelection() == Long.MAX_VALUE) {
             mDateText.setText(getString(R.string.label_date_not_set));
         } else {
-            CharSequence formatted = DateUtils.getRelativeTimeSpanString(getActivity(), mDueDate);
-            mDateText.setText(formatted);
+            mDateText.setText(GeneralUtils.formatDate(mDueDate));
         }
     }
 
