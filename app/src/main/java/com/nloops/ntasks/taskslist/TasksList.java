@@ -14,6 +14,7 @@ import android.util.Log;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.widgets.WidgetIntentService;
 
 import java.util.List;
 
@@ -42,6 +43,9 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
             transaction.add(R.id.tasks_list_container, tasksFragment);
             transaction.commit();
         }
+
+        // update Widget List with data.
+        WidgetIntentService.startActionChangeList(this);
 
         // we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES
         getPermissions();

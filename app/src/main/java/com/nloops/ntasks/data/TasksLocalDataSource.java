@@ -15,6 +15,7 @@ import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
+import com.nloops.ntasks.widgets.WidgetIntentService;
 
 /**
  * implements {@link TasksDataSource} to set behavior on how handle data from
@@ -66,6 +67,9 @@ public class TasksLocalDataSource implements TasksDataSource {
                         task.getDate(), uri, AlarmReceiver.class, task.getType());
             }
         }
+
+        // Update Home Widget
+        WidgetIntentService.startActionChangeList(mContext);
     }
 
     @Override
@@ -88,10 +92,15 @@ public class TasksLocalDataSource implements TasksDataSource {
         mContentResolver.delete(taskUri, null, null);
         String[] selectionArgs = new String[]{taskUri.getLastPathSegment()};
         mContentResolver.delete(TasksDBContract.TodoEntry.CONTENT_TODO_URI, null, selectionArgs);
+
+        // if this task has scheduled Reminder we will cancel it to prevent notify.
         PendingIntent operation =
                 AlarmScheduler.getReminderPendingIntent(mContext, taskUri, AlarmReceiver.class);
         AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(operation);
+
+        // Update Home Widget
+        WidgetIntentService.startActionChangeList(mContext);
     }
 
 
@@ -102,11 +111,14 @@ public class TasksLocalDataSource implements TasksDataSource {
         ContentValues values = new ContentValues(1);
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
         mContentResolver.update(rawUri, values, null, null);
-
+        // if this task has scheduled Reminder we will cancel it to prevent notify.
         PendingIntent operation =
                 AlarmScheduler.getReminderPendingIntent(mContext, rawUri, AlarmReceiver.class);
         AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
         manager.cancel(operation);
+
+        // Update Home Widget
+        WidgetIntentService.startActionChangeList(mContext);
     }
 
     @Override
@@ -145,6 +157,9 @@ public class TasksLocalDataSource implements TasksDataSource {
                 }
             }
         }
+
+        // Update Home Widget
+        WidgetIntentService.startActionChangeList(mContext);
     }
 
 
