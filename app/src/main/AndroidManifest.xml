@@ -25,17 +25,22 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".addedittasks.AddEditTasks" />
 
         <provider
             android:name=".data.TasksProvider"
             android:authorities="com.nloops.ntasks"
-            android:exported="false" />
+            android:exported="true" />
 
         <service
             android:name=".reminders.TaskOperationService"
             android:exported="false" />
+
+        <service android:name=".widgets.WidgetIntentService" />
+
+        <service
+            android:name=".widgets.ListViewService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <receiver
             android:name=".reminders.AlarmReceiver"
@@ -44,6 +49,17 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
+
+        <receiver android:name=".widgets.TasksListWidget">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/tasks_list_widget_info" />
+        </receiver>
+
     </application>
 
 </manifest>

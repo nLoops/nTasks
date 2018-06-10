@@ -32,5 +32,7 @@
     <string name="msg_task_added">Task added successfully</string>
     <!--Audio Notes Strings-->
     <string name="audio_counter_format">%02d:%02d</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 
 </resources>
