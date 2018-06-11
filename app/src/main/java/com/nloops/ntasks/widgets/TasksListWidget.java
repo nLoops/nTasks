@@ -16,7 +16,6 @@ public class TasksListWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-        Log.i("SHEFA", "updateAppWidget: ");
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.tasks_list_widget);
         Intent intent = new Intent(context, ListViewService.class);

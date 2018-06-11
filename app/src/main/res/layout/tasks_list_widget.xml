@@ -1,24 +1,13 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
+    android:background="@drawable/widget_background"
     android:orientation="vertical"
     android:padding="@dimen/widget_margin">
-
-    <TextView
-        android:id="@+id/tasks_widget_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/colorAccent"
-        android:text="Your Daily Tasks"
-        android:textAlignment="center"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Headline"
-        android:textColor="@android:color/white" />
 
     <ListView
         android:id="@+id/tasks_list_widget_lv"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/tasks_widget_title" />
+        android:layout_height="match_parent" />
 
 </RelativeLayout>
