@@ -1,0 +1,35 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    android:orientation="horizontal"
+    android:padding="@dimen/widget_margin">
+
+    <ImageButton
+        android:id="@+id/add_normal_note_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/touch_selector_widget"
+        android:contentDescription="@string/content_desc_normal_note"
+        android:src="@drawable/ic_note_big" />
+
+    <ImageButton
+        android:id="@+id/add_todo_note_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_eight_dp"
+        android:layout_marginStart="@dimen/dimen_eight_dp"
+        android:background="@drawable/touch_selector_widget"
+        android:contentDescription="@string/content_desc_todo_note"
+        android:src="@drawable/ic_list_big" />
+
+    <ImageButton
+        android:id="@+id/add_audio_note_widget"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dimen_eight_dp"
+        android:layout_marginStart="@dimen/dimen_eight_dp"
+        android:background="@drawable/touch_selector_widget"
+        android:contentDescription="@string/content_desc_audio_note"
+        android:src="@drawable/ic_mic_big" />
+</LinearLayout>

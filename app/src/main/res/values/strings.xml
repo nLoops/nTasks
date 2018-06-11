@@ -13,6 +13,9 @@
     <string name="content_desc_mic">Speech To Text mic icon</string>
     <string name="content_desc_empty_calender">Empty Calender image</string>
     <string name="content_desc_cup">Coffee cup drawable</string>
+    <string name="content_desc_normal_note">Normal Note</string>
+    <string name="content_desc_todo_note">Todo list Note</string>
+    <string name="content_desc_audio_note">Audio Note</string>
     <string name="permissions_required">App requires RECORD_AUDIO permission to access mic and
     WRITE_EXTERNAL_STORAGE to save recorded audio
   </string>
