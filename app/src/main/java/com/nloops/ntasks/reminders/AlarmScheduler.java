@@ -15,6 +15,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
+import android.support.v4.content.ContextCompat;
 
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
@@ -118,6 +119,7 @@ public class AlarmScheduler {
 
         // Build a Notification.
         NotificationCompat.Builder note = new NotificationCompat.Builder(context)
+                .setColor(ContextCompat.getColor(context, R.color.colorAccent))
                 .setContentTitle(context.getString(R.string.reminder_title))
                 .setContentText(taskTitle)
                 .setSmallIcon(R.drawable.ic_done)
