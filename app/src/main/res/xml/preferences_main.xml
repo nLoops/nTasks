@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="@string/settings_sortby_default"
+        android:entries="@array/settings_sortby_labels"
+        android:entryValues="@array/settings_sortby_values"
+        android:key="@string/settings_sortby_key"
+        android:title="@string/settings_sortby_label" />
+
+    <CheckBoxPreference
+        android:defaultValue="@bool/hide_complete_tasks"
+        android:key="@string/settings_completed_key"
+        android:summaryOff="@string/settings_completed_hide"
+        android:summaryOn="@string/settings_completed_show"
+        android:title="@string/settings_completed_title" />
+
+    <PreferenceCategory
+        android:key="@string/settings_cat_sync_key"
+        android:title="@string/settings_cat_sync_label">
+
+        <CheckBoxPreference
+            android:defaultValue="@bool/sync_data"
+            android:key="@string/settings_sync_key"
+            android:summaryOff="@string/settings_sync_disabled"
+            android:summaryOn="@string/settings_sync_enabled"
+            android:title="@string/settings_sync_title" />
+
+
+        <ListPreference
+            android:defaultValue="@string/settings_sync_time_default"
+            android:entries="@array/settings_time_labels"
+            android:entryValues="@array/settings_time_values"
+            android:key="@string/settings_sync_time_key"
+            android:title="@string/settings_sync_time_label" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

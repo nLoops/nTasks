@@ -1,11 +1,15 @@
 package com.nloops.ntasks.data;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+
+import com.nloops.ntasks.R;
 
 /**
  * Loader Provider need to load single Tasks or List of Tasks into background
@@ -22,13 +26,36 @@ public class TaskLoader {
 
 
     public Loader<Cursor> createTasksLoader() {
+        // get SharedPreference to arrange Tasks sortBy
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        // get the Current Value of preference
+        String sortByValue = sharedPreferences.getString(mContext.getString(R.string.settings_sortby_key),
+                mContext.getString(R.string.settings_sortby_default));
+        // By default we have Date first
+        String sortBy = TasksDBContract.DATE_SORT;
+        // if we have Priority first we change the sort of Tasks.
+        if (sortByValue.equals(mContext.getString(R.string.settings_priority_value))) {
+            sortBy = TasksDBContract.DEFAULT_SORT;
+        }
+
+        boolean pref = sharedPreferences.getBoolean(mContext.getString(R.string.settings_completed_key),
+                mContext.getResources().getBoolean(R.bool.hide_complete_tasks));
+        String selection = null;
+        String[] selectionArgs = null;
+
+        if (!pref) {
+            selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=?";
+            selectionArgs = new String[]{String.valueOf(TasksDBContract.TaskEntry.STATE_NOT_COMPLETED)};
+        }
         return new CursorLoader(mContext,
                 TasksDBContract.TaskEntry.CONTENT_TASK_URI,
                 null,
-                null,
-                null,
-                TasksDBContract.DEFAULT_SORT
+                selection,
+                selectionArgs,
+                sortBy
         );
+
+
     }
 
     public Loader<Cursor> createTaskLoader(Uri uri) {

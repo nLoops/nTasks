@@ -37,5 +37,40 @@
     <string name="audio_counter_format">%02d:%02d</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <!--App Settings-->
+    <!--Tasks sortBy -->
+    <string name="settings_label">Settings</string>
+    <string name="settings_sortby_label">Tasks Sort</string>
+    <string name="settings_sortby_key" translatable="false">tasks_sortby</string>
+    <string name="settings_sortby_default" translatable="false">@string/settings_date_value</string>
+
+    <string name="settings_priority_label">Priority First</string>
+    <string name="settings_priority_value" translatable="false">priority_first</string>
+    <string name="settings_date_label">Date First</string>
+    <string name="settings_date_value" translatable="false">date_first</string>
+
+    <!--Completed Tasks Display-->
+    <string name="settings_completed_title">Display Completed Tasks</string>
+    <string name="settings_completed_key">completed_tasks</string>
+    <string name="settings_completed_show">Show</string>
+    <string name="settings_completed_hide">Hide</string>
+
+    <!--Cloud Sync-->
+    <string name="settings_cat_sync_label">Cloud Backup</string>
+    <string name="settings_cat_sync_key" translatable="false">cloud_sync</string>
+    <string name="settings_sync_title">Allow Daily Cloud Backup</string>
+    <string name="settings_sync_key" translatable="false">sync_daily</string>
+    <string name="settings_sync_enabled">Enabled</string>
+    <string name="settings_sync_disabled">Disabled</string>
+
+    <string name="settings_sync_time_label">Backup Time</string>
+    <string name="settings_sync_time_key" translatable="false">backup_time</string>
+    <string name="settings_sync_time_default">@string/settings_sync_two_key</string>
+    <string name="settings_sync_twelve_label">12:00 AM</string>
+    <string name="settings_sync_twelve_key" translatable="false">twelve_time</string>
+    <string name="settings_sync_two_label">02:00 AM</string>
+    <string name="settings_sync_two_key" translatable="false">two_time</string>
+    <string name="settings_sync_four_label">04:00 AM</string>
+    <string name="settings_sync_four_key" translatable="false">four_time</string>
 
 </resources>

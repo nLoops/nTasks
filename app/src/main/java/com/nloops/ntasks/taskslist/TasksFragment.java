@@ -4,27 +4,32 @@ package com.nloops.ntasks.taskslist;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 
-import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-
 import com.nloops.ntasks.R;
+import com.nloops.ntasks.UI.SettingsActivity;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
 import butterknife.BindView;
@@ -69,6 +74,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, Bundle savedInstanceState) {
+        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.frag_tasks_list, container, false);
         Context context = container.getContext();
         //Bind fragment layout elements
@@ -114,6 +120,23 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     public void onPause() {
         super.onPause();
         mPresenter.removeLoader();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.tasks_list_menu, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                showSettingsActivity();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
     }
 
     @Override
@@ -173,6 +196,14 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     @Override
     public void showAddedMessage() {
         showMessage(getString(R.string.msg_task_added));
+    }
+
+    @Override
+    public void showSettingsActivity() {
+        Intent intent = new Intent(getContext(), SettingsActivity.class);
+        startActivity(intent);
+        // set Navigation Animation
+        getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
     }
 
     @Override

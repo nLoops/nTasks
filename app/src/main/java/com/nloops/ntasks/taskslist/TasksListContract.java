@@ -25,6 +25,8 @@ public interface TasksListContract {
         void showUpdatedMessage();
 
         void showAddedMessage();
+
+        void showSettingsActivity();
     }
 
 
