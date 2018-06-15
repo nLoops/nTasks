@@ -24,6 +24,9 @@
     <string name="label_due_date">Due Date</string>
     <string name="label_date_not_set">Not Set</string>
     <string name="reminder_title">Task Reminder</string>
+    <string name="reminder_normaltask">Normal Task</string>
+    <string name="reminder_todolist">TODO List</string>
+    <string name="reminder_audionote">Audio Note</string>
     <string name="notify_action_complete">Done</string>
     <string name="todo_list_button">Add New Item</string>
     <!--This string CurrentUser will help when background job runs to backup data under user root-->

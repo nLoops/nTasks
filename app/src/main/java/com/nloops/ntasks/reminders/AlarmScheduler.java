@@ -117,10 +117,24 @@ public class AlarmScheduler {
         PendingIntent actionComplete = PendingIntent.getService(context, 1, completeIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
 
+        // Setup ContentTitle For Notification
+        String contentTitle = context.getString(R.string.reminder_title);
+        switch (taskType) {
+            case TasksDBContract.TaskEntry.TYPE_NORMAL_NOTE:
+                contentTitle = context.getString(R.string.reminder_normaltask);
+                break;
+            case TasksDBContract.TaskEntry.TYPE_TODO_NOTE:
+                contentTitle = context.getString(R.string.reminder_todolist);
+                break;
+            case TasksDBContract.TaskEntry.TYPE_AUDIO_NOTE:
+                contentTitle = context.getString(R.string.reminder_audionote);
+                break;
+        }
+
         // Build a Notification.
         NotificationCompat.Builder note = new NotificationCompat.Builder(context)
                 .setColor(ContextCompat.getColor(context, R.color.colorAccent))
-                .setContentTitle(context.getString(R.string.reminder_title))
+                .setContentTitle(contentTitle)
                 .setContentText(taskTitle)
                 .setSmallIcon(R.drawable.ic_done)
                 .setContentIntent(operation)
