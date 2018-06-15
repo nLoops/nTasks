@@ -12,14 +12,14 @@
 
     <string-array name="settings_time_labels">
         <item>@string/settings_sync_twelve_label</item>
-        <item>@string/settings_sync_two_label</item>
-        <item>@string/settings_sync_four_label</item>
+        <item>@string/settings_sync_day_label</item>
+        <item>@string/settings_sync_week_label</item>
     </string-array>
 
     <string-array name="settings_time_values">
         <item>@string/settings_sync_twelve_key</item>
-        <item>@string/settings_sync_two_key</item>
-        <item>@string/settings_sync_four_key</item>
+        <item>@string/settings_sync_day_key</item>
+        <item>@string/settings_sync_week_key</item>
     </string-array>
 
 </resources>

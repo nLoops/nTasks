@@ -26,6 +26,8 @@
     <string name="reminder_title">Task Reminder</string>
     <string name="notify_action_complete">Done</string>
     <string name="todo_list_button">Add New Item</string>
+    <!--This string CurrentUser will help when background job runs to backup data under user root-->
+    <string name="current_user_firebase">current_user</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
@@ -65,12 +67,15 @@
 
     <string name="settings_sync_time_label">Backup Time</string>
     <string name="settings_sync_time_key" translatable="false">backup_time</string>
-    <string name="settings_sync_time_default">@string/settings_sync_two_key</string>
-    <string name="settings_sync_twelve_label">12:00 AM</string>
+    <string name="settings_sync_time_default">@string/settings_sync_day_key</string>
+
+    <string name="settings_sync_twelve_label">Every 12 hours</string>
     <string name="settings_sync_twelve_key" translatable="false">twelve_time</string>
-    <string name="settings_sync_two_label">02:00 AM</string>
-    <string name="settings_sync_two_key" translatable="false">two_time</string>
-    <string name="settings_sync_four_label">04:00 AM</string>
-    <string name="settings_sync_four_key" translatable="false">four_time</string>
+
+    <string name="settings_sync_day_label">Every Day</string>
+    <string name="settings_sync_day_key" translatable="false">day_time</string>
+
+    <string name="settings_sync_week_label">Every Week</string>
+    <string name="settings_sync_week_key" translatable="false">week_time</string>
 
 </resources>

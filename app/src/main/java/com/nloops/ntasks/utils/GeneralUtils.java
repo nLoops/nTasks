@@ -1,5 +1,7 @@
 package com.nloops.ntasks.utils;
 
+import android.content.Context;
+import android.database.Cursor;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -8,11 +10,15 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.SwitchCompat;
 import android.text.format.DateUtils;
 
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.Todo;
 
 import java.io.File;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -83,6 +89,28 @@ public class GeneralUtils {
         );
 
         return formatted;
+    }
+
+
+    /**
+     * Helper method that grab data from SQLite database
+     *
+     * @param context passed Context
+     * @return Cursor with {@link Task } that stored into DB
+     */
+    public static Cursor getData(Context context) {
+        return context.getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
+                null, null, null, null);
+    }
+
+    public static List<Todo> getTodoData(Context context, String[] selectionArgs) {
+        List<Todo> todos = new ArrayList<>();
+        Cursor cursor = context.getContentResolver().query(TasksDBContract.TodoEntry.CONTENT_TODO_URI,
+                null, null, selectionArgs, null);
+        while (cursor.moveToNext()) {
+            todos.add(new Todo(cursor));
+        }
+        return todos;
     }
 
 }

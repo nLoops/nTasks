@@ -2,20 +2,26 @@ package com.nloops.ntasks.taskslist;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.nloops.ntasks.R;
-import com.nloops.ntasks.data.TaskLoader;
-import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.utils.CloudSyncTasks;
+import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 
+import java.util.Arrays;
 import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
@@ -23,6 +29,11 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private static final int PERMISSION_REQ_CODE = 225;
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    public static final int RC_SIGN_IN = 101;
+    // Current Auth User to use Firebase Database.
+    public static String mUserID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +44,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setLogo(R.mipmap.ic_app_name);
-
+        // get ref of Firebase Auth
+        mFirebaseAuth = FirebaseAuth.getInstance();
         TasksFragment tasksFragment =
                 (TasksFragment) getSupportFragmentManager().findFragmentById(R.id.tasks_list_container);
         if (tasksFragment == null) {
@@ -50,6 +62,70 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         // we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES
         getPermissions();
 
+        //set Firebase Auth Listener
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    mUserID = user.getUid();
+                    SharedPreferences preferences = PreferenceManager.
+                            getDefaultSharedPreferences(TasksList.this);
+                    preferences.edit().
+                            putString(getString(R.string.current_user_firebase), mUserID)
+                            .commit();
+
+                    // user signed in
+                    if (isSyncEnabled()) {
+                        CloudSyncTasks.initialize(TasksList.this);
+                    }
+                } else {
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setIsSmartLockEnabled(true)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.GoogleBuilder().build()
+                                    )).build(), RC_SIGN_IN);
+                }
+
+            }
+        };
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mFirebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == Activity.RESULT_OK) {
+                Toast.makeText(TasksList.this, "Signed In", Toast.LENGTH_LONG).show();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(TasksList.this, "Signed Out", Toast.LENGTH_LONG).show();
+                finish();
+            }
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (mAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+        }
+    }
+
+    private boolean isSyncEnabled() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getBoolean(getString(R.string.settings_sync_key),
+                getResources().getBoolean(R.bool.sync_data));
     }
 
     /**
