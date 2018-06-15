@@ -21,6 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
 import com.nloops.ntasks.R;
@@ -83,6 +85,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         mEmptyView = (View) getActivity().findViewById(R.id.empty_view);
         mAdapter = new TaskListAdapter(null, getContext());
         mAdapter.setOnClickListener(onItemClickListener);
+        // Set RecyclerView Adapter
         mRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         mRecyclerView.setLayoutManager(manager);
@@ -114,6 +117,18 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     public void onResume() {
         super.onResume();
         mPresenter.loadTasks();
+        setupRecyclerLayoutAnim();
+    }
+
+    /**
+     * Helper Method to load Layout anim to recyclerView items.
+     */
+    private void setupRecyclerLayoutAnim() {
+        //Setup Layout Animation for RecyclerView
+        LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(
+                getContext(), R.anim.layout_animation_from_right
+        );
+        mRecyclerView.setLayoutAnimation(animationController);
     }
 
     @Override
