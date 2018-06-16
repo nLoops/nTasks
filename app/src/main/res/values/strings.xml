@@ -69,6 +69,8 @@
     <string name="settings_sync_enabled">Enabled</string>
     <string name="settings_sync_disabled">Disabled</string>
 
+    <string name="backup_schedule" translatable="false">backup_scheduled</string>
+
     <string name="settings_sync_time_label">Backup Time</string>
     <string name="settings_sync_time_key" translatable="false">backup_time</string>
     <string name="settings_sync_time_default">@string/settings_sync_day_key</string>

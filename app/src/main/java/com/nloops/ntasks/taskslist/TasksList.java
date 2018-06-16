@@ -18,7 +18,6 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.utils.CloudSyncTasks;
-import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 
 import java.util.Arrays;
@@ -26,7 +25,8 @@ import java.util.List;
 
 import pub.devrel.easypermissions.EasyPermissions;
 
-public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
+public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int PERMISSION_REQ_CODE = 225;
     private FirebaseAuth mFirebaseAuth;
@@ -34,6 +34,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     public static final int RC_SIGN_IN = 101;
     // Current Auth User to use Firebase Database.
     public static String mUserID;
+    // Ref of Shared Preferences
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +61,10 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         // update Widget List with data.
         WidgetIntentService.startActionChangeList(this);
 
+        // get Preferences Ref
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        preferences.registerOnSharedPreferenceChangeListener(this);
+
         // we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES
         getPermissions();
 
@@ -74,9 +80,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                     preferences.edit().
                             putString(getString(R.string.current_user_firebase), mUserID)
                             .commit();
-
                     // user signed in
-                    if (isSyncEnabled()) {
+                    if (isSyncEnabled() && !isScheduled()) {
                         CloudSyncTasks.initialize(TasksList.this);
                     }
                 } else {
@@ -128,6 +133,12 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                 getResources().getBoolean(R.bool.sync_data));
     }
 
+    private boolean isScheduled() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        return sharedPreferences.getBoolean(getString(R.string.backup_schedule),
+                getResources().getBoolean(R.bool.backup_scheduled));
+    }
+
     /**
      * This Method will check if we have the required permissions to RECORD and SAVE files,
      * if not we will alert USER to get the permissions.
@@ -157,6 +168,20 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
 // TODO : we need to consider if the USER denied the permissions and need to add an AUIDo note, in this case we need to Display AlertDialog to grant the Permissions.
+
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        if (key.equals(getString(R.string.settings_sync_time_key))) {
+            CloudSyncTasks.initialize(this);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        preferences.unregisterOnSharedPreferenceChangeListener(this);
 
     }
 }

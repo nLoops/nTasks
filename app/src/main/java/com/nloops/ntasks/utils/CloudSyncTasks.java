@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
@@ -16,10 +15,9 @@ import com.firebase.jobdispatcher.Lifetime;
 import com.firebase.jobdispatcher.Trigger;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.R;
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
-import com.nloops.ntasks.taskslist.TasksList;
 
 import java.util.concurrent.TimeUnit;
 
@@ -119,7 +117,21 @@ public class CloudSyncTasks {
     synchronized public static void initialize(@NonNull final Context context) {
         if (sInitialized) return;
         sInitialized = true;
+        setScheduled(context, true);
         scheduleFirebaseJobDispatcherSync(context);
+    }
+
+    /**
+     * Helper method to set Boolean Value to prevent unneeded schedules.
+     *
+     * @param context {@link Context}
+     * @param value   {@link #sInitialized}
+     */
+    private static void setScheduled(Context context, boolean value) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPreferences.edit()
+                .putBoolean(context.getString(R.string.backup_schedule), value)
+                .commit();
     }
 
     /**
