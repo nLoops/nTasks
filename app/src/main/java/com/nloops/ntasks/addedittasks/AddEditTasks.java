@@ -1,5 +1,7 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -113,6 +115,8 @@ public class AddEditTasks extends AppCompatActivity {
         AudioNoteFragment audioNoteFragment =
                 (AudioNoteFragment) getSupportFragmentManager().findFragmentById(R.id.task_detail_container);
         if (audioNoteFragment == null) {
+            // Put Activity in Portrait Mode to prevent crash when Recording.
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             audioNoteFragment = AudioNoteFragment.newInstance();
             GeneralUtils.addFragmentToActivity(getSupportFragmentManager(),
                     audioNoteFragment, R.id.task_detail_container);
