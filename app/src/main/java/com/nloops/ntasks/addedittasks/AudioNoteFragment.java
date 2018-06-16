@@ -114,7 +114,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         mActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mElementsChanged) {
+                if (mTitleView.length() > 0) {
                     if (AddEditTasks.TASK_URI == null) {
                         if (mAudioPresenter.isRecording()) {
                             mAudioPresenter.stopRecording();

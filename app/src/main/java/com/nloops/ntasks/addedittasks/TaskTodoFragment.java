@@ -108,7 +108,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mElementsChanged) {
+                if (mTitle.length() > 0) {
                     if (mItemEditText.getText().length() > 0) {
                         addOneTodo();
                     } else {

@@ -82,7 +82,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mElementsChanged) {
+                if (mTitle.length() > 0) {
                     if (AddEditTasks.TASK_URI == null) {
                         mPresenter.saveTask(getTask());
                     } else {
