@@ -2,6 +2,7 @@ package com.nloops.ntasks.addedittasks;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentUris;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -205,6 +206,10 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.task_detail_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_detail_delete);
+        if (AddEditTasks.TASK_URI != null) {
+            menuItem.setVisible(true);
+        }
     }
 
     @Override
@@ -212,7 +217,8 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
                 mAudioPresenter.deleteAudioFile();
-                mPresenter.deleteTask(AddEditTasks.TASK_URI);
+                long rawID = ContentUris.parseId(AddEditTasks.TASK_URI);
+                mPresenter.completeTask(true, rawID);
                 break;
             case R.id.action_detail_reminder:
                 mPresenter.launchDatePicker();

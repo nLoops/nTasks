@@ -10,7 +10,6 @@ import android.support.v4.content.Loader;
 
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
-import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
 public class TasksDetailPresenter implements TaskDetailContract.Presenter,
@@ -121,6 +120,12 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
     @Override
     public void completeTODO(boolean state, long rawID) {
         mLocalDataSource.completeTODO(state, rawID);
+    }
+
+    @Override
+    public void completeTask(boolean state, long rawID) {
+        mLocalDataSource.completeTask(state, rawID);
+        mTasksView.showTasksListUpdated();
     }
 
 

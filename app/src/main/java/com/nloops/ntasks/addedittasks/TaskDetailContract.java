@@ -37,6 +37,8 @@ public interface TaskDetailContract {
 
         void completeTODO(boolean state, long rawID);
 
+        void completeTask(boolean state, long rawID);
+
 
     }
 }

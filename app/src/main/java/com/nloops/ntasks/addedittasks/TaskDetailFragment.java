@@ -2,6 +2,7 @@ package com.nloops.ntasks.addedittasks;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.ContentUris;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -136,13 +137,18 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.task_detail_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_detail_delete);
+        if (AddEditTasks.TASK_URI != null) {
+            menuItem.setVisible(true);
+        }
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
-                mPresenter.deleteTask(AddEditTasks.TASK_URI);
+                long rawID = ContentUris.parseId(AddEditTasks.TASK_URI);
+                mPresenter.completeTask(true, rawID);
                 break;
             case R.id.action_detail_reminder:
                 mPresenter.launchDatePicker();
