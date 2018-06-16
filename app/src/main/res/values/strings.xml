@@ -29,6 +29,7 @@
     <string name="reminder_audionote">Audio Note</string>
     <string name="notify_action_complete">Done</string>
     <string name="todo_list_button">Add New Item</string>
+    <string name="cannot_save_empty">Task Cannot Be Empty</string>
     <!--This string CurrentUser will help when background job runs to backup data under user root-->
     <string name="current_user_firebase">current_user</string>
     <!--Detail Menu Items-->
@@ -80,5 +81,12 @@
 
     <string name="settings_sync_week_label">Every Week</string>
     <string name="settings_sync_week_key" translatable="false">week_time</string>
+    <!--AlertDialog Strings-->
+    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+    <string name="discard">Discard</string>
+    <string name="keep_editing">Keep Editing</string>
+    <string name="delete_task">Delete Task ?</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

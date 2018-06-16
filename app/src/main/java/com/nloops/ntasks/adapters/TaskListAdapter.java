@@ -18,6 +18,7 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDataSource;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.views.TaskTitleView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,6 +92,25 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
             holder.mCheckBox.setChecked(false);
         }
 
+        setTitleState(currentTask, holder.mTitleView);
+
+    }
+
+
+    /**
+     * Helper method to setState behavior upon Task State.
+     *
+     * @param task      {@link Task}
+     * @param titleView {@link TaskTitleView}
+     */
+    private void setTitleState(Task task, TaskTitleView titleView) {
+        titleView.setState(TaskTitleView.NORMAL);
+        if (task.getDate() < System.currentTimeMillis()) {
+            titleView.setState(TaskTitleView.OVERDUE);
+        }
+        if (task.isComplete()) {
+            titleView.setState(TaskTitleView.DONE);
+        }
     }
 
     @Override
@@ -125,7 +145,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
             View.OnClickListener {
 
         @BindView(R.id.tasks_list_title)
-        TextView mTitleView;
+        TaskTitleView mTitleView;
 
         @BindView(R.id.tasks_list_check)
         CheckBox mCheckBox;
