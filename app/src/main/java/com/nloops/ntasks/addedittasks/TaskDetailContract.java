@@ -20,6 +20,8 @@ public interface TaskDetailContract {
 
         void showDateTimePicker();
 
+        void showSaveEmptyError();
+
     }
 
 

@@ -25,7 +25,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".addedittasks.AddEditTasks" />
+        <activity android:name=".addedittasks.AddEditTasks">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".taskslist.TasksList" />
+        </activity>
 
         <provider
             android:name=".data.TasksProvider"

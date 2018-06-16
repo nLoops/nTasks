@@ -1,20 +1,25 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -68,6 +73,10 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     private long timeInMilliseconds = 0L;
     private long timeSwapBuff = 0L;
 
+    // flag to track TouchListener
+    private boolean mElementsChanged = false;
+    FloatingActionButton mActivityFab;
+
     /**
      * Empty Constructor required by Platform
      */
@@ -101,24 +110,29 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         if (AddEditTasks.TASK_URI != null) {
             mPlayBackBtn.setImageResource(R.drawable.ic_play_btn);
         }
-        final FloatingActionButton mActivityFab = getActivity().findViewById(R.id.task_detail_fab);
+        mActivityFab = getActivity().findViewById(R.id.task_detail_fab);
         mActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddEditTasks.TASK_URI == null) {
-                    if (mAudioPresenter.isRecording()) {
-                        mAudioPresenter.stopRecording();
-                        customHandler.removeCallbacks(updateTimerThread);
+                if (mElementsChanged) {
+                    if (AddEditTasks.TASK_URI == null) {
+                        if (mAudioPresenter.isRecording()) {
+                            mAudioPresenter.stopRecording();
+                            customHandler.removeCallbacks(updateTimerThread);
+                        }
+                        mPresenter.saveTask(getTask());
+                    } else {
+                        if (mAudioPresenter.isPlaying()) {
+                            mAudioPresenter.stopPlaying();
+                        }
+                        mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
                     }
-                    mPresenter.saveTask(getTask());
                 } else {
-                    if (mAudioPresenter.isPlaying()) {
-                        mAudioPresenter.stopPlaying();
-                    }
-                    mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                    showSaveEmptyError();
                 }
             }
         });
+
         mPlayBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -154,6 +168,11 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
                 mPresenter.launchDatePicker();
             }
         });
+
+        // Set onTouch Listener
+        mTitleView.setOnTouchListener(mTouchListener);
+        mDueDateTV.setOnTouchListener(mTouchListener);
+        mPrioritySwitch.setOnTouchListener(mTouchListener);
 
 
         return rootView;
@@ -199,6 +218,11 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     }
 
     @Override
+    public void showSaveEmptyError() {
+        Snackbar.make(mTitleView, getString(R.string.cannot_save_empty), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
     public void setPresenter(TaskDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -223,9 +247,58 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
             case R.id.action_detail_reminder:
                 mPresenter.launchDatePicker();
                 break;
+            case android.R.id.home:
+                if (!mElementsChanged) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                    break;
+                }
+                DialogInterface.OnClickListener discardButton =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                NavUtils.navigateUpFromSameTask(getActivity());
+                            }
+                        };
+                showUnSavedChangesDialog(discardButton);
+                break;
         }
 
         return true;
+    }
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            mElementsChanged = true;
+            return false;
+        }
+    };
+
+    /**
+     * Helper method that shows a dialog to user if there's any changes will discard.
+     *
+     * @param discardButton
+     */
+    private void showUnSavedChangesDialog(DialogInterface.OnClickListener discardButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        // set dialog message
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        // set positive button (passed click listener)
+        builder.setPositiveButton(R.string.discard, discardButton);
+        // set negative button to keep editing.
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // create the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     private void getDatePicker() {

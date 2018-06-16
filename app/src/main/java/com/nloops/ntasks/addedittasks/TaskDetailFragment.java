@@ -1,18 +1,23 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.NavUtils;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -50,6 +55,10 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     private int mMonth;
     private int mDay;
 
+    // flag to track TouchListener
+    private boolean mElementsChanged = false;
+    FloatingActionButton detailFAB;
+
 
     /**
      * Empty constructor (Required)
@@ -68,14 +77,19 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.frag_task_detail, container, false);
         ButterKnife.bind(this, rootView);
-        FloatingActionButton detailFAB = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
+        detailFAB = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
+
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddEditTasks.TASK_URI == null) {
-                    mPresenter.saveTask(getTask());
+                if (mElementsChanged) {
+                    if (AddEditTasks.TASK_URI == null) {
+                        mPresenter.saveTask(getTask());
+                    } else {
+                        mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                    }
                 } else {
-                    mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                    showSaveEmptyError();
                 }
             }
         });
@@ -86,7 +100,48 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 mPresenter.launchDatePicker();
             }
         });
+
+        // Set OnTouch Listener for Views.
+        mTitle.setOnTouchListener(mTouchListener);
+        mDateText.setOnTouchListener(mTouchListener);
+        mBody.setOnTouchListener(mTouchListener);
+        mPrioritySwitch.setOnTouchListener(mTouchListener);
         return rootView;
+    }
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            mElementsChanged = true;
+            return false;
+        }
+    };
+
+    /**
+     * Helper method that shows a dialog to user if there's any changes will discard.
+     *
+     * @param discardButton
+     */
+    private void showUnSavedChangesDialog(DialogInterface.OnClickListener discardButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        // set dialog message
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        // set positive button (passed click listener)
+        builder.setPositiveButton(R.string.discard, discardButton);
+        // set negative button to keep editing.
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // create the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     @Override
@@ -130,6 +185,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     }
 
     @Override
+    public void showSaveEmptyError() {
+        Snackbar.make(mTitle, getString(R.string.cannot_save_empty), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
     public void setPresenter(TaskDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -152,6 +212,20 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 break;
             case R.id.action_detail_reminder:
                 mPresenter.launchDatePicker();
+                break;
+            case android.R.id.home:
+                if (!mElementsChanged) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                    break;
+                }
+                DialogInterface.OnClickListener discardButton =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                NavUtils.navigateUpFromSameTask(getActivity());
+                            }
+                        };
+                showUnSavedChangesDialog(discardButton);
                 break;
         }
 

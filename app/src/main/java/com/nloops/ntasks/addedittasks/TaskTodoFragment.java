@@ -1,16 +1,20 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentUris;
+import android.content.DialogInterface;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,6 +24,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -70,6 +75,10 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     private int mDay;
     private TaskLoader mTaskLoader;
 
+    // flag to track TouchListener
+    private boolean mElementsChanged = false;
+    FloatingActionButton detailFAB;
+
     /**
      * Empty constructor (Required)
      */
@@ -86,7 +95,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.frag_todo_note, container, false);
         ButterKnife.bind(this, rootView);
-        FloatingActionButton detailFAB = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
+        detailFAB = (FloatingActionButton) getActivity().findViewById(R.id.task_detail_fab);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         mTodoRecycleView.setHasFixedSize(true);
@@ -99,10 +108,14 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         detailFAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddEditTasks.TASK_URI == null) {
-                    mPresenter.saveTask(getTask());
+                if (mElementsChanged) {
+                    if (AddEditTasks.TASK_URI == null) {
+                        mPresenter.saveTask(getTask());
+                    } else {
+                        mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                    }
                 } else {
-                    mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                    showSaveEmptyError();
                 }
             }
         });
@@ -134,6 +147,15 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
                 mPresenter.launchDatePicker();
             }
         });
+
+        // Set OnTouch Listener.
+        mTitle.setOnTouchListener(mTouchListener);
+        mDateText.setOnTouchListener(mTouchListener);
+        mItemEditText.setOnTouchListener(mTouchListener);
+        mPrioritySwitch.setOnTouchListener(mTouchListener);
+        mDateText.setOnTouchListener(mTouchListener);
+
+
         return rootView;
     }
 
@@ -155,6 +177,20 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
                 break;
             case R.id.action_detail_reminder:
                 mPresenter.launchDatePicker();
+                break;
+            case android.R.id.home:
+                if (!mElementsChanged) {
+                    NavUtils.navigateUpFromSameTask(getActivity());
+                    break;
+                }
+                DialogInterface.OnClickListener discardButton =
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                NavUtils.navigateUpFromSameTask(getActivity());
+                            }
+                        };
+                showUnSavedChangesDialog(discardButton);
                 break;
         }
 
@@ -200,6 +236,11 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     }
 
     @Override
+    public void showSaveEmptyError() {
+        Snackbar.make(mTitle, getString(R.string.cannot_save_empty), Snackbar.LENGTH_LONG).show();
+    }
+
+    @Override
     public void setPresenter(TaskDetailContract.Presenter presenter) {
         mPresenter = presenter;
     }
@@ -237,6 +278,41 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         } else {
             mDateText.setText(GeneralUtils.formatDate(mDueDate));
         }
+    }
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+            mElementsChanged = true;
+            return false;
+        }
+    };
+
+    /**
+     * Helper method that shows a dialog to user if there's any changes will discard.
+     *
+     * @param discardButton
+     */
+    private void showUnSavedChangesDialog(DialogInterface.OnClickListener discardButton) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        // set dialog message
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        // set positive button (passed click listener)
+        builder.setPositiveButton(R.string.discard, discardButton);
+        // set negative button to keep editing.
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int id) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // create the dialog
+        AlertDialog dialog = builder.create();
+        dialog.show();
+
     }
 
     TodoListAdapter.onItemClickListener onItemClickListener = new TodoListAdapter.onItemClickListener() {
