@@ -109,10 +109,14 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
             @Override
             public void onClick(View v) {
                 if (mElementsChanged) {
-                    if (AddEditTasks.TASK_URI == null) {
-                        mPresenter.saveTask(getTask());
+                    if (mItemEditText.getText().length() > 0) {
+                        addOneTodo();
                     } else {
-                        mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                        if (AddEditTasks.TASK_URI == null) {
+                            mPresenter.saveTask(getTask());
+                        } else {
+                            mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+                        }
                     }
                 } else {
                     showSaveEmptyError();
@@ -125,10 +129,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     if (mItemEditText.getText().length() > 0) {
-                        mTodoList.add(new Todo(mItemEditText.getText().toString(),
-                                TasksDBContract.TodoEntry.STATE_NOT_COMPLETED));
-                        mAdapter.swapTodoList(mTodoList);
-                        mItemEditText.setText("");
+                        addOneTodo();
                         return true;
                     }
                 }
@@ -157,6 +158,16 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
 
 
         return rootView;
+    }
+
+    /**
+     * Helper method that takes EditText String and add to {@link #mTodoList}
+     */
+    private void addOneTodo() {
+        mTodoList.add(new Todo(mItemEditText.getText().toString(),
+                TasksDBContract.TodoEntry.STATE_NOT_COMPLETED));
+        mAdapter.swapTodoList(mTodoList);
+        mItemEditText.setText("");
     }
 
     @Override
