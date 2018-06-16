@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 
-import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
@@ -149,12 +148,19 @@ public class TasksLocalDataSource implements TasksDataSource {
                 ContentValues todoValues = DatabaseValues.from(todo);
                 mContentResolver.insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
             }
-            // setup Alarm For this Reminder.
-            if (task.getDate() != Long.MAX_VALUE) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    AlarmScheduler.scheduleAlarm(mContext,
-                            task.getDate(), AddEditTasks.TASK_URI, AlarmReceiver.class, task.getType());
-                }
+
+        }
+        // first we will cancel previous Alarm
+        PendingIntent operation =
+                AlarmScheduler.getReminderPendingIntent(mContext, uri, AlarmReceiver.class);
+        AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+        manager.cancel(operation);
+
+        // setup Alarm For this Reminder.
+        if (task.getDate() != Long.MAX_VALUE) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                AlarmScheduler.scheduleAlarm(mContext,
+                        task.getDate(), uri, AlarmReceiver.class, task.getType());
             }
         }
 
