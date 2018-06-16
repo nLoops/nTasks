@@ -78,6 +78,13 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
                 }
             }
         });
+
+        mDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.launchDatePicker();
+            }
+        });
         return rootView;
     }
 

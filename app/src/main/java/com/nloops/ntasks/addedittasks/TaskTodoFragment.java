@@ -126,6 +126,13 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
             mTaskLoader = new TaskLoader(getContext());
             getActivity().getSupportLoaderManager().initLoader(0, null, this);
         }
+
+        mDateText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.launchDatePicker();
+            }
+        });
         return rootView;
     }
 

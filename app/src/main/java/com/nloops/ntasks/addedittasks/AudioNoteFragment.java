@@ -147,6 +147,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
             }
         });
 
+        mDueDateTV.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPresenter.launchDatePicker();
+            }
+        });
+
 
         return rootView;
     }
