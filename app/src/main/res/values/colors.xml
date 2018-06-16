@@ -8,4 +8,5 @@
     <color name="colorBlack">#000000</color>
     <color name="colorRed">#F44336</color>
     <color name="colorCardBackground">#E2E2E2</color>
+    <color name="colorBackgroundActivity">#f4efef</color>
 </resources>
