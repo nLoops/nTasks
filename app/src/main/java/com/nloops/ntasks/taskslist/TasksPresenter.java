@@ -103,6 +103,8 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @Override
     public void updateComplete(boolean state, long rawID) {
         mLocalDataSource.completeTask(state, rawID);
+        removeLoader();
+        initLoaderManager();
     }
 
     @Override
