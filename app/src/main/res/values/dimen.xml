@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <dimen name="empty_view_image">150dp</dimen>
     <dimen name="empty_text_size">20sp</dimen>
     <dimen name="dimen_four_dp">4dp</dimen>
     <dimen name="dimen_eight_dp">8dp</dimen>
     <dimen name="dimen_sixteen_dp">16dp</dimen>
+    <dimen name="dimen_twentyfour_dp">24dp</dimen>
     <dimen name="divider_height">1dp</dimen>
     <dimen name="tasks_card_elevtion">8dp</dimen>
     <dimen name="tasks_corner_radius">8dp</dimen>
     <dimen name="dimen_two_dp">2dp</dimen>
+    <dimen name="title_text_size">16sp</dimen>
+    <dimen name="switch_button_height">56dp</dimen>
 </resources>

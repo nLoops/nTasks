@@ -79,6 +79,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
         if (currentTask.isPriority()) {
             holder.mPriorityView.
                     setBackgroundColor(mContext.getResources().getColor(R.color.colorRed));
+        } else {
+            holder.mPriorityView.
+                    setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
         }
         if (currentTask.getDate() != Long.MAX_VALUE) {
             holder.mDueDateView.setVisibility(View.VISIBLE);

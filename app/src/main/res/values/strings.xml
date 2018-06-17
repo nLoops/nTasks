@@ -32,9 +32,11 @@
     <string name="cannot_save_empty">Task Cannot Be Empty</string>
     <!--This string CurrentUser will help when background job runs to backup data under user root-->
     <string name="current_user_firebase">current_user</string>
+    <string name="title_transition_name">shared_element_trans</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
+    <string name="str_action_detail_done">Done</string>
     <!--Task Operations Messages-->
     <string name="msg_task_updated">Task updated successfully</string>
     <string name="msg_task_deleted">Task deleted successfully</string>

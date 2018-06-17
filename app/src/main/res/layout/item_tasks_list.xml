@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="4dp"
-    android:background="@color/colorCardBackground"
+    android:background="@drawable/tasks_list_touch_selector"
     android:elevation="@dimen/dimen_four_dp">
 
     <LinearLayout
@@ -32,7 +32,7 @@
                 android:layout_weight="3"
                 android:paddingEnd="@dimen/dimen_four_dp"
                 android:paddingRight="@dimen/dimen_four_dp"
-                android:textSize="20sp"
+                android:textSize="@dimen/title_text_size"
                 tools:text="Get Some Milk" />
 
             <View

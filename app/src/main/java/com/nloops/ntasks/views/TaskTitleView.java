@@ -56,7 +56,7 @@ public class TaskTitleView extends AppCompatTextView {
         switch (state) {
             case DONE:
                 setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
-                setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
+                setTextColor(ContextCompat.getColor(getContext(), R.color.colorGray));
                 break;
             case NORMAL:
                 setPaintFlags(0);
@@ -75,7 +75,7 @@ public class TaskTitleView extends AppCompatTextView {
 
 
     private Typeface setTextFont(@NonNull Context context) {
-        return Typeface.createFromAsset(context.getAssets(), "fonts/tajawal-medium.ttf");
+        return Typeface.createFromAsset(context.getAssets(), "fonts/font_bold.ttf");
     }
 
 

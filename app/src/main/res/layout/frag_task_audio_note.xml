@@ -10,8 +10,10 @@
         android:id="@+id/task_audio_title"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-condensed"
         android:hint="@string/title_hint"
         android:inputType="textAutoComplete|text"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -19,10 +21,11 @@
     <android.support.v7.widget.SwitchCompat
         android:id="@+id/audio_note_switch_priority"
         android:layout_width="match_parent"
-        android:layout_height="56dp"
+        android:layout_height="@dimen/switch_button_height"
+        android:layout_marginBottom="@dimen/dimen_eight_dp"
         android:layout_marginTop="@dimen/dimen_eight_dp"
-        android:paddingEnd="4dp"
-        android:paddingStart="4dp"
+        android:paddingEnd="@dimen/dimen_two_dp"
+        android:paddingStart="@dimen/dimen_two_dp"
         android:text="@string/task_priority"
         android:textAppearance="?android:textAppearanceMedium"
         android:textColor="?android:textColorSecondary"
@@ -35,9 +38,10 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dimen_sixteen_dp"
-        android:layout_marginStart="@dimen/dimen_sixteen_dp"
+        android:layout_marginLeft="@dimen/dimen_four_dp"
+        android:layout_marginStart="@dimen/dimen_four_dp"
         android:text="@string/label_due_date"
+        android:textSize="@dimen/title_text_size"
         app:layout_constraintLeft_toLeftOf="@id/audio_note_switch_priority"
         app:layout_constraintTop_toBottomOf="@id/audio_note_switch_priority" />
 
@@ -45,20 +49,23 @@
         android:id="@+id/audionote_detail_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/dimen_sixteen_dp"
-        android:layout_marginLeft="@dimen/dimen_sixteen_dp"
-        android:layout_marginRight="@dimen/dimen_sixteen_dp"
+        android:layout_marginEnd="@dimen/dimen_eight_dp"
+        android:layout_marginRight="@dimen/dimen_eight_dp"
         android:text="@string/label_date_not_set"
+        android:textSize="@dimen/title_text_size"
         app:layout_constraintRight_toRightOf="@id/audio_note_switch_priority"
         app:layout_constraintTop_toBottomOf="@id/audio_note_switch_priority" />
-
 
     <include
         android:id="@+id/item_playback"
         layout="@layout/item_notes_playback"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dimen_sixteen_dp"
+        android:layout_marginEnd="@dimen/dimen_four_dp"
+        android:layout_marginLeft="@dimen/dimen_four_dp"
+        android:layout_marginRight="@dimen/dimen_four_dp"
+        android:layout_marginStart="@dimen/dimen_four_dp"
+        android:layout_marginTop="@dimen/dimen_twentyfour_dp"
         app:layout_constraintLeft_toLeftOf="@id/audio_note_switch_priority"
         app:layout_constraintRight_toRightOf="@id/audio_note_switch_priority"
         app:layout_constraintTop_toBottomOf="@id/audionote_detail_date" />

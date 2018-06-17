@@ -9,4 +9,5 @@
     <color name="colorRed">#F44336</color>
     <color name="colorCardBackground">#E2E2E2</color>
     <color name="colorBackgroundActivity">#f4efef</color>
+    <color name="colorGray">#ada7a7</color>
 </resources>
