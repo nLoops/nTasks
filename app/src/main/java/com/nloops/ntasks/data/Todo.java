@@ -1,13 +1,15 @@
 package com.nloops.ntasks.data;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import static com.nloops.ntasks.data.TasksDBContract.*;
 
 /**
  * Model that represent task relative TODOs
  */
-public class Todo {
+public class Todo implements Parcelable {
 
     private long mID;
     private String mTodo;
@@ -76,4 +78,37 @@ public class Todo {
     public void setTaskID(int mTaskID) {
         this.mTaskID = mTaskID;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.mID);
+        dest.writeString(this.mTodo);
+        dest.writeInt(this.mIsCompleted);
+        dest.writeInt(this.mTaskID);
+    }
+
+    protected Todo(Parcel in) {
+        this.mID = in.readLong();
+        this.mTodo = in.readString();
+        this.mIsCompleted = in.readInt();
+        this.mTaskID = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Todo> CREATOR = new Parcelable.Creator<Todo>() {
+        @Override
+        public Todo createFromParcel(Parcel source) {
+            return new Todo(source);
+        }
+
+        @Override
+        public Todo[] newArray(int size) {
+            return new Todo[size];
+        }
+    };
 }

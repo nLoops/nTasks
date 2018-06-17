@@ -79,6 +79,8 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     private boolean mElementsChanged = false;
     FloatingActionButton detailFAB;
 
+    private static final String SAVED_TASK = "task_values";
+
     /**
      * Empty constructor (Required)
      */
@@ -294,6 +296,28 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
             mDateText.setText(getString(R.string.label_date_not_set));
         } else {
             mDateText.setText(GeneralUtils.formatDate(mDueDate));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVED_TASK, getTask());
+
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            Task task = savedInstanceState.getParcelable(SAVED_TASK);
+            mTitle.setText(task.getTitle());
+            setDateSelection(task.getDate());
+            if (task.isPriority()) {
+                mPrioritySwitch.setChecked(true);
+            }
+            mTodoList = (ArrayList<Todo>) task.getTodos();
+            mAdapter.swapTodoList(mTodoList);
         }
     }
 

@@ -58,6 +58,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     // flag to track TouchListener
     private boolean mElementsChanged = false;
     FloatingActionButton detailFAB;
+    private static final String SAVED_TASK = "task_values";
 
 
     /**
@@ -260,6 +261,27 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
             mDateText.setText(getString(R.string.label_date_not_set));
         } else {
             mDateText.setText(GeneralUtils.formatDate(mDueDate));
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(SAVED_TASK, getTask());
+    }
+
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
+        if (savedInstanceState != null) {
+            Task task = savedInstanceState.getParcelable(SAVED_TASK);
+            mTitle.setText(task.getTitle());
+            mBody.setText(task.getBody());
+            setDateSelection(task.getDate());
+            if (task.isPriority()) {
+                mPrioritySwitch.setChecked(true);
+            }
+
         }
     }
 

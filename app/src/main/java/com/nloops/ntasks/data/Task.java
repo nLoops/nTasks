@@ -1,6 +1,8 @@
 package com.nloops.ntasks.data;
 
 import android.database.Cursor;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -12,7 +14,7 @@ import java.util.List;
  * Model that represent single task structure.
  */
 
-public class Task {
+public class Task implements Parcelable {
 
     /*Constants for missing data*/
     public static final long NO_ID = -1;
@@ -164,4 +166,47 @@ public class Task {
                 ", mTodos=" + mTodos +
                 '}';
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(this.mID);
+        dest.writeString(this.mTitle);
+        dest.writeString(this.mBody);
+        dest.writeInt(this.mType);
+        dest.writeInt(this.mPriority);
+        dest.writeLong(this.mDate);
+        dest.writeInt(this.mCompleted);
+        dest.writeString(this.mPath);
+        dest.writeTypedList(this.mTodos);
+    }
+
+    protected Task(Parcel in) {
+        this.mID = in.readLong();
+        this.mTitle = in.readString();
+        this.mBody = in.readString();
+        this.mType = in.readInt();
+        this.mPriority = in.readInt();
+        this.mDate = in.readLong();
+        this.mCompleted = in.readInt();
+        this.mPath = in.readString();
+        this.mTodos = in.createTypedArrayList(Todo.CREATOR);
+    }
+
+    public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+        @Override
+        public Task createFromParcel(Parcel source) {
+            return new Task(source);
+        }
+
+        @Override
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
 }
