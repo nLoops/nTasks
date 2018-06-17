@@ -361,6 +361,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
         public void onItemToggled(boolean active, int position) {
             long rawID = mAdapter.getItemId(position);
             mPresenter.completeTODO(active, rawID);
+            mTodoList.clear();
         }
     };
 
