@@ -37,6 +37,7 @@
     <string name="str_action_detail_delete">Delete</string>
     <string name="str_action_detail_reminder">Set Reminder</string>
     <string name="str_action_detail_done">Done</string>
+    <string name="str_action_signout">Sign out</string>
     <!--Task Operations Messages-->
     <string name="msg_task_updated">Task updated successfully</string>
     <string name="msg_task_deleted">Task deleted successfully</string>

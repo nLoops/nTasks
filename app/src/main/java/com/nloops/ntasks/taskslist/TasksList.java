@@ -89,6 +89,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
                                     .setIsSmartLockEnabled(true)
+                                    .setLogo(R.drawable.ic_auth_logo)
+                                    .setTheme(R.style.AuthTheme)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.GoogleBuilder().build()

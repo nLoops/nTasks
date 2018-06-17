@@ -9,6 +9,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -25,6 +26,10 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.widget.ProgressBar;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ui.idp.SingleSignInActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.UI.SettingsActivity;
 import com.nloops.ntasks.adapters.TaskListAdapter;
@@ -147,6 +152,10 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         switch (item.getItemId()) {
             case R.id.action_settings:
                 showSettingsActivity();
+                return true;
+            case R.id.action_list_signout:
+                AuthUI.getInstance()
+                        .signOut(getContext());
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
