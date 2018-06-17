@@ -197,9 +197,12 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.task_detail_menu, menu);
-        MenuItem menuItem = menu.findItem(R.id.action_detail_delete);
+        // if we are in EditMode will make Done & Delete menuButton visible.
+        MenuItem itemDelete = menu.findItem(R.id.action_detail_delete);
+        MenuItem itemDone = menu.findItem(R.id.action_detail_done);
         if (AddEditTasks.TASK_URI != null) {
-            menuItem.setVisible(true);
+            itemDelete.setVisible(true);
+            itemDone.setVisible(true);
         }
     }
 
@@ -207,6 +210,9 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_detail_delete:
+                mPresenter.deleteTask(AddEditTasks.TASK_URI);
+                break;
+            case R.id.action_detail_done:
                 long rawID = ContentUris.parseId(AddEditTasks.TASK_URI);
                 mPresenter.completeTask(true, rawID);
                 break;
