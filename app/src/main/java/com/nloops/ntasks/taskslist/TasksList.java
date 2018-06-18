@@ -5,15 +5,23 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Display;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetSequence;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.nloops.ntasks.R;
@@ -42,7 +50,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.tasks_list_toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.tasks_list_toolbar);
+        toolbar.inflateMenu(R.menu.tasks_list_menu);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setLogo(R.mipmap.ic_app_name);
@@ -99,7 +108,74 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
             }
         };
+        setupFirstRunGuide(toolbar);
 
+    }
+
+    private void setupFirstRunGuide(Toolbar toolbar) {
+
+        if (isFirstTimeRun()) {
+            // get Display Size to Draw Rectangle in the Center of Screen
+            // with app Drawable
+            final Display display = getWindowManager().getDefaultDisplay();
+            final Drawable appDrawable = ContextCompat.getDrawable(this, R.drawable.ic_auth_calendar);
+            final Rect drawableRect = new Rect(0, 0, appDrawable.getIntrinsicWidth() * 2, appDrawable.getIntrinsicHeight() * 2);
+            drawableRect.offset(display.getWidth() / 2, display.getHeight() / 2);
+
+            // Setup TapTargetView Guide.
+            // first we setup Sequence that will our Tutorial will go throw.
+            final TapTargetSequence sequence = new TapTargetSequence(this)
+                    .targets(
+                            TapTarget.forView(findViewById(R.id.tasks_list_fab),
+                                    getString(R.string.task_list_fab_title),
+                                    getString(R.string.task_list_fab_description))
+                                    .cancelable(false)
+                                    .drawShadow(true)
+                                    .titleTextDimen(R.dimen.title_text_size)
+                                    .tintTarget(false)
+                                    .id(1),
+                            TapTarget.forToolbarMenuItem(
+                                    toolbar, R.id.action_settings,
+                                    getString(R.string.task_list_settings_title), getString(R.string.task_list_settings_desc))
+                                    .cancelable(false)
+                                    .id(2),
+                            TapTarget.forToolbarOverflow(toolbar, getString(R.string.task_list_overflow_title), getString(R.string.task_list_overflow_desc))
+                                    .cancelable(false)
+                                    .id(3)
+                    ).listener(new TapTargetSequence.Listener() {
+                        @Override
+                        public void onSequenceFinish() {
+                            Snackbar.make(findViewById(R.id.task_list_coordinator),
+                                    getString(R.string.sequence_finish_message), Snackbar.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+
+                        }
+
+                        @Override
+                        public void onSequenceCanceled(TapTarget lastTarget) {
+
+                        }
+                    });
+
+            // Second we fire our Guide.
+            TapTargetView.showFor(this, TapTarget.forBounds(drawableRect,
+                    getString(R.string.task_list_app_title),
+                    getString(R.string.task_list_app_desc))
+                    .cancelable(false)
+                    .icon(appDrawable), new TapTargetView.Listener() {
+                @Override
+                public void onTargetClick(TapTargetView view) {
+                    super.onTargetClick(view);
+                    sequence.start();
+                }
+            });
+            preferences.edit()
+                    .putBoolean(getString(R.string.str_is_first_run), false)
+                    .commit();
+        }
     }
 
     @Override
@@ -113,9 +189,9 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == Activity.RESULT_OK) {
-                Toast.makeText(TasksList.this, "Signed In", Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.task_list_coordinator), getString(R.string.firebase_signed_in), Snackbar.LENGTH_LONG).show();
             } else if (resultCode == Activity.RESULT_CANCELED) {
-                Toast.makeText(TasksList.this, "Signed Out", Toast.LENGTH_LONG).show();
+                Snackbar.make(findViewById(R.id.task_list_coordinator), getString(R.string.firebase_signed_out), Snackbar.LENGTH_LONG).show();
                 finish();
             }
         }
@@ -130,15 +206,18 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     }
 
     private boolean isSyncEnabled() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return sharedPreferences.getBoolean(getString(R.string.settings_sync_key),
+        return preferences.getBoolean(getString(R.string.settings_sync_key),
                 getResources().getBoolean(R.bool.sync_data));
     }
 
     private boolean isScheduled() {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        return sharedPreferences.getBoolean(getString(R.string.backup_schedule),
+        return preferences.getBoolean(getString(R.string.backup_schedule),
                 getResources().getBoolean(R.bool.backup_scheduled));
+    }
+
+    private boolean isFirstTimeRun() {
+        return preferences.getBoolean(getString(R.string.str_is_first_run),
+                getResources().getBoolean(R.bool.first_run));
     }
 
     /**

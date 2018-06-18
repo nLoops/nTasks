@@ -5,6 +5,10 @@
     <string name="action_todo">ToDoList</string>
     <string name="action_mic">AudioNote</string>
     <!--General Strings -->
+    <string name="firebase_signed_in">Signed In</string>
+    <string name="firebase_signed_out">Signed Out</string>
+    <string name="notification_channel_name">nTasks</string>
+    <string name="notification_channel_desc">the main channel to provide tasks notification</string>
     <string name="str_empty_tasks">You\'re done for today</string>
     <string name="str_empty_tasks_two">Enjoy the rest</string>
     <string name="title_hint">Title</string>
@@ -93,5 +97,16 @@
     <string name="delete_task">Delete Task ?</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
+    <!--First Time Guide Strings-->
+    <string name="task_list_fab_title">Add New Task</string>
+    <string name="task_list_fab_description">we have three different types of tasks tap on + to figure out</string>
+    <string name="task_list_settings_title">Settings Button</string>
+    <string name="task_list_settings_desc">customize your Tasks display and enable/disable cloud backup</string>
+    <string name="task_list_overflow_title">Overflow Actions</string>
+    <string name="task_list_overflow_desc">you can sign out with current user and use a different one to fetch user data from the server </string>
+    <string name="task_list_app_title">Welcome to nTasks</string>
+    <string name="task_list_app_desc">This app made for you, your feedback always matters our goal to provide smooth experience with clean UX without ads and always free!</string>
+    <string name="sequence_finish_message">Enjoy managing your daily tasks!</string>
+    <string name="str_is_first_run">first_run</string>
 
 </resources>

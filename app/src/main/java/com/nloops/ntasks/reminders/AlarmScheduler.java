@@ -96,8 +96,8 @@ public class AlarmScheduler {
 
         // Create Notification Channel this only for OS O and further.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence cName = "nTasks";
-            String cDescription = "get nTasks Daily Notifications";
+            CharSequence cName = context.getString(R.string.notification_channel_name);
+            String cDescription = context.getString(R.string.notification_channel_desc);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, cName, importance);
             mChannel.setDescription(cDescription);

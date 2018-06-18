@@ -44,6 +44,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.1'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.1'
     implementation 'com.firebase:firebase-jobdispatcher:0.8.5'
+    // import TapTargetView library
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
 
 }
 apply plugin: 'com.google.gms.google-services'
