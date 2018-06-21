@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
-import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -36,6 +35,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
+    private static final String TAG = CloudSyncTasks.class.getSimpleName();
     private static final int PERMISSION_REQ_CODE = 225;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
@@ -254,7 +254,10 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(getString(R.string.settings_sync_time_key))) {
+        String currentValue = sharedPreferences.getString(getString(R.string.settings_sync_time_key),
+                getString(R.string.settings_sync_time_default));
+        if (key.equals(getString(R.string.settings_sync_time_key))
+                && !key.equals(currentValue)) {
             CloudSyncTasks.initialize(this);
         }
     }

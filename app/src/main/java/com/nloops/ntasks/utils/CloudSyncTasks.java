@@ -27,6 +27,8 @@ import java.util.concurrent.TimeUnit;
  */
 public class CloudSyncTasks {
 
+    private static final String TAG = CloudSyncTasks.class.getSimpleName();
+
     private static final String TASKS_DATABASE_REFERENCE = "tasks";
 
     private static final int TWELVE_HOURS = 12;
@@ -37,7 +39,7 @@ public class CloudSyncTasks {
     private static int SYNC_INTERVAL_SECONDS;
     private static int SYNC_FLEXTIME_SECONDS;
 
-    private static boolean sInitialized;
+
     private static final String TASKS_TAG = "sync-tasks";
 
     public static void syncData(Cursor cursor, Context context) {
@@ -115,8 +117,6 @@ public class CloudSyncTasks {
     }
 
     synchronized public static void initialize(@NonNull final Context context) {
-        if (sInitialized) return;
-        sInitialized = true;
         setScheduled(context, true);
         scheduleFirebaseJobDispatcherSync(context);
     }
@@ -125,7 +125,6 @@ public class CloudSyncTasks {
      * Helper method to set Boolean Value to prevent unneeded schedules.
      *
      * @param context {@link Context}
-     * @param value   {@link #sInitialized}
      */
     private static void setScheduled(Context context, boolean value) {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
