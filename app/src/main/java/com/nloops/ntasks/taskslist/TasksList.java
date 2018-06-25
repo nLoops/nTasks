@@ -35,13 +35,12 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
         SharedPreferences.OnSharedPreferenceChangeListener {
 
-    private static final String TAG = CloudSyncTasks.class.getSimpleName();
     private static final int PERMISSION_REQ_CODE = 225;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 101;
     // Current Auth User to use Firebase Database.
-    public static String mUserID;
+    private String mCurrentUser;
     // Ref of Shared Preferences
     SharedPreferences preferences;
 
@@ -50,7 +49,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_list);
 
-        final Toolbar toolbar = (Toolbar) findViewById(R.id.tasks_list_toolbar);
+        final Toolbar toolbar = findViewById(R.id.tasks_list_toolbar);
         toolbar.inflateMenu(R.menu.tasks_list_menu);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -76,6 +75,18 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
         // we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES
         getPermissions();
+        // Check and sign user in to make operations to Server Database.
+        signAccountIn();
+        // Launch first Run Tutorial
+        setupFirstRunGuide(toolbar);
+
+    }
+
+    /**
+     * Helper Method using {@link #mAuthStateListener} to sign user in
+     * to make Server Database Operations.
+     */
+    private void signAccountIn() {
 
         //set Firebase Auth Listener
         mAuthStateListener = new FirebaseAuth.AuthStateListener() {
@@ -83,11 +94,11 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    mUserID = user.getUid();
-                    SharedPreferences preferences = PreferenceManager.
+                    mCurrentUser = user.getUid();
+                    SharedPreferences userPreferences = PreferenceManager.
                             getDefaultSharedPreferences(TasksList.this);
-                    preferences.edit().
-                            putString(getString(R.string.current_user_firebase), mUserID)
+                    userPreferences.edit().
+                            putString(getString(R.string.current_user_firebase), mCurrentUser)
                             .commit();
                     // user signed in
                     if (isSyncEnabled() && !isScheduled()) {
@@ -108,10 +119,14 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
             }
         };
-        setupFirstRunGuide(toolbar);
-
     }
 
+
+    /**
+     * if this is first run we launch a tutorial helping user to know the app interface
+     *
+     * @param toolbar {@link TasksList} toolbar.
+     */
     private void setupFirstRunGuide(Toolbar toolbar) {
 
         if (isFirstTimeRun()) {
@@ -151,12 +166,12 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
                         @Override
                         public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-
+                            // will implemented soon
                         }
 
                         @Override
                         public void onSequenceCanceled(TapTarget lastTarget) {
-
+                            // will implemented soon
                         }
                     });
 
@@ -205,16 +220,25 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         }
     }
 
+    /**
+     * @return if cloud back enabled/disabled.
+     */
     private boolean isSyncEnabled() {
         return preferences.getBoolean(getString(R.string.settings_sync_key),
                 getResources().getBoolean(R.bool.sync_data));
     }
 
+    /**
+     * @return if already backup set scheduled or no.
+     */
     private boolean isScheduled() {
         return preferences.getBoolean(getString(R.string.backup_schedule),
                 getResources().getBoolean(R.bool.backup_scheduled));
     }
 
+    /**
+     * @return if this is first app run.
+     */
     private boolean isFirstTimeRun() {
         return preferences.getBoolean(getString(R.string.str_is_first_run),
                 getResources().getBoolean(R.bool.first_run));
@@ -243,7 +267,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
     @Override
     public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
-
+        // will implemented soon
     }
 
     @Override
