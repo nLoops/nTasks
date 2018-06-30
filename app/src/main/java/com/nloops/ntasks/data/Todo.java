@@ -4,7 +4,10 @@ import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import static com.nloops.ntasks.data.TasksDBContract.*;
+import static com.nloops.ntasks.data.TasksDBContract.TodoEntry;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnInt;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnLong;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnString;
 
 /**
  * Model that represent task relative TODOs
@@ -17,14 +20,21 @@ public class Todo implements Parcelable {
     private int mTaskID;
 
     /**
+     * Empty Constructor for Firebase Server service.
+     */
+    public Todo() {
+    }
+
+    /**
      * public Constructor.
      *
-     * @param id
-     * @param
+     * @param id              todo_ID
+     * @param todoDescription the description of singleTodo
+     * @param isCompleted     todoState
      */
-    public Todo(int id, String todo, int isCompleted) {
+    public Todo(int id, String todoDescription, int isCompleted) {
         this.mID = id;
-        this.mTodo = todo;
+        this.mTodo = todoDescription;
         this.mIsCompleted = isCompleted;
 
     }

@@ -1,6 +1,7 @@
 package com.nloops.ntasks.data;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -11,6 +12,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+/**
+ * Extended from {@link ContentProvider} this class will represents as
+ * a middle layer between view and {@link TasksDBContract} which create database using
+ * {@link TasksDBHelper} this Provider will access using {@link TasksLocalDataSource} as well
+ * the normal {@link ContentResolver} sometimes.
+ */
 public class TasksProvider extends ContentProvider {
 
     private static final String TAG = TasksProvider.class.getSimpleName();
@@ -202,5 +209,60 @@ public class TasksProvider extends ContentProvider {
     @Override
     public String getType(@NonNull Uri uri) {
         return null;
+    }
+
+    /**
+     * This method will help insert Bulk of {@link Task} when retrieve data from Server.
+     *
+     * @param uri    {@link Task} uri.
+     * @param values {@link Task} inserted Values.
+     * @return count of inserted rows.
+     */
+    @Override
+    public int bulkInsert(@NonNull Uri uri, @NonNull ContentValues[] values) {
+        final SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        switch (sUriMatcher.match(uri)) {
+            case TASK:
+                db.beginTransaction();
+                int rowsInserted = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(TasksDBContract.TaskEntry.TABLE_NAME,
+                                null, value);
+                        if (_id != -1) {
+                            rowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                if (rowsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return rowsInserted;
+
+            case TODOs:
+                db.beginTransaction();
+                int todosRowsInserted = 0;
+                try {
+                    for (ContentValues value : values) {
+                        long _id = db.insert(TasksDBContract.TodoEntry.TABLE_NAME,
+                                null, value);
+                        if (_id != -1) {
+                            todosRowsInserted++;
+                        }
+                    }
+                    db.setTransactionSuccessful();
+                } finally {
+                    db.endTransaction();
+                }
+                if (todosRowsInserted > 0) {
+                    getContext().getContentResolver().notifyChange(uri, null);
+                }
+                return todosRowsInserted;
+            default:
+                return super.bulkInsert(uri, values);
+        }
     }
 }

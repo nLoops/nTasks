@@ -3,12 +3,13 @@ package com.nloops.ntasks.data;
 import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-
-import static com.nloops.ntasks.data.TasksDBContract.*;
 
 import java.util.List;
+
+import static com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnInt;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnLong;
+import static com.nloops.ntasks.data.TasksDBContract.getColumnString;
 
 /**
  * Model that represent single task structure.
@@ -21,9 +22,9 @@ public class Task implements Parcelable {
     public static final long NO_DATE = Long.MAX_VALUE;
 
     private long mID;
-    @NonNull
+
     private String mTitle;
-    @NonNull
+
     private String mBody;
 
     private int mType;
@@ -34,13 +35,16 @@ public class Task implements Parcelable {
 
     private int mCompleted;
 
-    @Nullable
+
     private String mPath;
-    @Nullable
+
     private List<Todo> mTodos;
 
-    public Task(@NonNull String title, @NonNull String body, int type, int priorty,
-                long date, int completed, String path, @Nullable List<Todo> todo) {
+    public Task() {
+    }
+
+    public Task(String title, String body, int type, int priorty,
+                long date, int completed, String path, List<Todo> todo) {
         this.mID = NO_ID;
         this.mTitle = title;
         this.mBody = body;
@@ -72,12 +76,12 @@ public class Task implements Parcelable {
         return mID;
     }
 
-    @NonNull
+
     public String getTitle() {
         return mTitle;
     }
 
-    @NonNull
+
     public String getBody() {
         return mBody;
     }
@@ -98,12 +102,12 @@ public class Task implements Parcelable {
         return mCompleted;
     }
 
-    @Nullable
+
     public String getPath() {
         return mPath;
     }
 
-    @Nullable
+
     public List<Todo> getTodos() {
         return mTodos;
     }
@@ -116,11 +120,11 @@ public class Task implements Parcelable {
         return mPriority == TaskEntry.PRIORTY_HIGH;
     }
 
-    public void setTitle(@NonNull String mTitle) {
+    public void setTitle(String mTitle) {
         this.mTitle = mTitle;
     }
 
-    public void setBody(@NonNull String mBody) {
+    public void setBody(String mBody) {
         this.mBody = mBody;
     }
 
@@ -144,11 +148,11 @@ public class Task implements Parcelable {
         this.mCompleted = mCompleted;
     }
 
-    public void setPath(@Nullable String mPath) {
+    public void setPath(String mPath) {
         this.mPath = mPath;
     }
 
-    public void setTodos(@Nullable List<Todo> mTodos) {
+    public void setTodos(List<Todo> mTodos) {
         this.mTodos = mTodos;
     }
 

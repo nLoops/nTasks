@@ -108,5 +108,9 @@
     <string name="task_list_app_desc">This app made for you, your feedback always matters our goal to provide smooth experience with clean UX without ads and always free!</string>
     <string name="sequence_finish_message">Enjoy managing your daily tasks!</string>
     <string name="str_is_first_run">first_run</string>
+    <!--FirstRun Backup-->
+    <string name="backup_message">Available Backup For This Account</string>
+    <string name="backup_restore">Restore</string>
+    <string name="backup_cancel">Cancel</string>
 
 </resources>

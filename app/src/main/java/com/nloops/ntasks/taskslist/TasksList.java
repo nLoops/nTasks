@@ -3,10 +3,14 @@ package com.nloops.ntasks.taskslist;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -23,10 +27,22 @@ import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.nloops.ntasks.R;
+import com.nloops.ntasks.data.Task;
+import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.Todo;
+import com.nloops.ntasks.reminders.AlarmReceiver;
+import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.CloudSyncTasks;
+import com.nloops.ntasks.utils.DatabaseValues;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -36,12 +52,14 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final int PERMISSION_REQ_CODE = 225;
+    /* ref of Auth to signUser In and handle Authentication*/
     private FirebaseAuth mFirebaseAuth;
+    /* this listener will works to handle different user using cases */
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     public static final int RC_SIGN_IN = 101;
-    // Current Auth User to use Firebase Database.
+    /* Current Auth User to use Firebase Database */
     private String mCurrentUser;
-    // Ref of Shared Preferences
+    /* Ref of Shared Preferences */
     SharedPreferences preferences;
 
     @Override
@@ -162,6 +180,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                         public void onSequenceFinish() {
                             Snackbar.make(findViewById(R.id.task_list_coordinator),
                                     getString(R.string.sequence_finish_message), Snackbar.LENGTH_LONG).show();
+                            /*Call backup check to get data from server*/
+                            getDataFromServer();
                         }
 
                         @Override
@@ -272,8 +292,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
     @Override
     public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
-// TODO : we need to consider if the USER denied the permissions and need to add an AUIDo note, in this case we need to Display AlertDialog to grant the Permissions.
-
+        // will implemented soon
     }
 
     @Override
@@ -291,5 +310,117 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         super.onDestroy();
         preferences.unregisterOnSharedPreferenceChangeListener(this);
 
+    }
+
+    /**
+     * This method helps to get Backup from server onFirstRun if
+     * it's available.
+     */
+    private void getDataFromServer() {
+        final String TASKS_DATABASE_REFERENCE = "tasks";
+        // get ref of whole database
+        final FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
+        String currentUser =
+                preferences.getString
+                        (getString(R.string.current_user_firebase), "");
+        // get ref of tasks node in the database.
+        DatabaseReference mFireDatabaseReference =
+                mFireDataBase.getReference().child(TASKS_DATABASE_REFERENCE)
+                        .child(currentUser);
+        mFireDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    /*Declare List of Task to hold the data.*/
+                    List<Task> serverData = new ArrayList<>();
+                    for (DataSnapshot child : dataSnapshot.getChildren()) {
+                        /* get CurrentTask*/
+                        Task task = child.getValue(Task.class);
+                        /* Add Current Task to the Array*/
+                        serverData.add(task);
+                    }
+                    /*Check if the list has data included*/
+                    if (!serverData.isEmpty()) {
+                        showAvailableBackupMessage(serverData);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                /*implemented later*/
+            }
+        });
+    }
+
+
+    /**
+     * This method will pop-up to user to get data from server.
+     */
+    private void showAvailableBackupMessage(final List<Task> taskList) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(TasksList.this)
+                /*Set AlertDialog Message*/
+                .setMessage(getString(R.string.backup_message))
+                /* Set AlertDialog Positive button which restoreData from Server*/
+                .setPositiveButton(getString(R.string.backup_restore), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        confirmBackup(taskList);
+                    }
+                })
+                /*set Negative Button which dismiss the dialog*/
+                .setNegativeButton(getString(R.string.backup_cancel), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog != null) {
+                            dialog.dismiss();
+                        }
+                    }
+                });
+
+        /*Build the Dialog*/
+        AlertDialog alertDialog = builder.create();
+        /*Show the Dialog*/
+        alertDialog.show();
+
+
+    }
+
+    /**
+     * This Method will handle Inserting data into DB and Schedule future tasks alarm.
+     *
+     * @param taskList list of {@link Task}
+     */
+    private void confirmBackup(List<Task> taskList) {
+        ContentValues[] values = new ContentValues[taskList.size()];
+        for (int i = 0; i < taskList.size(); i++) {
+            ContentValues value = DatabaseValues.from(taskList.get(i));
+            values[i] = value;
+            /*Schedule tasks from Server*/
+            Task currentTask = taskList.get(i);
+            /*Check if this task has TODOS items*/
+            if (currentTask.getTodos() != null) {
+                List<Todo> todos = currentTask.getTodos();
+                for (int x = 0; x < todos.size(); x++) {
+                    ContentValues todoValue = DatabaseValues.from(todos.get(x));
+                    getContentResolver().insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI,
+                            todoValue);
+                }
+            }
+            /*if the task date is not null and also bigger than now*/
+            if (currentTask.getDate() != Long.MAX_VALUE
+                    && currentTask.getDate() > System.currentTimeMillis()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    AlarmScheduler.scheduleAlarm(TasksList.this,
+                            currentTask.getDate(),
+                            TasksDBContract.getTaskUri(currentTask),
+                            AlarmReceiver.class, currentTask.getType());
+                }
+            }
+        }
+        /*Insert data to DB*/
+        getContentResolver().bulkInsert(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
+                values);
     }
 }
