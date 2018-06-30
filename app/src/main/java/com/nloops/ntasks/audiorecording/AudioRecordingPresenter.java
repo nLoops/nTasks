@@ -6,28 +6,31 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
 
+import com.nloops.ntasks.audiorecording.AudioRecordingContract.Presenter;
+import com.nloops.ntasks.addedittasks.AudioNoteFragment;
+
 import com.nloops.ntasks.utils.GeneralUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 /**
- * This class will implemented {@link AudioRecordingContract.Presenter} interface
- * to support Audio Recording and Playback method related to {@link com.nloops.ntasks.addedittasks.AudioNoteFragment}
+ * This class will implemented {@link Presenter} interface
+ * to support Audio Recording and Playback method related to {@link AudioNoteFragment}
  */
 public class AudioRecordingPresenter implements AudioRecordingContract.Presenter {
 
-    // ref of View to trigger actions related to fragment views.
+    /* ref of View to trigger actions related to fragment views */
     private final AudioRecordingContract.View mView;
-    // this variable will hold the path of recorded item
-    // onRecord will create a new path, onPlaying will pass it from SqlDB
+    /* this variable will hold the path of recorded item */
+    /* onRecord will create a new path, onPlaying will pass it from SqlDB */
     private String mFileName;
-    // ref of Recorder to allow app recording Audio
+    /* ref of Recorder to allow app recording Audio */
     private MediaRecorder mRecorder;
-    // ref of MediaPlayer to allow app playback the recorded notes.
+    /* ref of MediaPlayer to allow app playback the recorded notes */
     private MediaPlayer mMediaPlayer;
 
-    // Private ref to release the Resources once our MediaPlayBack is done.
+    /* Private ref to release the Resources once our MediaPlayBack is done */
     private final MediaPlayer.OnCompletionListener mOnCompletionListener =
             new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -36,8 +39,28 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
                 }
             };
 
-    // Declare a global AudioManager to control the behavior of Playing Audio States
+    /*Declare a global AudioManager to control the behavior of Playing Audio States */
     private final AudioManager mAudioManager;
+
+    /* set OnAudioChange while recording */
+    private final AudioManager.OnAudioFocusChangeListener mOnRecordingFocusChangeListener
+            = new AudioManager.OnAudioFocusChangeListener() {
+        @Override
+        public void onAudioFocusChange(int focusChange) {
+            switch (focusChange) {
+                /* When get Audio Focus start recording*/
+                case AudioManager.AUDIOFOCUS_GAIN:
+                    mRecorder.start();
+                    break;
+                /* When we loss this audio focus we stop recording */
+                case AudioManager.AUDIOFOCUS_LOSS:
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+                case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+                    stopRecording();
+                    break;
+            }
+        }
+    };
 
     // Set OnAudioChange instructions to run for different audio states
     private final AudioManager.OnAudioFocusChangeListener mOnAudioFocusChangeListener
@@ -87,20 +110,29 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
         mFileName = GeneralUtils.getSavedPath();
         // setup MediaRecorder.
         mRecorder = new MediaRecorder();
-        mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
-        mRecorder.setOutputFile(mFileName);
-        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        int audioResult = mAudioManager.requestAudioFocus(
+                // instructions for different states of focus
+                mOnRecordingFocusChangeListener,
+                // the type of our app Audio
+                AudioManager.STREAM_MUSIC,
+                // we don't need the service for a long time
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
+        if (audioResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+            mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+            mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+            mRecorder.setOutputFile(mFileName);
+            mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
 
-        try {
-            mRecorder.prepare();
-        } catch (IOException e) {
-            e.printStackTrace();
+            try {
+                mRecorder.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            isRecording = true;
+            mView.setPlayButtonSrc();
+            mRecorder.start();
+
         }
-        isRecording = true;
-        mView.setPlayButtonSrc();
-        mRecorder.start();
-
 
     }
 
@@ -110,6 +142,7 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
             mRecorder.stop();
             mRecorder.release();
             mRecorder = null;
+            mAudioManager.abandonAudioFocus(mOnRecordingFocusChangeListener);
             isRecording = false;
             mView.setPlayButtonSrc();
         }
