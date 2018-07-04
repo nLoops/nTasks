@@ -3,10 +3,7 @@ package com.nloops.ntasks.adapters;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.text.format.DateUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +13,6 @@ import android.widget.TextView;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
-import com.nloops.ntasks.data.TasksDataSource;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.views.TaskTitleView;
 
