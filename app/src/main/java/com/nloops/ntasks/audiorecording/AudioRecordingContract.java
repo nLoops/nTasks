@@ -22,6 +22,10 @@ public interface AudioRecordingContract {
 
         void releaseMediaPlayer();
 
+        void pausePlaying();
+
+        void playerSeekTo(int duration);
+
 
     }
 }

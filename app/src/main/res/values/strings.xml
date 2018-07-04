@@ -9,6 +9,8 @@
     <string name="firebase_signed_out">Signed Out</string>
     <string name="notification_channel_name">nTasks</string>
     <string name="notification_channel_desc">the main channel to provide tasks notification</string>
+    <string name="notification_media_name">Media Notification</string>
+    <string name="notification_media_desc">the channel that provide media style notification</string>
     <string name="str_empty_tasks">You\'re done for today</string>
     <string name="str_empty_tasks_two">Enjoy the rest</string>
     <string name="title_hint">Title</string>
@@ -34,6 +36,8 @@
     <string name="notify_action_complete">Done</string>
     <string name="todo_list_button">Add New Item</string>
     <string name="cannot_save_empty">Task Cannot Be Empty</string>
+    <string name="play">Play</string>
+    <string name="pause">Pause</string>
     <!--This string CurrentUser will help when background job runs to backup data under user root-->
     <string name="current_user_firebase">current_user</string>
     <string name="title_transition_name">shared_element_trans</string>

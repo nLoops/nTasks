@@ -3,48 +3,50 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tool="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_alignParentTop="true"
-    android:layout_centerHorizontal="true"
+    android:layout_height="75dp"
     android:layout_gravity="center"
-    android:layout_margin="@dimen/dimen_two_dp"
-    android:background="@color/colorCardBackground"
+    android:layout_margin="@dimen/dimen_five_dp"
+    app:cardCornerRadius="@dimen/dimen_four_dp"
     app:cardElevation="@dimen/dimen_four_dp">
+
+    <com.nloops.ntasks.views.CustomFillBar
+        android:id="@+id/custom_fill_seekbar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:fill_color="@color/colorCardBackground" />
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.AppCompatSeekBar
-            android:id="@+id/playback_seek_bar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toTopOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="parent" />
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp">
 
         <com.nloops.ntasks.views.AudioCounterView
             android:id="@+id/playback_txt_counter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/dimen_eight_dp"
+            android:layout_marginLeft="10dp"
             android:layout_marginRight="@dimen/dimen_eight_dp"
+            android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-condensed"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/play_back_btn"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/play_back_btn"
+            app:layout_constraintTop_toBottomOf="@id/play_back_btn"
             tool:text="0:00" />
 
         <ImageButton
             android:id="@+id/play_back_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dimen_sixteen_dp"
             android:background="@drawable/touch_selector"
             android:contentDescription="@string/content_playback_btn"
             android:src="@drawable/ic_red_mic"
-            app:layout_constraintLeft_toRightOf="@id/playback_seek_bar"
-            app:layout_constraintRight_toLeftOf="@id/playback_seek_bar"
-            app:layout_constraintTop_toBottomOf="@id/playback_seek_bar" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
 

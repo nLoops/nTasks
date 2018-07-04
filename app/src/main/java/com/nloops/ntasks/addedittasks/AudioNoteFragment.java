@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.ImageButton;
-import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
 
@@ -37,6 +36,7 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.views.AudioCounterView;
+import com.nloops.ntasks.views.CustomFillBar;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
@@ -56,12 +56,12 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     SwitchCompat mPrioritySwitch;
     @BindView(R.id.audionote_detail_date)
     TextView mDueDateTV;
-    @BindView(R.id.playback_seek_bar)
-    SeekBar mPlayBackBar;
     @BindView(R.id.play_back_btn)
     ImageButton mPlayBackBtn;
     @BindView(R.id.playback_txt_counter)
     AudioCounterView mPlayTimer;
+    @BindView(R.id.custom_fill_seekbar)
+    CustomFillBar mSeekBar;
 
     private long mDueDate = Long.MAX_VALUE;
     private int mYear;
@@ -73,14 +73,16 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     private long timeInMilliseconds = 0L;
     private long timeSwapBuff = 0L;
 
-    // flag to track TouchListener
+    /* flag to track TouchListener */
     private boolean mElementsChanged = false;
     FloatingActionButton mActivityFab;
+
 
     /**
      * Empty Constructor required by Platform
      */
     public AudioNoteFragment() {
+        /*Empty Constructor*/
     }
 
     public static AudioNoteFragment newInstance() {
@@ -90,7 +92,8 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mAudioPresenter = new AudioRecordingPresenter(this, getActivity());
+        mAudioPresenter = new AudioRecordingPresenter(this,
+                getContext());
 
     }
 
@@ -114,51 +117,14 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         mActivityFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (mTitleView.length() > 0) {
-                    if (AddEditTasks.TASK_URI == null) {
-                        if (mAudioPresenter.isRecording()) {
-                            mAudioPresenter.stopRecording();
-                            customHandler.removeCallbacks(updateTimerThread);
-                        }
-                        mPresenter.saveTask(getTask());
-                    } else {
-                        if (mAudioPresenter.isPlaying()) {
-                            mAudioPresenter.stopPlaying();
-                        }
-                        mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
-                    }
-                } else {
-                    showSaveEmptyError();
-                }
+                actionFabClick();
             }
         });
 
         mPlayBackBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AddEditTasks.TASK_URI != null) {
-                    if (mAudioPresenter.isPlaying()) {
-                        mAudioPresenter.stopPlaying();
-                        customHandler.removeCallbacks(refreshPlayingTimer);
-                    } else {
-                        mAudioPresenter.playRecording();
-                        mPlayTimer.setState(AudioCounterView.IS_PLAYING);
-                        mPlayBackBar.setMax(mAudioPresenter.getTrackDuration());
-                        updateSeekBar();
-
-                    }
-                } else {
-                    if (mAudioPresenter.isRecording()) {
-                        mAudioPresenter.stopRecording();
-                        timeSwapBuff += timeInMilliseconds;
-                        customHandler.removeCallbacks(updateTimerThread);
-                    } else {
-                        mAudioPresenter.startRecording();
-                        mPlayTimer.setState(AudioCounterView.IS_RECORDING);
-                        startHTime = SystemClock.uptimeMillis();
-                        customHandler.postDelayed(updateTimerThread, 0);
-                    }
-                }
+                handlePlayButtonClick();
             }
         });
 
@@ -169,7 +135,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
             }
         });
 
-        // Set onTouch Listener
+        /* Set onTouch Listener */
         mTitleView.setOnTouchListener(mTouchListener);
         mDueDateTV.setOnTouchListener(mTouchListener);
         mPrioritySwitch.setOnTouchListener(mTouchListener);
@@ -177,6 +143,59 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
 
         return rootView;
     }
+
+    /**
+     * Helper Method that checks and operate the right action
+     * (Record, Play, Pause, Stop Recording)
+     */
+    private void handlePlayButtonClick() {
+        if (AddEditTasks.TASK_URI != null) {
+            if (mAudioPresenter.isPlaying()) {
+                mAudioPresenter.pausePlaying();
+                customHandler.removeCallbacks(refreshPlayingTimer);
+            } else {
+                mAudioPresenter.playRecording();
+                mPlayTimer.setState(AudioCounterView.IS_PLAYING);
+                mSeekBar.setMaxValue(mAudioPresenter.getTrackDuration());
+                updateSeekBar();
+
+            }
+        } else {
+            if (mAudioPresenter.isRecording()) {
+                mAudioPresenter.stopRecording();
+                timeSwapBuff += timeInMilliseconds;
+                customHandler.removeCallbacks(updateTimerThread);
+            } else {
+                mAudioPresenter.startRecording();
+                mPlayTimer.setState(AudioCounterView.IS_RECORDING);
+                startHTime = SystemClock.uptimeMillis();
+                customHandler.postDelayed(updateTimerThread, 0);
+            }
+        }
+    }
+
+    /**
+     * This method will help to save new or update {@link Task}
+     */
+    private void actionFabClick() {
+        if (mTitleView.length() > 0) {
+            if (AddEditTasks.TASK_URI == null) {
+                if (mAudioPresenter.isRecording()) {
+                    mAudioPresenter.stopRecording();
+                    customHandler.removeCallbacks(updateTimerThread);
+                }
+                mPresenter.saveTask(getTask());
+            } else {
+                if (mAudioPresenter.isPlaying()) {
+                    mAudioPresenter.stopPlaying();
+                }
+                mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+            }
+        } else {
+            showSaveEmptyError();
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -390,6 +409,8 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
             int seconds = (int) (updatedTime / 1000);
             int minutes = seconds / 60;
             seconds = seconds % 60;
+            mSeekBar.setMaxValue(60);
+            mSeekBar.setProgress(seconds);
             if (mPlayTimer != null)
                 mPlayTimer.setText(getString(R.string.audio_counter_format, minutes, seconds));
             customHandler.postDelayed(this, 0);
@@ -402,7 +423,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         public void run() {
             if (mAudioPresenter.isPlaying()) {
                 int mCurrentPosition = mAudioPresenter.getCurrentPosition();
-                mPlayBackBar.setProgress(mCurrentPosition);
+                mSeekBar.setProgress(mCurrentPosition);
                 long minutes = TimeUnit.MILLISECONDS.toMinutes(mCurrentPosition);
                 long seconds =
                         TimeUnit.MILLISECONDS.toSeconds
@@ -416,7 +437,6 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     };
 
     private void updateSeekBar() {
-        customHandler.postDelayed(refreshPlayingTimer, 1000);
+        customHandler.postDelayed(refreshPlayingTimer, 100);
     }
-
 }
