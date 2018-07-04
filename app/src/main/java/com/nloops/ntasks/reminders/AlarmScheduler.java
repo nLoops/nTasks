@@ -12,7 +12,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
@@ -81,9 +80,11 @@ public class AlarmScheduler {
         //Grab the task taskTitle
         Cursor cursor = context.getContentResolver().query(data, null, null, null, null);
         String taskTitle = "";
+        String taskPath = "";
         try {
             if (cursor != null && cursor.moveToFirst()) {
                 taskTitle = TasksDBContract.getColumnString(cursor, TasksDBContract.TaskEntry.COLUMN_NAME_TITLE);
+                taskPath = TasksDBContract.getColumnString(cursor, TasksDBContract.TaskEntry.COLUMN_NAME_PATH);
             }
         } finally {
             if (cursor != null) {
@@ -142,6 +143,18 @@ public class AlarmScheduler {
                 .addAction(R.drawable.ic_done, context.getString(R.string.notify_action_complete)
                         , actionComplete)
                 .setAutoCancel(true);
+
+        if (!taskPath.isEmpty()) {
+            Intent intent = new Intent(context, TaskOperationService.class);
+            intent.setAction(TaskOperationService.ACTION_PLAY_NOTE_AUDIO);
+            intent.putExtra(TaskOperationService.EXTRAS_NOTE_AUDIO_PATH, taskPath);
+            PendingIntent actionPlayNote = PendingIntent.getService
+                    (context, 101, intent,
+                            PendingIntent.FLAG_UPDATE_CURRENT);
+            note.addAction(R.drawable.ic_play_btn, context.getString(R.string.play), actionPlayNote);
+
+        }
+
 
         assert manager != null;
         manager.notify(NOTIFICATION_ID, note.build());
