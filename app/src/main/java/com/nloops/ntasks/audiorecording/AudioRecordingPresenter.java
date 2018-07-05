@@ -124,6 +124,8 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
             mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
             mRecorder.setOutputFile(mFileName);
             mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+            mRecorder.setAudioEncodingBitRate(16);
+            mRecorder.setAudioSamplingRate(44100);
 
             try {
                 mRecorder.prepare();
