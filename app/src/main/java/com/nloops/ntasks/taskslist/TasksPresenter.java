@@ -1,6 +1,7 @@
 package com.nloops.ntasks.taskslist;
 
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -112,6 +113,13 @@ public class TasksPresenter implements TasksListContract.Presenter,
         if (mLoaderManager.getLoader(LOADER_ID) != null) {
             mLoaderManager.destroyLoader(LOADER_ID);
         }
+    }
+
+    @Override
+    public void deleteTask(Uri taskUri) {
+        mLocalDataSource.deleteTask(taskUri);
+        removeLoader();
+        initLoaderManager();
     }
 
 

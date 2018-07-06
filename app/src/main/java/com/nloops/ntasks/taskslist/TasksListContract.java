@@ -1,8 +1,7 @@
 package com.nloops.ntasks.taskslist;
 
 import android.database.Cursor;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.net.Uri;
 
 import com.nloops.ntasks.data.BaseView;
 
@@ -43,6 +42,8 @@ public interface TasksListContract {
         void updateComplete(boolean state, long rawID);
 
         void removeLoader();
+
+        void deleteTask(Uri taskUri);
     }
 
 

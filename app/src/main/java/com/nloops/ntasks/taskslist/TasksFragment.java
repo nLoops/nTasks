@@ -5,6 +5,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -12,6 +13,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,8 +27,11 @@ import android.widget.ProgressBar;
 import com.firebase.ui.auth.AuthUI;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.UI.SettingsActivity;
+import com.nloops.ntasks.adapters.SwipeController;
+import com.nloops.ntasks.adapters.SwipeControllerActions;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
@@ -83,6 +88,37 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         mEmptyView = (View) getActivity().findViewById(R.id.empty_view);
         mAdapter = new TaskListAdapter(null, getContext());
         mAdapter.setOnClickListener(onItemClickListener);
+        /*Attach Swipe Controller to RecyclerView*/
+
+        /*Create New Object of our Custom ItemTouchHelper Callbacks*/
+        final SwipeController swipeController = new SwipeController(new SwipeControllerActions() {
+            @Override
+            public void onLeftClicked(int position) {
+                super.onLeftClicked(position);
+                long rawID = mAdapter.getItemId(position);
+                mPresenter.updateComplete(true, rawID);
+            }
+
+            @Override
+            public void onRightClicked(int position) {
+                super.onRightClicked(position);
+                Task task = mAdapter.getItem(position);
+                Uri currentTaskUri = TasksDBContract.getTaskUri(task);
+                mPresenter.deleteTask(currentTaskUri);
+                showDeletedMessage();
+            }
+        });
+        /*Pass the object to new ItemTouchHelper Object*/
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(swipeController);
+        /*Attach to RecyclerView*/
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+        /*Call OnDraw*/
+        mRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void onDraw(Canvas c, RecyclerView parent, RecyclerView.State state) {
+                swipeController.onDraw(c);
+            }
+        });
         // Set RecyclerView Adapter
         mRecyclerView.setAdapter(mAdapter);
         LinearLayoutManager manager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
