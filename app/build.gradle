@@ -61,5 +61,7 @@ dependencies {
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.11.0'
     //Firebase Crashlytics
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
+    //Spin Kit Loading Indicator
+    implementation 'com.github.ybq:Android-SpinKit:1.1.0'
 }
 apply plugin: 'com.google.gms.google-services'
