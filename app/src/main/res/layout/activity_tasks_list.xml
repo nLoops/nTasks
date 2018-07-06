@@ -19,6 +19,16 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <com.github.ybq.android.spinkit.SpinKitView
+        android:id="@+id/task_list_spinkit_indicator"
+        style="@style/SpinKitView.Large.Wave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        app:SpinKit_Color="@color/colorAccent"
+        tools:visibility="visible" />
+
     <FrameLayout
         android:id="@+id/tasks_list_container"
         android:layout_width="match_parent"

@@ -20,11 +20,18 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
+import android.view.View;
 
 import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.github.ybq.android.spinkit.SpinKitView;
+import com.github.ybq.android.spinkit.SpriteFactory;
+import com.github.ybq.android.spinkit.Style;
+import com.github.ybq.android.spinkit.sprite.Sprite;
+import com.github.ybq.android.spinkit.style.DoubleBounce;
+import com.github.ybq.android.spinkit.style.Wave;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -61,12 +68,14 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     private String mCurrentUser;
     /* Ref of Shared Preferences */
     SharedPreferences preferences;
+    /*Ref of SpinKitView*/
+    SpinKitView mSpinKitView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_list);
-
+        mSpinKitView = (SpinKitView) findViewById(R.id.task_list_spinkit_indicator);
         final Toolbar toolbar = findViewById(R.id.tasks_list_toolbar);
         toolbar.inflateMenu(R.menu.tasks_list_menu);
         setSupportActionBar(toolbar);
@@ -180,6 +189,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                         public void onSequenceFinish() {
                             Snackbar.make(findViewById(R.id.task_list_coordinator),
                                     getString(R.string.sequence_finish_message), Snackbar.LENGTH_LONG).show();
+                            setupSpinKitAnimation(true);
                             /*Call backup check to get data from server*/
                             getDataFromServer();
                         }
@@ -343,6 +353,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                     if (!serverData.isEmpty()) {
                         showAvailableBackupMessage(serverData);
                     }
+                } else {
+                    setupSpinKitAnimation(false);
                 }
 
             }
@@ -381,6 +393,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
         /*Build the Dialog*/
         AlertDialog alertDialog = builder.create();
+        /*Make Indicator GONE*/
+        setupSpinKitAnimation(false);
         /*Show the Dialog*/
         alertDialog.show();
 
@@ -422,5 +436,15 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         /*Insert data to DB*/
         getContentResolver().bulkInsert(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
                 values);
+    }
+
+    private void setupSpinKitAnimation(boolean state) {
+        if (state) {
+            mSpinKitView.setVisibility(View.VISIBLE);
+            Wave wave = new Wave();
+            mSpinKitView.setIndeterminateDrawable(wave);
+        } else {
+            mSpinKitView.setVisibility(View.GONE);
+        }
     }
 }
