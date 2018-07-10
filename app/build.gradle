@@ -63,5 +63,7 @@ dependencies {
     implementation 'com.crashlytics.sdk.android:crashlytics:2.9.3'
     //Spin Kit Loading Indicator
     implementation 'com.github.ybq:Android-SpinKit:1.1.0'
+    //Implement PlaceHolder mindorks
+    implementation 'com.mindorks:placeholderview:0.2.7'
 }
 apply plugin: 'com.google.gms.google-services'
