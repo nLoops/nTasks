@@ -8,6 +8,13 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="actionOverflowButtonStyle">@style/OverFlow</item>
         <item name="android:windowBackground">@color/colorBackgroundActivity</item>
+        <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
+    </style>
+
+    <!--use item name="drawerArrowStyle" if you are using dark primaryColor in your app, else remove it-->
+    <style name="MaterialDrawer.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
+        <item name="spinBars">false</item>
+        <item name="color">#FFFFFF</item>
     </style>
 
     <style name="SettingsTheme" parent="Theme.AppCompat.Light.DarkActionBar">

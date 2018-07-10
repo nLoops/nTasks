@@ -1,58 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/task_list_coordinator"
+    android:id="@+id/task_list_drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".taskslist.TasksList">
+    android:fitsSystemWindows="true">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/tasks_list_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:elevation="@dimen/dimen_two_dp" />
-
-    </android.support.design.widget.AppBarLayout>
-
-    <com.github.ybq.android.spinkit.SpinKitView
-        android:id="@+id/task_list_spinkit_indicator"
-        style="@style/SpinKitView.Large.Wave"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible"
-        app:SpinKit_Color="@color/colorAccent"
-        tools:visibility="visible" />
-
-    <FrameLayout
-        android:id="@+id/tasks_list_container"
+    <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/task_list_coordinator"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="?android:attr/actionBarSize" />
+        tools:context=".taskslist.TasksList">
 
-    <include
-        android:id="@+id/empty_view"
-        layout="@layout/empty_tasks_view"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="invisible" />
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-    <io.github.yavski.fabspeeddial.FabSpeedDial
-        android:id="@+id/tasks_list_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        app:fabGravity="bottom_end"
-        app:fabMenu="@menu/task_fab_menu"
-        app:miniFabBackgroundTint="@android:color/white"
-        app:miniFabDrawableTint="@color/colorPrimaryLight"
-        app:miniFabTitleTextColor="@color/colorPrimaryLight" />
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/tasks_list_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?android:attr/actionBarSize"
+                android:elevation="@dimen/dimen_two_dp" />
 
+        </android.support.design.widget.AppBarLayout>
 
-</android.support.design.widget.CoordinatorLayout>
+        <com.github.ybq.android.spinkit.SpinKitView
+            android:id="@+id/task_list_spinkit_indicator"
+            style="@style/SpinKitView.Large.Wave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            app:SpinKit_Color="@color/colorAccent"
+            tools:visibility="visible" />
+
+        <FrameLayout
+            android:id="@+id/tasks_list_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="?android:attr/actionBarSize" />
+
+        <include
+            android:id="@+id/empty_view"
+            layout="@layout/empty_tasks_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible" />
+
+        <io.github.yavski.fabspeeddial.FabSpeedDial
+            android:id="@+id/tasks_list_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            app:fabGravity="bottom_end"
+            app:fabMenu="@menu/task_fab_menu"
+            app:miniFabBackgroundTint="@android:color/white"
+            app:miniFabDrawableTint="@color/colorPrimaryLight"
+            app:miniFabTitleTextColor="@color/colorPrimaryLight" />
+
+    </android.support.design.widget.CoordinatorLayout>
+
+    <FrameLayout
+        android:layout_width="250dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@android:color/white">
+
+        <com.mindorks.placeholderview.PlaceHolderView
+            android:id="@+id/drawerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="vertical" />
+    </FrameLayout>
+
+</android.support.v4.widget.DrawerLayout>

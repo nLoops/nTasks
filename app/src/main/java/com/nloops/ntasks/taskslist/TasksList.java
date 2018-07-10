@@ -17,6 +17,8 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
@@ -27,10 +29,6 @@ import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.ybq.android.spinkit.SpinKitView;
-import com.github.ybq.android.spinkit.SpriteFactory;
-import com.github.ybq.android.spinkit.Style;
-import com.github.ybq.android.spinkit.sprite.Sprite;
-import com.github.ybq.android.spinkit.style.DoubleBounce;
 import com.github.ybq.android.spinkit.style.Wave;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -39,7 +37,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mindorks.placeholderview.PlaceHolderView;
 import com.nloops.ntasks.R;
+import com.nloops.ntasks.UI.DrawerHeader;
+import com.nloops.ntasks.UI.DrawerMenuItem;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.Todo;
@@ -70,17 +71,27 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     SharedPreferences preferences;
     /*Ref of SpinKitView*/
     SpinKitView mSpinKitView;
+    /*Ref of DrawerLayout*/
+    private DrawerLayout mDrawer;
+    /*Ref of PlaceHolder that contains the Drawer views.*/
+    private PlaceHolderView mDrawerView;
+    /*Ref of Activity toolbar*/
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tasks_list);
-        mSpinKitView = (SpinKitView) findViewById(R.id.task_list_spinkit_indicator);
-        final Toolbar toolbar = findViewById(R.id.tasks_list_toolbar);
-        toolbar.inflateMenu(R.menu.tasks_list_menu);
-        setSupportActionBar(toolbar);
+        /*Get Views ref and Setup Menus*/
+        mSpinKitView = findViewById(R.id.task_list_spinkit_indicator);
+        mDrawer = findViewById(R.id.task_list_drawer_layout);
+        mDrawerView = findViewById(R.id.drawerView);
+        mToolbar = findViewById(R.id.tasks_list_toolbar);
+        mToolbar.inflateMenu(R.menu.tasks_list_menu);
+        setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
         getSupportActionBar().setLogo(R.mipmap.ic_app_name);
+
         // get ref of Firebase Auth
         mFirebaseAuth = FirebaseAuth.getInstance();
         TasksFragment tasksFragment =
@@ -105,7 +116,9 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         // Check and sign user in to make operations to Server Database.
         signAccountIn();
         // Launch first Run Tutorial
-        setupFirstRunGuide(toolbar);
+        setupFirstRunGuide(mToolbar);
+        // setupDrawer
+        setupDrawer();
 
     }
 
@@ -124,8 +137,13 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                     mCurrentUser = user.getUid();
                     SharedPreferences userPreferences = PreferenceManager.
                             getDefaultSharedPreferences(TasksList.this);
+                    /*Save User ID to push to his node in the Firebase DB*/
                     userPreferences.edit().
                             putString(getString(R.string.current_user_firebase), mCurrentUser)
+                            .commit();
+                    /*Save User Display name to add to DrawerLayout*/
+                    userPreferences.edit().
+                            putString(getString(R.string.current_user_display_name), user.getDisplayName())
                             .commit();
                     // user signed in
                     if (isSyncEnabled() && !isScheduled()) {
@@ -152,7 +170,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     /**
      * if this is first run we launch a tutorial helping user to know the app interface
      *
-     * @param toolbar {@link TasksList} toolbar.
+     * @param toolbar {@link TasksList} mToolbar.
      */
     private void setupFirstRunGuide(Toolbar toolbar) {
 
@@ -446,5 +464,33 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         } else {
             mSpinKitView.setVisibility(View.GONE);
         }
+    }
+
+    /**
+     * This helper method will setup {@link #mDrawer} and add {@link #mDrawerView}
+     * which holds the views to the Drawer and add listener for Open/close.
+     */
+    private void setupDrawer() {
+        mDrawerView
+                .addView(new DrawerHeader(this.getApplicationContext()))
+                .addView(new DrawerMenuItem(this.getApplicationContext(), DrawerMenuItem.DRAWER_MENU_ITEM_CALENDER_VIEW));
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
+                this,
+                mDrawer,
+                mToolbar,
+                R.string.open_drawer, R.string.close_drawer) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+        mDrawer.addDrawerListener(drawerToggle);
+        drawerToggle.syncState();
     }
 }

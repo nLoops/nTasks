@@ -7,6 +7,9 @@
     <!--General Strings -->
     <string name="firebase_signed_in">Signed In</string>
     <string name="firebase_signed_out">Signed Out</string>
+    <string name="open_drawer">open</string>
+    <string name="close_drawer">close</string>
+    <string name="drawer_calender_view">Calender View</string>
     <string name="notification_channel_name">nTasks</string>
     <string name="notification_channel_desc">the main channel to provide tasks notification</string>
     <string name="notification_media_name">Media Notification</string>
@@ -40,6 +43,7 @@
     <string name="pause">Pause</string>
     <!--This string CurrentUser will help when background job runs to backup data under user root-->
     <string name="current_user_firebase">current_user</string>
+    <string name="current_user_display_name">user_display_name</string>
     <string name="title_transition_name">shared_element_trans</string>
     <!--Detail Menu Items-->
     <string name="str_action_detail_delete">Delete</string>
