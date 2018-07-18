@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:layout_marginBottom="@dimen/dimen_four_dp"
+  android:padding="@dimen/dimen_eight_dp"
+  android:background="@drawable/item_click_selector"
+  android:orientation="vertical">
+
+  <TextView
+    android:id="@+id/tv_calendar_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
+    tools:text="Task Title"/>
+
+  <TextView
+    android:id="@+id/tv_calendar_date"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:textColor="@color/colorAccent"
+    android:textSize="@dimen/title_text_size"
+    tools:text="Date"/>
+
+</LinearLayout>
+

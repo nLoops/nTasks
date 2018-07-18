@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  tools:context=".calenderview.CalendarView">
+
+  <LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical">
+
+    <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+      android:id="@+id/calendar_view"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:mcv_arrowColor="@color/colorAccent"
+      app:mcv_dateTextAppearance="@style/CustomTextAppearance"
+      app:mcv_headerTextAppearance="@style/CustomTextAppearance"
+      app:mcv_selectionColor="@color/colorAccent"
+      app:mcv_showOtherDates="all"
+      app:mcv_weekDayTextAppearance="@style/CustomWeekDayTextAppearance"
+      />
+
+    <TextView
+      android:id="@+id/tv_calendar_today"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:padding="@dimen/dimen_four_dp"
+      android:textColor="@android:color/white"
+      tools:text="Today"
+      />
+
+    <ListView
+      android:id="@+id/calendar_view_list"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"/>
+
+    <TextView
+      android:id="@+id/empty_calendar_view"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:layout_gravity="center"
+      android:textColor="@android:color/white"
+      tools:text="No Tasks for Today"/>
+
+  </LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
