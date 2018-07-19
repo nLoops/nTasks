@@ -1,11 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <declare-styleable name="FillSeekBar">
-        <attr name="fill_color" format="color" />
-        <attr name="progress" format="integer" />
-    </declare-styleable>
-    <declare-styleable name="Themes">
-        <attr name="fillseekbarViewStyle" format="reference" />
-    </declare-styleable>
+  <declare-styleable name="FillSeekBar">
+    <attr format="color" name="fill_color"/>
+    <attr format="integer" name="progress"/>
+  </declare-styleable>
+  <declare-styleable name="Themes">
+    <attr format="reference" name="fillseekbarViewStyle"/>
+  </declare-styleable>
+
+  <declare-styleable name="SwipeRevealLayout">
+    <attr name="dragFromEdge">
+      <flag name="left" value="1"/>
+      <flag name="right" value="2"/>
+    </attr>
+  </declare-styleable>
 
 </resources>
