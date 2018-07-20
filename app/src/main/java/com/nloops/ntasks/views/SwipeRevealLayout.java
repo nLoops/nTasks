@@ -396,6 +396,10 @@ public class SwipeRevealLayout extends ViewGroup {
     ViewCompat.postInvalidateOnAnimation(this);
   }
 
+  public boolean getIsOpenBeforeInit() {
+    return mIsOpenBeforeInit;
+  }
+
   /**
    * @return true if the drag/swipe motion is currently locked.
    */
