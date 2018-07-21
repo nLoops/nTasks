@@ -1,30 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="wrap_content"
+  android:padding="@dimen/dimen_eight_dp"
+  android:orientation="horizontal">
+
+  <ImageView
+    android:id="@+id/widget_list_taskImage"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:src="@drawable/ic_mic"
+    android:tint="@color/colorAccent"
+    />
+
+  <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/dimen_eight_dp">
-
-
-    <TextView
-        android:id="@+id/widget_list_tasktitle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-condensed"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
-        android:textColor="@android:color/white"
-        tools:text="My Task Title"
-        tools:textColor="@android:color/black" />
+    android:layout_marginLeft="@dimen/dimen_four_dp"
+    android:orientation="vertical">
 
     <TextView
-        android:id="@+id/widget_list_taskdate"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="end"
-        android:textColor="@android:color/white"
-        android:textStyle="italic"
-        tools:text="Due Date"
-        tools:textColor="@android:color/black" />
+      android:id="@+id/widget_list_tasktitle"
+      style="@style/MyTaskTitleStyle"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:autoLink="all"
+      android:textColor="@android:color/white"
+      tools:text="My Task Title"
+      tools:textColor="@color/colorBlack"
+      />
+
+    <TextView
+      android:id="@+id/widget_list_taskdate"
+      style="@style/MyTaskDateStyle"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textColor="@android:color/white"
+      tools:text="Due Date"
+      tools:textColor="@color/colorBlack"
+      />
+
+  </LinearLayout>
 
 </LinearLayout>

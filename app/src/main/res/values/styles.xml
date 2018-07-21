@@ -63,4 +63,85 @@
     <item name="android:textColor">@drawable/my_week_day_text_color</item>
   </style>
 
+  <!--My Views Styles-->
+  <style name="MyDateTextViewStyle">
+    <item name="android:layout_height">@dimen/dimen_fifty_dp</item>
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/dimen_eight_dp</item>
+    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:gravity">center</item>
+    <item name="android:textSize">@dimen/title_text_size</item>
+  </style>
+
+  <style name="MyFragmentsCardViewStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_margin">@dimen/dimen_eight_dp</item>
+    <item name="android:elevation">@dimen/dimen_four_dp</item>
+  </style>
+
+  <style name="MySwitchPriorityStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/switch_button_height</item>
+    <item name="android:layout_marginTop">@dimen/dimen_eight_dp</item>
+    <item name="android:layout_marginBottom">@dimen/dimen_eight_dp</item>
+    <item name="android:paddingStart">@dimen/dimen_two_dp</item>
+    <item name="android:paddingEnd">@dimen/dimen_two_dp</item>
+    <item name="android:paddingLeft">@dimen/dimen_two_dp</item>
+    <item name="android:paddingRight">@dimen/dimen_two_dp</item>
+    <item name="android:text">@string/task_priority</item>
+    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:textSize">@dimen/title_text_size</item>
+    <item name="android:textColor">?android:textColorSecondary</item>
+  </style>
+
+  <style name="MyEditTextStyle">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:fontFamily">@font/worksans_semibold</item>
+    <item name="android:inputType">textAutoComplete|text|textCapWords</item>
+    <item name="android:textSize">@dimen/title_text_size</item>
+    <item name="android:hint">@string/title_hint</item>
+  </style>
+
+  <style name="MyToolBarStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">?android:attr/actionBarSize</item>
+    <item name="android:elevation">@dimen/dimen_two_dp</item>
+  </style>
+
+  <style name="MyCustomViewStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">90dp</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:elevation">@dimen/dimen_four_dp</item>
+  </style>
+
+  <style name="MyTaskItemCardStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_margin">@dimen/dimen_four_dp</item>
+    <item name="android:foreground">?android:selectableItemBackground</item>
+    <item name="android:stateListAnimator">@animator/card_lift_on_touch</item>
+    <item name="android:visibility">visible</item>
+  </style>
+
+  <style name="MyTaskTitleStyle">
+    <item name="android:paddingRight">@dimen/dimen_four_dp</item>
+    <item name="android:paddingEnd">@dimen/dimen_four_dp</item>
+    <item name="android:paddingLeft">@dimen/dimen_four_dp</item>
+    <item name="android:paddingStart">@dimen/dimen_four_dp</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:fontFamily">@font/worksans_semibold</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:textSize">@dimen/title_text_size</item>
+    <item name="android:autoLink">all</item>
+  </style>
+
+  <style name="MyTaskDateStyle">
+    <item name="android:textStyle">italic</item>
+    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:textSize">@dimen/item_task_date_size</item>
+  </style>
+
 </resources>

@@ -8,7 +8,7 @@
   android:paddingEnd="@dimen/drawer_header_text_margin_top"
   android:paddingLeft="@dimen/drawer_header_text_margin_top"
   android:paddingRight="@dimen/drawer_header_text_margin_top"
-  android:background="@drawable/item_click_selector"
+  android:background="?attr/selectableItemBackgroundBorderless"
   android:gravity="center|start"
   android:orientation="horizontal">
 

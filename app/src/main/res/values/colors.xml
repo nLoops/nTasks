@@ -11,4 +11,6 @@
   <color name="colorBackgroundActivity">#f4efef</color>
   <color name="colorGray">#ada7a7</color>
   <color name="app_light_grey">#64000000</color>
+  <color name="colorWidgetBackground">#60000000</color>
+  <color name="colorSubWidgetBackground">#65000000</color>
 </resources>

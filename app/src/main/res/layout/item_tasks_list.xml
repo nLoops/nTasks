@@ -5,97 +5,92 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   android:id="@+id/item_swipe_layout"
-  android:layout_width="match_parent"
-  android:layout_height="wrap_content"
-  android:layout_gravity="center_vertical"
+  style="@style/MyCustomViewStyle"
   app:dragFromEdge="right">
 
   <FrameLayout
     android:layout_width="wrap_content"
-    android:layout_height="match_parent">
+    android:layout_height="80dp">
+
     <LinearLayout
       android:layout_width="wrap_content"
       android:layout_height="match_parent"
-      android:paddingStart="@dimen/dimen_twenty_dp"
-      android:paddingEnd="@dimen/dimen_twenty_dp"
+      android:layout_margin="@dimen/dimen_six_dp"
+      android:background="@color/colorAccent"
       android:gravity="center_vertical|end"
       android:orientation="horizontal">
 
       <ImageButton
         android:id="@+id/item_delete_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@color/colorAccent"
         android:src="@drawable/ic_delete"
-        android:text="@string/str_action_detail_delete"
-        android:tint="@color/colorPrimaryDark"/>
+        android:text="@string/str_action_detail_delete"/>
 
     </LinearLayout>
+
   </FrameLayout>
 
   <FrameLayout
     android:id="@+id/frame_holder_task"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:clickable="true">
+    android:layout_height="80dp">
+
     <android.support.v7.widget.CardView
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_marginBottom="@dimen/dimen_four_dp"
-      android:elevation="@dimen/dimen_four_dp"
-      android:foreground="?android:selectableItemBackground"
-      android:stateListAnimator="@animator/card_lift_on_touch"
-      android:visibility="visible">
+      style="@style/MyTaskItemCardStyle">
 
-      <LinearLayout
+      <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dimen_eight_dp"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <LinearLayout
-          android:layout_width="match_parent"
+        <CheckBox
+          android:id="@+id/tasks_list_check"
+          android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:orientation="horizontal">
+          android:layout_marginTop="@dimen/dimen_eight_dp"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintTop_toTopOf="parent"
+          />
 
-          <CheckBox
-            android:id="@+id/tasks_list_check"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+        <com.nloops.ntasks.views.TaskTitleView
+          android:id="@+id/tasks_list_title"
+          style="@style/MyTaskTitleStyle"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          app:layout_constraintLeft_toRightOf="@id/tasks_list_check"
+          app:layout_constraintRight_toLeftOf="@id/task_priority_view"
+          app:layout_constraintTop_toTopOf="@id/tasks_list_check"
+          tools:text="Get Some Milk"
+          />
 
-          <com.nloops.ntasks.views.TaskTitleView
-            android:id="@+id/tasks_list_title"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:paddingEnd="@dimen/dimen_four_dp"
-            android:paddingRight="@dimen/dimen_four_dp"
-            android:textSize="@dimen/title_text_size"
-            tools:text="Get Some Milk"/>
-
-          <View
-            android:id="@+id/task_priority_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="0.05"
-            android:layout_marginEnd="@dimen/dimen_four_dp"
-            android:layout_marginRight="@dimen/dimen_four_dp"
-            android:background="@color/colorPrimaryLight"/>
-        </LinearLayout>
+        <View
+          android:id="@+id/task_priority_view"
+          android:layout_width="5dp"
+          android:layout_height="0dp"
+          android:layout_marginBottom="@dimen/dimen_eight_dp"
+          android:layout_marginEnd="@dimen/dimen_four_dp"
+          android:layout_marginRight="@dimen/dimen_four_dp"
+          android:background="@color/colorPrimaryLight"
+          app:layout_constraintBottom_toBottomOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toTopOf="@id/tasks_list_check"
+          />
 
         <TextView
           android:id="@+id/task_list_due_date"
-          android:textStyle="italic"
+          style="@style/MyTaskDateStyle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_marginEnd="@dimen/dimen_four_dp"
-          android:layout_marginRight="@dimen/dimen_four_dp"
-          android:layout_gravity="end"
-          android:fontFamily="sans-serif-condensed"
+          android:textColor="@color/colorPrimary"
+          app:layout_constraintLeft_toRightOf="@id/tasks_list_check"
+          app:layout_constraintTop_toBottomOf="@id/tasks_list_title"
           tools:text="25-05"/>
 
-      </LinearLayout>
+      </android.support.constraint.ConstraintLayout>
 
     </android.support.v7.widget.CardView>
+
   </FrameLayout>
 
 </com.nloops.ntasks.views.SwipeRevealLayout>
