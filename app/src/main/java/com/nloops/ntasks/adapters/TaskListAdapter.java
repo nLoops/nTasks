@@ -201,7 +201,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
       if (v == mCheckBox) {
         completionToggled(this);
       } else if (v == fullView) {
-        posItemClick(this);
+        if (mSwipeLayout.getIsOpenBeforeInit()) {
+          mSwipeLayout.close(true);
+        } else {
+          posItemClick(this);
+        }
       } else if (v == mSwipeDeleteBtn) {
         swipeDeleteClicked(this);
         mSwipeLayout.close(true);

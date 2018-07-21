@@ -1,8 +1,11 @@
 package com.nloops.ntasks.utils;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
+import android.preference.PreferenceManager;
+import android.service.autofill.RegexValidator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,6 +25,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This class will include common helper methods which needed in the different cases in the APP
@@ -125,5 +130,27 @@ public class GeneralUtils {
     view.animate();
     animation.start();
   }
+
+  /**
+   * Helper Method to return the current User Data Sort Preference.
+   *
+   * @param context passed {@link Context}
+   */
+  public static String getDataSort(Context context) {
+    // get SharedPreference to arrange Tasks sortBy
+    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+    // get the Current Value of preference
+    String sortByValue = sharedPreferences
+        .getString(context.getString(R.string.settings_sortby_key),
+            context.getString(R.string.settings_sortby_default));
+    // By default we have Date first
+    String sortBy = TasksDBContract.DATE_SORT;
+    // if we have Priority first we change the sort of Tasks.
+    if (sortByValue.equals(context.getString(R.string.settings_priority_value))) {
+      sortBy = TasksDBContract.DEFAULT_SORT;
+    }
+    return sortBy;
+  }
+
 
 }
