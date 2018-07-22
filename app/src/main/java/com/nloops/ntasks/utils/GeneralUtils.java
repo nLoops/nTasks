@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Environment;
 import android.preference.PreferenceManager;
-import android.service.autofill.RegexValidator;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -25,8 +24,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * This class will include common helper methods which needed in the different cases in the APP
@@ -152,5 +149,56 @@ public class GeneralUtils {
     return sortBy;
   }
 
+
+  /**
+   * Helper method to getMonth Name
+   *
+   * @param month Calendar Month Int
+   * @return Month Name.
+   */
+  public static String getMonthName(int month) {
+    String strMonth;
+    switch (month) {
+      case 1:
+        strMonth = "January";
+        break;
+      case 2:
+        strMonth = "February";
+        break;
+      case 3:
+        strMonth = "March";
+        break;
+      case 4:
+        strMonth = "April";
+        break;
+      case 5:
+        strMonth = "May";
+        break;
+      case 6:
+        strMonth = "June";
+        break;
+      case 7:
+        strMonth = "July";
+        break;
+      case 8:
+        strMonth = "August";
+        break;
+      case 9:
+        strMonth = "September";
+        break;
+      case 10:
+        strMonth = "October";
+        break;
+      case 11:
+        strMonth = "November";
+        break;
+      case 12:
+        strMonth = "December";
+        break;
+      default:
+        strMonth = "N/A";
+    }
+    return strMonth;
+  }
 
 }
