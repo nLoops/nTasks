@@ -1,124 +1,125 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">nTasks</string>
-    <!--Fab Menu Action items Strings-->
-    <string name="action_note">Note</string>
-    <string name="action_todo">ToDoList</string>
-    <string name="action_mic">AudioNote</string>
-    <!--General Strings -->
-    <string name="firebase_signed_in">Signed In</string>
-    <string name="firebase_signed_out">Signed Out</string>
-    <string name="open_drawer">open</string>
-    <string name="close_drawer">close</string>
-    <string name="drawer_calender_view">Calender View</string>
-    <string name="notification_channel_name">nTasks</string>
-    <string name="notification_channel_desc">the main channel to provide tasks notification</string>
-    <string name="notification_media_name">Media Notification</string>
-    <string name="notification_media_desc">the channel that provide media style notification</string>
-    <string name="str_empty_tasks">You\'re done for today</string>
-    <string name="str_empty_tasks_two">Enjoy the rest</string>
-    <string name="title_hint">Title</string>
-    <string name="body_hint">Description</string>
-    <string name="task_priority">Task Priority</string>
-    <string name="content_desc_mic">Speech To Text mic icon</string>
-    <string name="content_desc_empty_calender">Empty Calender image</string>
-    <string name="content_desc_cup">Coffee cup drawable</string>
-    <string name="content_desc_normal_note">Normal Note</string>
-    <string name="content_desc_todo_note">Todo list Note</string>
-    <string name="content_desc_audio_note">Audio Note</string>
-    <string name="permissions_required">App requires RECORD_AUDIO permission to access mic and
+  <string name="app_name">nTasks</string>
+  <!--Fab Menu Action items Strings-->
+  <string name="action_note">Note</string>
+  <string name="action_todo">ToDoList</string>
+  <string name="action_mic">AudioNote</string>
+  <!--General Strings -->
+  <string name="firebase_signed_in">Signed In</string>
+  <string name="firebase_signed_out">Signed Out</string>
+  <string name="open_drawer">open</string>
+  <string name="close_drawer">close</string>
+  <string name="drawer_calender_view">Calender View</string>
+  <string name="notification_channel_name">nTasks</string>
+  <string name="notification_channel_desc">the main channel to provide tasks notification</string>
+  <string name="notification_media_name">Media Notification</string>
+  <string name="notification_media_desc">the channel that provide media style notification</string>
+  <string name="str_empty_tasks">You\'re done for today</string>
+  <string name="widget_empty_string">You\'re done for today, Enjoy</string>
+  <string name="str_empty_tasks_two">Enjoy the rest</string>
+  <string name="title_hint">Title</string>
+  <string name="body_hint">Description</string>
+  <string name="task_priority">Task Priority</string>
+  <string name="content_desc_mic">Speech To Text mic icon</string>
+  <string name="content_desc_empty_calender">Empty Calender image</string>
+  <string name="content_desc_cup">Coffee cup drawable</string>
+  <string name="content_desc_normal_note">Normal Note</string>
+  <string name="content_desc_todo_note">Todo list Note</string>
+  <string name="content_desc_audio_note">Audio Note</string>
+  <string name="permissions_required">App requires RECORD_AUDIO permission to access mic and
     WRITE_EXTERNAL_STORAGE to save recorded audio
   </string>
-    <string name="permissions_alert_title">Permissions Required</string>
-    <string name="content_playback_btn">Play Back Button</string>
-    <string name="label_due_date">Due Date</string>
-    <string name="label_date_not_set">Not Set</string>
-    <string name="reminder_title">Task Reminder</string>
-    <string name="reminder_normaltask">Normal Task</string>
-    <string name="reminder_todolist">TODO List</string>
-    <string name="reminder_audionote">Audio Note</string>
-    <string name="notify_action_complete">Done</string>
-    <string name="todo_list_button">Add New Item</string>
-    <string name="cannot_save_empty">Task Cannot Be Empty</string>
-    <string name="play">Play</string>
-    <string name="pause">Pause</string>
-    <!--This string CurrentUser will help when background job runs to backup data under user root-->
-    <string name="current_user_firebase">current_user</string>
-    <string name="current_user_display_name">user_display_name</string>
-    <string name="title_transition_name">shared_element_trans</string>
-    <!--Detail Menu Items-->
-    <string name="str_action_detail_delete">Delete</string>
-    <string name="str_action_detail_reminder">Set Reminder</string>
-    <string name="str_action_detail_done">Done</string>
-    <string name="str_action_signout">Sign out</string>
-    <!--Task Operations Messages-->
-    <string name="msg_task_updated">Task updated successfully</string>
-    <string name="msg_task_deleted">Task deleted successfully</string>
-    <string name="msg_task_added">Task added successfully</string>
-    <!--Audio Notes Strings-->
-    <string name="audio_counter_format">%02d:%02d</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <!--App Settings-->
-    <!--Tasks sortBy -->
-    <string name="settings_label">Settings</string>
-    <string name="settings_sortby_label">Tasks Sort</string>
-    <string name="settings_sortby_key" translatable="false">tasks_sortby</string>
-    <string name="settings_sortby_default" translatable="false">@string/settings_date_value</string>
+  <string name="permissions_alert_title">Permissions Required</string>
+  <string name="content_playback_btn">Play Back Button</string>
+  <string name="label_due_date">Due Date</string>
+  <string name="label_date_not_set">Not Set</string>
+  <string name="reminder_title">Task Reminder</string>
+  <string name="reminder_normaltask">Normal Task</string>
+  <string name="reminder_todolist">TODO List</string>
+  <string name="reminder_audionote">Audio Note</string>
+  <string name="notify_action_complete">Done</string>
+  <string name="todo_list_button">Add New Item</string>
+  <string name="cannot_save_empty">Task Cannot Be Empty</string>
+  <string name="play">Play</string>
+  <string name="pause">Pause</string>
+  <!--This string CurrentUser will help when background job runs to backup data under user root-->
+  <string name="current_user_firebase">current_user</string>
+  <string name="current_user_display_name">user_display_name</string>
+  <string name="title_transition_name">shared_element_trans</string>
+  <!--Detail Menu Items-->
+  <string name="str_action_detail_delete">Delete</string>
+  <string name="str_action_detail_reminder">Set Reminder</string>
+  <string name="str_action_detail_done">Done</string>
+  <string name="str_action_signout">Sign out</string>
+  <!--Task Operations Messages-->
+  <string name="msg_task_updated">Task updated successfully</string>
+  <string name="msg_task_deleted">Task deleted successfully</string>
+  <string name="msg_task_added">Task added successfully</string>
+  <!--Audio Notes Strings-->
+  <string name="audio_counter_format">%02d:%02d</string>
+  <string name="appwidget_text">EXAMPLE</string>
+  <string name="add_widget">Add widget</string>
+  <!--App Settings-->
+  <!--Tasks sortBy -->
+  <string name="settings_label">Settings</string>
+  <string name="settings_sortby_label">Tasks Sort</string>
+  <string name="settings_sortby_key" translatable="false">tasks_sortby</string>
+  <string name="settings_sortby_default" translatable="false">@string/settings_date_value</string>
 
-    <string name="settings_priority_label">Priority First</string>
-    <string name="settings_priority_value" translatable="false">priority_first</string>
-    <string name="settings_date_label">Date First</string>
-    <string name="settings_date_value" translatable="false">date_first</string>
+  <string name="settings_priority_label">Priority First</string>
+  <string name="settings_priority_value" translatable="false">priority_first</string>
+  <string name="settings_date_label">Date First</string>
+  <string name="settings_date_value" translatable="false">date_first</string>
 
-    <!--Completed Tasks Display-->
-    <string name="settings_completed_title">Display Completed Tasks</string>
-    <string name="settings_completed_key">completed_tasks</string>
-    <string name="settings_completed_show">Show</string>
-    <string name="settings_completed_hide">Hide</string>
+  <!--Completed Tasks Display-->
+  <string name="settings_completed_title">Display Completed Tasks</string>
+  <string name="settings_completed_key">completed_tasks</string>
+  <string name="settings_completed_show">Show</string>
+  <string name="settings_completed_hide">Hide</string>
 
-    <!--Cloud Sync-->
-    <string name="settings_cat_sync_label">Cloud Backup</string>
-    <string name="settings_cat_sync_key" translatable="false">cloud_sync</string>
-    <string name="settings_sync_title">Allow Daily Cloud Backup</string>
-    <string name="settings_sync_key" translatable="false">sync_daily</string>
-    <string name="settings_sync_enabled">Enabled</string>
-    <string name="settings_sync_disabled">Disabled</string>
+  <!--Cloud Sync-->
+  <string name="settings_cat_sync_label">Cloud Backup</string>
+  <string name="settings_cat_sync_key" translatable="false">cloud_sync</string>
+  <string name="settings_sync_title">Allow Daily Cloud Backup</string>
+  <string name="settings_sync_key" translatable="false">sync_daily</string>
+  <string name="settings_sync_enabled">Enabled</string>
+  <string name="settings_sync_disabled">Disabled</string>
 
-    <string name="backup_schedule" translatable="false">backup_scheduled</string>
+  <string name="backup_schedule" translatable="false">backup_scheduled</string>
 
-    <string name="settings_sync_time_label">Backup Time</string>
-    <string name="settings_sync_time_key" translatable="false">backup_time</string>
-    <string name="settings_sync_time_default">@string/settings_sync_day_key</string>
+  <string name="settings_sync_time_label">Backup Time</string>
+  <string name="settings_sync_time_key" translatable="false">backup_time</string>
+  <string name="settings_sync_time_default">@string/settings_sync_day_key</string>
 
-    <string name="settings_sync_twelve_label">Every 12 hours</string>
-    <string name="settings_sync_twelve_key" translatable="false">twelve_time</string>
+  <string name="settings_sync_twelve_label">Every 12 hours</string>
+  <string name="settings_sync_twelve_key" translatable="false">twelve_time</string>
 
-    <string name="settings_sync_day_label">Every Day</string>
-    <string name="settings_sync_day_key" translatable="false">day_time</string>
+  <string name="settings_sync_day_label">Every Day</string>
+  <string name="settings_sync_day_key" translatable="false">day_time</string>
 
-    <string name="settings_sync_week_label">Every Week</string>
-    <string name="settings_sync_week_key" translatable="false">week_time</string>
-    <!--AlertDialog Strings-->
-    <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
-    <string name="discard">Discard</string>
-    <string name="keep_editing">Keep Editing</string>
-    <string name="delete_task">Delete Task ?</string>
-    <string name="confirm">Confirm</string>
-    <string name="cancel">Cancel</string>
-    <!--First Time Guide Strings-->
-    <string name="task_list_fab_title">Add New Task</string>
-    <string name="task_list_fab_description">we have three different types of tasks tap on + to figure out</string>
-    <string name="task_list_settings_title">Settings Button</string>
-    <string name="task_list_settings_desc">customize your Tasks display and enable/disable cloud backup</string>
-    <string name="task_list_overflow_title">Overflow Actions</string>
-    <string name="task_list_overflow_desc">you can sign out with current user and use a different one to fetch user data from the server </string>
-    <string name="task_list_app_title">Welcome to nTasks</string>
-    <string name="task_list_app_desc">This app made for you, your feedback always matters our goal to provide smooth experience with clean UX without ads and always free!</string>
-    <string name="sequence_finish_message">Enjoy managing your daily tasks!</string>
-    <string name="str_is_first_run">first_run</string>
-    <!--FirstRun Backup-->
-    <string name="backup_message">Available Backup For This Account</string>
-    <string name="backup_restore">Restore</string>
-    <string name="backup_cancel">Cancel</string>
+  <string name="settings_sync_week_label">Every Week</string>
+  <string name="settings_sync_week_key" translatable="false">week_time</string>
+  <!--AlertDialog Strings-->
+  <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
+  <string name="discard">Discard</string>
+  <string name="keep_editing">Keep Editing</string>
+  <string name="delete_task">Delete Task ?</string>
+  <string name="confirm">Confirm</string>
+  <string name="cancel">Cancel</string>
+  <!--First Time Guide Strings-->
+  <string name="task_list_fab_title">Add New Task</string>
+  <string name="task_list_fab_description">we have three different types of tasks tap on + to figure out</string>
+  <string name="task_list_settings_title">Settings Button</string>
+  <string name="task_list_settings_desc">customize your Tasks display and enable/disable cloud backup</string>
+  <string name="task_list_overflow_title">Overflow Actions</string>
+  <string name="task_list_overflow_desc">you can sign out with current user and use a different one to fetch user data from the server </string>
+  <string name="task_list_app_title">Welcome to nTasks</string>
+  <string name="task_list_app_desc">This app made for you, your feedback always matters our goal to provide smooth experience with clean UX without ads and always free!</string>
+  <string name="sequence_finish_message">Enjoy managing your daily tasks!</string>
+  <string name="str_is_first_run">first_run</string>
+  <!--FirstRun Backup-->
+  <string name="backup_message">Available Backup For This Account</string>
+  <string name="backup_restore">Restore</string>
+  <string name="backup_cancel">Cancel</string>
 
 </resources>

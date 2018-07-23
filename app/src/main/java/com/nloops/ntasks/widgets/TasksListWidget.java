@@ -23,6 +23,7 @@ public class TasksListWidget extends AppWidgetProvider {
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.tasks_list_widget);
     Intent intent = new Intent(context, ListViewService.class);
     views.setRemoteAdapter(R.id.tasks_list_widget_lv, intent);
+    views.setEmptyView(R.id.tasks_list_widget_lv, R.id.widget_list_empty_view);
     //Set Calendar of today
     Calendar calendar = Calendar.getInstance(TimeZone.getDefault());
     int thisMonth = calendar.get(Calendar.MONTH);

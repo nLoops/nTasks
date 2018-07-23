@@ -1,64 +1,83 @@
-<LinearLayout
+<RelativeLayout
   xmlns:android="http://schemas.android.com/apk/res/android"
   xmlns:tools="http://schemas.android.com/tools"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
-  android:padding="@dimen/widget_margin"
-  android:background="@drawable/widget_background"
-  android:orientation="vertical">
+  android:background="@drawable/widget_background">
 
   <LinearLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:padding="@dimen/dimen_four_dp"
-    android:background="@drawable/widget_top_view"
+    android:layout_height="match_parent"
+    android:padding="@dimen/widget_margin"
+
     android:orientation="vertical">
-    <TextView
-      android:id="@+id/tasks_list_widget_month"
+
+    <LinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:layout_gravity="start|bottom"
-      android:fontFamily="@font/worksans_semibold"
-      android:textColor="@android:color/white"
-      android:textSize="20sp"
-      tools:text="May"
+      android:padding="@dimen/dimen_four_dp"
+      android:background="@drawable/widget_top_view"
+      android:orientation="vertical">
+      <TextView
+        android:id="@+id/tasks_list_widget_month"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start|bottom"
+        android:fontFamily="@font/worksans_semibold"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        tools:text="May"
+        />
+      <TextView
+        android:id="@+id/tasks_list_widget_day"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/worksans_medium"
+        android:gravity="start|top"
+        android:textColor="@android:color/white"
+        android:textSize="16sp"
+        tools:text="24"
+        />
+
+    </LinearLayout>
+
+    <ListView
+      android:id="@+id/tasks_list_widget_lv"
+      android:layout_width="match_parent"
+      android:layout_height="0dp"
+      android:layout_weight="1"
       />
-    <TextView
-      android:id="@+id/tasks_list_widget_day"
+
+    <FrameLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"
-      android:fontFamily="@font/worksans_medium"
-      android:gravity="start|top"
-      android:textColor="@android:color/white"
-      android:textSize="16sp"
-      tools:text="24"
-      />
+      android:background="@drawable/widget_bottom_view"
+      android:clickable="true"
+      >
+
+      <ImageView
+        android:id="@+id/tasks_list_widget_add_new"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_gravity="end"
+        android:background="@drawable/item_click_selector"
+        android:src="@drawable/ic_add"
+        />
+
+    </FrameLayout>
 
   </LinearLayout>
 
-  <ListView
-    android:id="@+id/tasks_list_widget_lv"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_weight="1"
-    />
-
-  <FrameLayout
+  <TextView
+    android:id="@+id/widget_list_empty_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/widget_bottom_view"
-    android:clickable="true"
-    >
+    android:layout_centerInParent="true"
+    android:fontFamily="@font/worksans_regular"
+    android:gravity="center"
+    android:text="@string/widget_empty_string"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/title_text_size"
+    />
 
-    <ImageView
-      android:id="@+id/tasks_list_widget_add_new"
-      android:layout_width="36dp"
-      android:layout_height="36dp"
-      android:layout_gravity="end"
-      android:background="@drawable/item_click_selector"
-      android:src="@drawable/ic_add"
-      />
-
-  </FrameLayout>
-
-</LinearLayout>
+</RelativeLayout>
