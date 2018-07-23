@@ -440,6 +440,14 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     }
   };
 
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+    if (getActivity() != null) {
+      getActivity().finish();
+    }
+  }
+
   private void updateSeekBar() {
     customHandler.postDelayed(refreshPlayingTimer, 100);
   }
