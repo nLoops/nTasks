@@ -13,4 +13,9 @@
   <color name="app_light_grey">#64000000</color>
   <color name="colorWidgetBackground">#60000000</color>
   <color name="colorSubWidgetBackground">#65000000</color>
+
+  <color name="tab_disable">#979797</color>
+  <color name="tab_enable">#FFFFFF</color>
+  <color name="tab_checked">#F3CD70</color>
+  <color name="tab_unchecked">#FFFFFF</color>
 </resources>
