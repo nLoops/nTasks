@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
   <string name="app_name">nTasks</string>
   <!--Fab Menu Action items Strings-->
   <string name="action_note">Note</string>
@@ -10,6 +10,7 @@
   <string name="open_drawer">open</string>
   <string name="close_drawer">close</string>
   <string name="drawer_calender_view">Calender View</string>
+  <string name="drawer_report_view">Report View</string>
   <string name="notification_channel_name">nTasks</string>
   <string name="notification_channel_desc">the main channel to provide tasks notification</string>
   <string name="notification_media_name">Media Notification</string>
@@ -42,6 +43,8 @@
   <string name="cannot_save_empty">Task Cannot Be Empty</string>
   <string name="play">Play</string>
   <string name="pause">Pause</string>
+  <string name="rep_weekly">Weekly Tasks</string>
+  <string name="rep_active">Active Days</string>
   <!--This string CurrentUser will help when background job runs to backup data under user root-->
   <string name="current_user_firebase">current_user</string>
   <string name="current_user_display_name">user_display_name</string>

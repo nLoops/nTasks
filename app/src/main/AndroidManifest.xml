@@ -85,8 +85,13 @@
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
     </activity>
+    <activity android:name=".calenderview.CalendarView">
+      <meta-data
+        android:name="android.support.PARENT_ACTIVITY"
+        android:value=".taskslist.TasksList"/>
+    </activity>
     <activity
-      android:name=".calenderview.CalendarView">
+      android:name=".reports.TasksReports">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
