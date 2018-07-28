@@ -18,6 +18,7 @@ import com.nloops.ntasks.R;
 public class DrawerMenuItem {
 
   public static final int DRAWER_MENU_ITEM_CALENDER_VIEW = 1;
+  public static final int DRAWER_MENU_ITEM_REPORT_VIEW = 2;
 
   private int mMenuPosition;
   private Context mContext;
@@ -42,6 +43,11 @@ public class DrawerMenuItem {
         itemIcon.setImageDrawable(mContext.getResources().
             getDrawable(R.drawable.ic_empty_calender_small));
         break;
+      case DRAWER_MENU_ITEM_REPORT_VIEW:
+        itemNameTxt.setText(mContext.getString(R.string.drawer_report_view));
+        itemIcon.setImageDrawable(
+            mContext.getResources().getDrawable(R.drawable.ic_charts));
+
     }
   }
 
@@ -53,6 +59,10 @@ public class DrawerMenuItem {
           mCallBack.onCaldendarViewSelected();
         }
         break;
+      case DRAWER_MENU_ITEM_REPORT_VIEW:
+        if (mCallBack != null) {
+          mCallBack.onReportViewSelected();
+        }
     }
   }
 
@@ -63,6 +73,8 @@ public class DrawerMenuItem {
   public interface DrawerCallBack {
 
     void onCaldendarViewSelected();
+
+    void onReportViewSelected();
   }
 
 }

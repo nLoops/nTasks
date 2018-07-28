@@ -30,6 +30,11 @@ import java.util.Locale;
  */
 public class GeneralUtils {
 
+  /**
+   * Private Constructor
+   */
+  private GeneralUtils() {
+  }
 
   /**
    * The {@code fragment} is added to the container view with id {@code frameId}. The operation is
@@ -160,45 +165,46 @@ public class GeneralUtils {
     String strMonth;
     switch (month) {
       case 1:
-        strMonth = "January";
+        strMonth = Constants.JANUARY;
         break;
       case 2:
-        strMonth = "February";
+        strMonth = Constants.FEBRUARY;
         break;
       case 3:
-        strMonth = "March";
+        strMonth = Constants.MARCH;
         break;
       case 4:
-        strMonth = "April";
+        strMonth = Constants.APRIL;
         break;
       case 5:
-        strMonth = "May";
+        strMonth = Constants.MAY;
         break;
       case 6:
-        strMonth = "June";
+        strMonth = Constants.JUNE;
         break;
       case 7:
-        strMonth = "July";
+        strMonth = Constants.JULY;
         break;
       case 8:
-        strMonth = "August";
+        strMonth = Constants.AUGUST;
         break;
       case 9:
-        strMonth = "September";
+        strMonth = Constants.SEPTEMBER;
         break;
       case 10:
-        strMonth = "October";
+        strMonth = Constants.OCTOBER;
         break;
       case 11:
-        strMonth = "November";
+        strMonth = Constants.NOVEMBER;
         break;
       case 12:
-        strMonth = "December";
+        strMonth = Constants.DECEMBER;
         break;
       default:
-        strMonth = "N/A";
+        strMonth = Constants.NOT_AVAILABLE;
     }
     return strMonth;
   }
+
 
 }

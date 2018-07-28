@@ -47,6 +47,7 @@ import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
+import com.nloops.ntasks.reports.TasksReports;
 import com.nloops.ntasks.utils.CloudSyncTasks;
 import com.nloops.ntasks.utils.DatabaseValues;
 import com.nloops.ntasks.widgets.WidgetIntentService;
@@ -475,6 +476,25 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
   }
 
   /**
+   * CallBack to Listen to DrawerItem Click
+   */
+  private DrawerCallBack mDrawerCallback = new DrawerCallBack() {
+    @Override
+    public void onCaldendarViewSelected() {
+      Intent intent = new Intent(TasksList.this, CalendarView.class);
+      startActivity(intent);
+      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    public void onReportViewSelected() {
+      Intent intent = new Intent(TasksList.this, TasksReports.class);
+      startActivity(intent);
+      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+  };
+
+  /**
    * This helper method will setup {@link #mDrawer} and add {@link #mDrawerView} which holds the
    * views to the Drawer and add listener for Open/close.
    */
@@ -482,9 +502,13 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     DrawerMenuItem calendarItem = new DrawerMenuItem(this.getApplicationContext(),
         DrawerMenuItem.DRAWER_MENU_ITEM_CALENDER_VIEW);
     calendarItem.setDrawerCallBack(mDrawerCallback);
+    DrawerMenuItem reportItem = new DrawerMenuItem(this.getApplicationContext(),
+        DrawerMenuItem.DRAWER_MENU_ITEM_REPORT_VIEW);
+    reportItem.setDrawerCallBack(mDrawerCallback);
     mDrawerView
         .addView(new DrawerHeader(this.getApplicationContext()))
-        .addView(calendarItem);
+        .addView(calendarItem)
+        .addView(reportItem);
     ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
         this,
         mDrawer,
@@ -504,16 +528,4 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     mDrawer.addDrawerListener(drawerToggle);
     drawerToggle.syncState();
   }
-
-  /**
-   * CallBack to Listen to DrawerItem Click
-   */
-  private DrawerCallBack mDrawerCallback = new DrawerCallBack() {
-    @Override
-    public void onCaldendarViewSelected() {
-      Intent intent = new Intent(TasksList.this, CalendarView.class);
-      startActivity(intent);
-      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
-  };
 }
