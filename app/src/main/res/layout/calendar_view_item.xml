@@ -21,7 +21,7 @@
     android:id="@+id/tv_calendar_date"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textColor="@color/colorAccent"
+    android:textColor="@color/colorBackgroundActivity"
     android:textSize="@dimen/title_text_size"
     tools:text="Date"/>
 

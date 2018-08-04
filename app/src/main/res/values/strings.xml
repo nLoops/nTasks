@@ -4,6 +4,7 @@
   <string name="action_note">Note</string>
   <string name="action_todo">ToDoList</string>
   <string name="action_mic">AudioNote</string>
+  <string name="str_settings_title">Settings</string>
   <!--General Strings -->
   <string name="firebase_signed_in">Signed In</string>
   <string name="firebase_signed_out">Signed Out</string>

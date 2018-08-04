@@ -19,7 +19,18 @@
 
       <android.support.v7.widget.Toolbar
         android:id="@+id/tasks_list_toolbar"
-        style="@style/MyToolBarStyle"/>
+        style="@style/MyToolBarStyle">
+        <FrameLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
+          <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_app_name_two"
+            />
+        </FrameLayout>
+      </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -54,9 +65,10 @@
       android:layout_gravity="bottom|end"
       app:fabGravity="bottom_end"
       app:fabMenu="@menu/task_fab_menu"
-      app:miniFabBackgroundTint="@android:color/white"
-      app:miniFabDrawableTint="@color/colorPrimaryLight"
-      app:miniFabTitleTextColor="@color/colorPrimaryLight"/>
+      app:miniFabBackgroundTint="@color/colorPrimary"
+      app:miniFabDrawableTint="@color/colorBackgroundActivity"
+      app:miniFabTitleBackgroundTint="@color/colorPrimary"
+      app:miniFabTitleTextColor="@color/colorBackgroundActivity"/>
 
   </android.support.design.widget.CoordinatorLayout>
 
@@ -71,6 +83,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:scrollbars="vertical"/>
+
   </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

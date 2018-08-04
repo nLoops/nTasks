@@ -61,6 +61,7 @@
 
   <style name="CustomWeekDayTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
     <item name="android:textColor">@drawable/my_week_day_text_color</item>
+    <item name="android:textStyle">bold</item>
   </style>
 
   <!--My Views Styles-->

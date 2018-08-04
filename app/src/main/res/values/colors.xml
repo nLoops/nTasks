@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorPrimary">#344955</color>
-  <color name="colorPrimaryDark">#232F34</color>
-  <color name="colorAccent">#F9AA33</color>
-  <color name="colorPrimaryLight">#4A6572</color>
+  <color name="colorPrimary">#40A0f0</color>
+  <color name="colorPrimaryDark">#40A0f0</color>
+  <color name="colorAccent">#fe5722</color>
+  <color name="colorPrimaryLight">#B8D0E8</color>
   <color name="activated">#E0E0E0</color>
   <color name="colorBlack">#000000</color>
   <color name="colorRed">#F44336</color>
   <color name="colorCardBackground">#E2E2E2</color>
-  <color name="colorBackgroundActivity">#f4efef</color>
+  <color name="colorBackgroundActivity">#E0F0F8</color>
   <color name="colorGray">#ada7a7</color>
   <color name="app_light_grey">#64000000</color>
   <color name="colorWidgetBackground">#60000000</color>
   <color name="colorSubWidgetBackground">#65000000</color>
 
-  <color name="tab_disable">#979797</color>
+  <color name="tab_disable">#dddddd</color>
   <color name="tab_enable">#FFFFFF</color>
   <color name="tab_checked">#F3CD70</color>
   <color name="tab_unchecked">#FFFFFF</color>
