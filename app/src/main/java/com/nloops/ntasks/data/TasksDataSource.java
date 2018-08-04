@@ -4,8 +4,6 @@ package com.nloops.ntasks.data;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 
-import java.util.List;
-
 /**
  * following the explanation of the Android Architecture
  * (https://github.com/googlesamples/android-architecture)
@@ -14,31 +12,7 @@ import java.util.List;
  */
 public interface TasksDataSource {
 
-    interface LoadTasksCallback {
-
-        void onTasksLoaded(List<Task> tasks);
-
-        void onDataNotAvaialbe();
-    }
-
-    interface GetTaskCallback {
-
-        void onTaskLoaded(Task task);
-
-        void onDataNotAvailabe();
-    }
-
-    void getTasks(@NonNull LoadTasksCallback callback);
-
-    void getTask(int taskID, @NonNull GetTaskCallback callback);
-
     void saveTask(@NonNull Task task);
-
-    void clearCompletedTasks();
-
-    void refreshTasks();
-
-    void deleteAllTasks();
 
     void deleteTask(@NonNull Uri taskUri);
 

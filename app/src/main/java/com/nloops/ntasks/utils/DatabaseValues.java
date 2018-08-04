@@ -1,7 +1,6 @@
 package com.nloops.ntasks.utils;
 
 import android.content.ContentValues;
-
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.Todo;
@@ -18,7 +17,7 @@ public class DatabaseValues {
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_BODY, task.getBody());
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_PATH, task.getPath());
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_TYPE, task.getType());
-        values.put(TasksDBContract.TaskEntry.COLUMN_NAME_PRIORTY, task.getPriorty());
+        values.put(TasksDBContract.TaskEntry.COLUMN_NAME_PRIORTY, task.getPriority());
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_DATE, task.getDate());
         values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, task.getCompleted());
 

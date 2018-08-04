@@ -5,7 +5,6 @@ import android.content.ContentUris;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
-
 import com.nloops.ntasks.BuildConfig;
 
 /**
@@ -17,8 +16,7 @@ public class TasksDBContract {
     // to access data using Content Provider.
     public static final String CONTENT_AUTHORITY = BuildConfig.APPLICATION_ID;
     private static final String CONTENT_SCHEME = "content://";
-    public static final Uri BASE_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY);
-    private static final String SEPARATOR = "/";
+    private static final Uri BASE_CONTENT_URI = Uri.parse(CONTENT_SCHEME + CONTENT_AUTHORITY);
 
 
     // to prevent to instantiating the class.

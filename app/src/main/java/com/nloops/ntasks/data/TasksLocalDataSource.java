@@ -10,7 +10,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
-
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
@@ -32,16 +31,6 @@ public class TasksLocalDataSource implements TasksDataSource {
     public TasksLocalDataSource(@NonNull ContentResolver resolver, @NonNull Context context) {
         this.mContentResolver = resolver;
         this.mContext = context;
-    }
-
-    @Override
-    public void getTasks(@NonNull LoadTasksCallback callback) {
-
-    }
-
-    @Override
-    public void getTask(int taskID, @NonNull GetTaskCallback callback) {
-
     }
 
     @Override
@@ -69,21 +58,6 @@ public class TasksLocalDataSource implements TasksDataSource {
 
         // Update Home Widget
         WidgetIntentService.startActionChangeList(mContext);
-    }
-
-    @Override
-    public void clearCompletedTasks() {
-
-    }
-
-    @Override
-    public void refreshTasks() {
-
-    }
-
-    @Override
-    public void deleteAllTasks() {
-
     }
 
     @Override
