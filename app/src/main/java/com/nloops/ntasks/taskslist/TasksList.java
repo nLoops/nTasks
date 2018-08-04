@@ -90,7 +90,6 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     mToolbar.inflateMenu(R.menu.tasks_list_menu);
     setSupportActionBar(mToolbar);
     getSupportActionBar().setDisplayShowTitleEnabled(false);
-    getSupportActionBar().setLogo(R.mipmap.ic_app_name);
 
     // get ref of Firebase Auth
     mFirebaseAuth = FirebaseAuth.getInstance();

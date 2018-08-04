@@ -12,6 +12,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,7 +93,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     mRecyclerView.setLayoutManager(manager);
     mRecyclerView.setHasFixedSize(true);
     // ref of Activity menu_fab
-    FabSpeedDial fabSpeedDial = (FabSpeedDial) getActivity().findViewById(R.id.tasks_list_fab);
+    final FabSpeedDial fabSpeedDial = (FabSpeedDial) getActivity()
+        .findViewById(R.id.tasks_list_fab);
     fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
       @Override
       public boolean onMenuItemSelected(MenuItem menuItem) {
@@ -108,6 +110,18 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
             break;
         }
         return true;
+      }
+    });
+
+    /*this part will hide FAB onScroll*/
+    mRecyclerView.addOnScrollListener(new OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if (dy > 0) {
+          fabSpeedDial.hide();
+        } else if (dy < 0) {
+          fabSpeedDial.show();
+        }
       }
     });
 
