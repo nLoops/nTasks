@@ -51,6 +51,7 @@ public class ActiveDaysReport extends Fragment implements
       @Nullable Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.report_bar_chart, container, false);
     ButterKnife.bind(this, rootView);
+    assert getContext() != null;
     mTaskLoader = new TaskLoader(getContext());
 
     /*Array list of object DayModel to calculate the total of tasks to show active days*/
@@ -63,6 +64,7 @@ public class ActiveDaysReport extends Fragment implements
     days.add(new DayModel(Constants.FRIDAY, Constants.ZERO_VALUE));
     days.add(new DayModel(Constants.SATURDAY, Constants.ZERO_VALUE));
 
+    assert getActivity() != null;
     getActivity().getSupportLoaderManager().initLoader(1, null, this);
 
     return rootView;
@@ -109,7 +111,7 @@ public class ActiveDaysReport extends Fragment implements
     mChart.setDrawGridBackground(false);
 
     mChart.getXAxis().setPosition(XAxisPosition.BOTTOM);
-    /*Set Data to the dataset*/
+    /*Set Data to the data-set*/
     ArrayList<BarEntry> entries = new ArrayList<>();
     entries.add(new BarEntry(0, days.get(0).getTotalTasks()));
     entries.add(new BarEntry(1, days.get(1).getTotalTasks()));
@@ -120,7 +122,7 @@ public class ActiveDaysReport extends Fragment implements
     entries.add(new BarEntry(6, days.get(6).getTotalTasks()));
 
     BarDataSet dataSet = new BarDataSet(entries, getString(R.string.rep_active));
-    /*Set Collection of colors to the dataset*/
+    /*Set Collection of colors to the data-set*/
     dataSet.setColors(ColorTemplate.COLORFUL_COLORS);
 
     BarData data = new BarData(dataSet);
@@ -133,7 +135,7 @@ public class ActiveDaysReport extends Fragment implements
     mChart.setData(data);
   }
 
-  public void setDaysCount(int week) {
+  private void setDaysCount(int week) {
     switch (week) {
       case 1:
         days.get(0).addToTotal();

@@ -44,6 +44,8 @@ public class WeeklyTasksReport extends Fragment implements
       @Nullable Bundle savedInstanceState) {
     View rootView = inflater.inflate(R.layout.report_pie_chart, container, false);
     ButterKnife.bind(this, rootView);
+    assert getContext() != null;
+    assert getActivity() != null;
     mTaskLoader = new TaskLoader(getContext());
     getActivity().getSupportLoaderManager().initLoader(0, null, this);
     return rootView;
@@ -88,13 +90,13 @@ public class WeeklyTasksReport extends Fragment implements
     mChart.getDescription().setEnabled(false);
     mChart.setExtraOffsets(5, 10, 5, 5);
 
-    ArrayList<PieEntry> entries = new ArrayList<PieEntry>();
+    ArrayList<PieEntry> entries = new ArrayList<>();
     for (int i = 0; i < values.length; i++) {
       entries.add(new PieEntry(values[i], labels[i]));
     }
 
     PieDataSet dataSet = new PieDataSet(entries, "Tasks Report");
-    ArrayList<Integer> colors = new ArrayList<Integer>();
+    ArrayList<Integer> colors = new ArrayList<>();
     for (int c : ColorTemplate.JOYFUL_COLORS) {
       colors.add(c);
     }

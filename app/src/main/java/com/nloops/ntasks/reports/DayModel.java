@@ -2,7 +2,7 @@ package com.nloops.ntasks.reports;
 
 public class DayModel {
 
-  private String mDayName;
+  private final String mDayName;
   private int mTotalTasks;
 
   public DayModel(String dayName, int totalTasks) {

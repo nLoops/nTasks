@@ -12,12 +12,9 @@ import com.nloops.ntasks.R;
 
 public class TasksReports extends AppCompatActivity {
 
-  BottomNavigationView bottomNavigationView;
-  WeeklyTasksReport weeklyTasksReport;
+  private BottomNavigationView bottomNavigationView;
 
-  //Fragments
-  ActiveDaysReport activeDaysReport;
-  MenuItem prevMenuItem;
+  private MenuItem prevMenuItem;
   //This is our viewPager
   private ViewPager viewPager;
 
@@ -79,8 +76,8 @@ public class TasksReports extends AppCompatActivity {
 
   private void setupViewPager(ViewPager viewPager) {
     TasksTabsAdapter adapter = new TasksTabsAdapter(getSupportFragmentManager());
-    weeklyTasksReport = new WeeklyTasksReport();
-    activeDaysReport = new ActiveDaysReport();
+    WeeklyTasksReport weeklyTasksReport = new WeeklyTasksReport();
+    ActiveDaysReport activeDaysReport = new ActiveDaysReport();
     adapter.addFragment(weeklyTasksReport);
     adapter.addFragment(activeDaysReport);
     viewPager.setAdapter(adapter);
