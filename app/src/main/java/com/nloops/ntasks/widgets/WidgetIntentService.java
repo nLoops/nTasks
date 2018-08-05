@@ -6,12 +6,11 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-
 import com.nloops.ntasks.R;
 
 public class WidgetIntentService extends IntentService {
 
-    public static final String ACTION_CHANGE_WIDGET_LIST = "com.nloops.ntasks.ACTON_CHANGE_LIST";
+    private static final String ACTION_CHANGE_WIDGET_LIST = "com.nloops.ntasks.ACTON_CHANGE_LIST";
 
     /**
      * Creates an IntentService.  Invoked by your subclass's constructor.
@@ -25,6 +24,7 @@ public class WidgetIntentService extends IntentService {
 
         if (intent != null) {
             final String action = intent.getAction();
+            assert action != null;
             if (action.equals(ACTION_CHANGE_WIDGET_LIST)) {
                 handleActionChangeList();
             }

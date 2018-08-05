@@ -17,7 +17,7 @@ import java.util.TimeZone;
  */
 public class TasksListWidget extends AppWidgetProvider {
 
-  static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+  private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
       int appWidgetId) {
     // Construct the RemoteViews object
     RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.tasks_list_widget);

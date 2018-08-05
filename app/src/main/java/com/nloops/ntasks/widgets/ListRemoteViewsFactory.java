@@ -12,7 +12,7 @@ import com.nloops.ntasks.utils.GeneralUtils;
 
 public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
-  private Context mContext;
+  private final Context mContext;
   private Cursor mCursor;
 
   public ListRemoteViewsFactory(Context context) {
