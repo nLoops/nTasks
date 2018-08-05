@@ -105,6 +105,7 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
         /*Create Intent with Filter Task Type to open TaskDetail Page.*/
         Intent addEditIntent = new Intent(CalendarView.this, AddEditTasks.class);
         Task currentTask = mAdapter.getItem(position);
+        assert currentTask != null;
         Uri taskUri = ContentUris
             .withAppendedId(TasksDBContract.TaskEntry.CONTENT_TASK_URI, currentTask.getID());
         addEditIntent.putExtra(AddEditTasks.EXTRAS_TASK_TYPE, currentTask.getType());

@@ -9,8 +9,8 @@ import java.util.HashSet;
 
 public class TaskEventDecorator implements DayViewDecorator {
 
-  private int mColor;
-  private HashSet<CalendarDay> mDates;
+  private final int mColor;
+  private final HashSet<CalendarDay> mDates;
 
   public TaskEventDecorator(int color, Collection<CalendarDay> dates) {
     this.mColor = color;
