@@ -368,7 +368,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
       mMonth = month;
       mDay = dayOfMonth;
       TimePickerFragment pickerFragment = new TimePickerFragment();
-      pickerFragment.setOnTimeSetListenr(mSetTimePicker);
+      pickerFragment.setOnTimeSetListener(mSetTimePicker);
       pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
     }
   };

@@ -20,8 +20,8 @@ public class DrawerMenuItem {
   public static final int DRAWER_MENU_ITEM_CALENDER_VIEW = 1;
   public static final int DRAWER_MENU_ITEM_REPORT_VIEW = 2;
 
-  private int mMenuPosition;
-  private Context mContext;
+  private final int mMenuPosition;
+  private final Context mContext;
   private DrawerCallBack mCallBack;
 
   @View(R.id.itemNameTxt)
@@ -56,7 +56,7 @@ public class DrawerMenuItem {
     switch (mMenuPosition) {
       case DRAWER_MENU_ITEM_CALENDER_VIEW:
         if (mCallBack != null) {
-          mCallBack.onCaldendarViewSelected();
+          mCallBack.onCalendarViewSelected();
         }
         break;
       case DRAWER_MENU_ITEM_REPORT_VIEW:
@@ -72,7 +72,7 @@ public class DrawerMenuItem {
 
   public interface DrawerCallBack {
 
-    void onCaldendarViewSelected();
+    void onCalendarViewSelected();
 
     void onReportViewSelected();
   }

@@ -5,12 +5,11 @@ import android.app.TimePickerDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-
 import java.util.Calendar;
 
 public class TimePickerFragment extends DialogFragment {
 
-    TimePickerDialog.OnTimeSetListener mOnTimeSetListenr;
+    private TimePickerDialog.OnTimeSetListener mOnTimeSetListener;
 
     @NonNull
     @Override
@@ -21,15 +20,15 @@ public class TimePickerFragment extends DialogFragment {
 
         return new TimePickerDialog(
                 getActivity(),
-                mOnTimeSetListenr,
+            mOnTimeSetListener,
                 hours,
                 minutes,
                 false
         );
     }
 
-    public void setOnTimeSetListenr(TimePickerDialog.OnTimeSetListener timeSetListenr) {
-        this.mOnTimeSetListenr = timeSetListenr;
+    public void setOnTimeSetListener(TimePickerDialog.OnTimeSetListener timeSetListener) {
+        this.mOnTimeSetListener = timeSetListener;
     }
 
 }

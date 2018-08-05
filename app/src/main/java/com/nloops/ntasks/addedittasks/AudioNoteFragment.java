@@ -370,7 +370,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       mMonth = month;
       mDay = dayOfMonth;
       TimePickerFragment pickerFragment = new TimePickerFragment();
-      pickerFragment.setOnTimeSetListenr(mSetTimePicker);
+      pickerFragment.setOnTimeSetListener(mSetTimePicker);
       pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
     }
   };

@@ -5,7 +5,6 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.mindorks.placeholderview.annotations.Layout;
 import com.mindorks.placeholderview.annotations.NonReusable;
 import com.mindorks.placeholderview.annotations.Resolve;
@@ -32,7 +31,7 @@ public class DrawerHeader {
     private ImageView mImageView;
     @View(R.id.nameTxt)
     private TextView mUserName;
-    private Context mContext;
+    private final Context mContext;
 
     public DrawerHeader(Context context) {
         this.mContext = context;

@@ -479,7 +479,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
    */
   private DrawerCallBack mDrawerCallback = new DrawerCallBack() {
     @Override
-    public void onCaldendarViewSelected() {
+    public void onCalendarViewSelected() {
       Intent intent = new Intent(TasksList.this, CalendarView.class);
       startActivity(intent);
       overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
