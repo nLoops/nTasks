@@ -89,13 +89,12 @@ public class GeneralUtils {
    * @return Formatted Date into String
    */
   public static CharSequence formatDate(Long time) {
-    CharSequence formatted = DateUtils.getRelativeTimeSpanString(time,
+
+    return DateUtils.getRelativeTimeSpanString(time,
         System.currentTimeMillis(),
         0L,
         DateUtils.FORMAT_ABBREV_RELATIVE
     );
-
-    return formatted;
   }
 
 
@@ -114,9 +113,11 @@ public class GeneralUtils {
     List<Todo> todos = new ArrayList<>();
     Cursor cursor = context.getContentResolver().query(TasksDBContract.TodoEntry.CONTENT_TODO_URI,
         null, null, selectionArgs, null);
+    assert cursor != null;
     while (cursor.moveToNext()) {
       todos.add(new Todo(cursor));
     }
+    cursor.close();
     return todos;
   }
 
