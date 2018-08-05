@@ -1,10 +1,8 @@
 package com.nloops.ntasks.addedittasks;
 
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentUris;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -13,13 +11,11 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NavUtils;
 import android.support.v7.widget.SwitchCompat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
@@ -70,10 +66,6 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   private long timeInMilliseconds = 0L;
   private long timeSwapBuff = 0L;
 
-  /* flag to track TouchListener */
-  private boolean mElementsChanged = false;
-  FloatingActionButton mActivityFab;
-
 
   /**
    * Empty Constructor required by Platform
@@ -86,13 +78,18 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     return new AudioNoteFragment();
   }
 
-  @Override
-  public void onCreate(@Nullable Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-    mAudioPresenter = new AudioRecordingPresenter(this,
-        getContext());
-
-  }
+  private final DatePickerDialog.OnDateSetListener mSetDatePicker = new DatePickerDialog.OnDateSetListener() {
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+      mYear = year;
+      mMonth = month;
+      mDay = dayOfMonth;
+      TimePickerFragment pickerFragment = new TimePickerFragment();
+      pickerFragment.setOnTimeSetListener(mSetTimePicker);
+      assert getActivity() != null;
+      pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
+    }
+  };
 
   @Override
   public void onStop() {
@@ -110,44 +107,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     }
   }
 
-  @Nullable
   @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    setHasOptionsMenu(true);
-    View rootView = inflater.inflate(R.layout.frag_task_audio_note, container, false);
-    ButterKnife.bind(this, rootView);
-    if (AddEditTasks.TASK_URI != null) {
-      mPlayBackBtn.setImageResource(R.drawable.ic_play_btn);
-    }
-    mActivityFab = getActivity().findViewById(R.id.task_detail_fab);
-    mActivityFab.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        actionFabClick();
-      }
-    });
+  public void onCreate(@Nullable Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+    assert getContext() != null;
+    mAudioPresenter = new AudioRecordingPresenter(this,
+        getContext());
 
-    mPlayBackBtn.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        handlePlayButtonClick();
-      }
-    });
-
-    mDueDateTV.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mPresenter.launchDatePicker();
-      }
-    });
-
-    /* Set onTouch Listener */
-    mTitleView.setOnTouchListener(mTouchListener);
-    mDueDateTV.setOnTouchListener(mTouchListener);
-    mPrioritySwitch.setOnTouchListener(mTouchListener);
-
-    return rootView;
   }
 
   /**
@@ -208,11 +174,47 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     mPresenter.loadTaskData();
   }
 
+  @Nullable
+  @Override
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    setHasOptionsMenu(true);
+    View rootView = inflater.inflate(R.layout.frag_task_audio_note, container, false);
+    ButterKnife.bind(this, rootView);
+    if (AddEditTasks.TASK_URI != null) {
+      mPlayBackBtn.setImageResource(R.drawable.ic_play_btn);
+    }
+    assert getActivity() != null;
+    FloatingActionButton mActivityFab = getActivity().findViewById(R.id.task_detail_fab);
+    mActivityFab.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        actionFabClick();
+      }
+    });
+
+    mPlayBackBtn.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        handlePlayButtonClick();
+      }
+    });
+
+    mDueDateTV.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mPresenter.launchDatePicker();
+      }
+    });
+
+    return rootView;
+  }
+
   @Override
   public void displayTaskData(Task task) {
     mTitleView.setText(task.getTitle());
     setDateSelection(task.getDate());
-    if (task.isPriority()) {
+    if (task.getIsPriority()) {
       mPrioritySwitch.setChecked(true);
     }
     mAudioPresenter.setFileName(task.getPath());
@@ -220,19 +222,15 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
 
   @Override
   public void showTasksListUpdated() {
+    assert getActivity() != null;
     getActivity().setResult(AddEditTasks.RESULT_UPDATE_TASK);
     getActivity().finish();
   }
 
   @Override
   public void showTasksListDelete() {
+    assert getActivity() != null;
     getActivity().setResult(AddEditTasks.RESULT_DELETE_TASK);
-    getActivity().finish();
-  }
-
-  @Override
-  public void showTasksListAdded() {
-    getActivity().setResult(AddEditTasks.RESULT_ADD_TASK);
     getActivity().finish();
   }
 
@@ -276,63 +274,16 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       case R.id.action_detail_reminder:
         mPresenter.launchDatePicker();
         break;
-      case android.R.id.home:
-        if (!mElementsChanged) {
-          NavUtils.navigateUpFromSameTask(getActivity());
-          break;
-        }
-        DialogInterface.OnClickListener discardButton =
-            new DialogInterface.OnClickListener() {
-              @Override
-              public void onClick(DialogInterface dialog, int which) {
-                NavUtils.navigateUpFromSameTask(getActivity());
-              }
-            };
-        showUnSavedChangesDialog(discardButton);
-        break;
     }
 
     return true;
   }
 
-  private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
-    @Override
-    public boolean onTouch(View v, MotionEvent event) {
-      mElementsChanged = true;
-      return false;
-    }
-  };
-
-  /**
-   * Helper method that shows a dialog to user if there's any changes will discard.
-   */
-  private void showUnSavedChangesDialog(DialogInterface.OnClickListener discardButton) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
-    // set dialog message
-    builder.setMessage(R.string.unsaved_changes_dialog_msg);
-    // set positive button (passed click listener)
-    builder.setPositiveButton(R.string.discard, discardButton);
-    // set negative button to keep editing.
-    builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
-      @Override
-      public void onClick(DialogInterface dialog, int id) {
-        if (dialog != null) {
-          dialog.dismiss();
-        }
-      }
-    });
-
-    // create the dialog
-    AlertDialog dialog = builder.create();
-    dialog.show();
-
-  }
-
-  private void getDatePicker() {
-    DatePickerFragment pickerFragment = new DatePickerFragment();
-    pickerFragment.setDateListener(mSetDatePicker);
-    pickerFragment.show(getActivity().getSupportFragmentManager(), "DateFragment");
-
+  @Override
+  public void showTasksListAdded() {
+    assert getActivity() != null;
+    getActivity().setResult(AddEditTasks.RESULT_ADD_TASK);
+    getActivity().finish();
   }
 
   private void setDateSelection(long selectedTimestamp) {
@@ -363,17 +314,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         , mAudioPresenter.getFileName(), null);
   }
 
-  private final DatePickerDialog.OnDateSetListener mSetDatePicker = new DatePickerDialog.OnDateSetListener() {
-    @Override
-    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-      mYear = year;
-      mMonth = month;
-      mDay = dayOfMonth;
-      TimePickerFragment pickerFragment = new TimePickerFragment();
-      pickerFragment.setOnTimeSetListener(mSetTimePicker);
-      pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
-    }
-  };
+  private void getDatePicker() {
+    DatePickerFragment pickerFragment = new DatePickerFragment();
+    pickerFragment.setDateListener(mSetDatePicker);
+    assert getActivity() != null;
+    pickerFragment.show(getActivity().getSupportFragmentManager(), "DateFragment");
+
+  }
 
   private final TimePickerDialog.OnTimeSetListener mSetTimePicker = new TimePickerDialog.OnTimeSetListener() {
     @Override
