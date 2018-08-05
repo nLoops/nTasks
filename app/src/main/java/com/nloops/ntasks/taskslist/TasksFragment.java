@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -46,7 +47,24 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   RecyclerView mRecyclerView;
   @BindView(R.id.tasks_list_progress)
   ProgressBar mProgressBar;
-  View mEmptyView;
+  private final TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
+    @Override
+    public void onItemClick(View v, int position, int taskType) {
+      long rawID = mAdapter.getItemId(position);
+      mPresenter.loadAddEditActivity(rawID, taskType);
+    }
+
+    @Override
+    public void onItemToggled(boolean active, int position) {
+      long rawID = mAdapter.getItemId(position);
+      mPresenter.updateComplete(active, rawID);
+    }
+
+    @Override
+    public void onSwipeDeleteClick(Uri taskUri) {
+      mPresenter.deleteTask(taskUri);
+    }
+  };
 
   /**
    * Empty Constructor required by system.
@@ -58,11 +76,14 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     return new TasksFragment();
   }
 
+  private View mEmptyView;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
     // Create new object of Cursor Loader
+    assert getActivity() != null;
+    assert getContext() != null;
     TaskLoader loader = new TaskLoader(getActivity());
     // Create new instance of LocalDataSource
     TasksLocalDataSource dataSource = new TasksLocalDataSource(getActivity().getContentResolver(),
@@ -72,17 +93,49 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         dataSource);
   }
 
+  @Override
+  public void onResume() {
+    super.onResume();
+    mPresenter.loadTasks();
+    setupRecyclerLayoutAnim();
+  }
+
+  /**
+   * Helper Method to load Layout anim to recyclerView items.
+   */
+  private void setupRecyclerLayoutAnim() {
+    //Setup Layout Animation for RecyclerView
+    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(
+        getContext(), R.anim.layout_animation_from_right
+    );
+    mRecyclerView.setLayoutAnimation(animationController);
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+    mPresenter.removeLoader();
+  }
+
+  @Override
+  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+    inflater.inflate(R.menu.tasks_list_menu, menu);
+  }
+
   @Nullable
   @Override
-  public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
       Bundle savedInstanceState) {
     setHasOptionsMenu(true);
     View rootView = inflater.inflate(R.layout.frag_tasks_list, container, false);
+    assert getContext() != null;
+    assert getActivity() != null;
+    assert container != null;
     Context context = container.getContext();
     //Bind fragment layout elements
     ButterKnife.bind(this, rootView);
     // get ref of empty view lives into Activity.
-    mEmptyView = (View) getActivity().findViewById(R.id.empty_view);
+    mEmptyView = getActivity().findViewById(R.id.empty_view);
     mAdapter = new TaskListAdapter(null, getContext());
     mAdapter.setOnClickListener(onItemClickListener);
 
@@ -93,7 +146,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     mRecyclerView.setLayoutManager(manager);
     mRecyclerView.setHasFixedSize(true);
     // ref of Activity menu_fab
-    final FabSpeedDial fabSpeedDial = (FabSpeedDial) getActivity()
+    final FabSpeedDial fabSpeedDial = getActivity()
         .findViewById(R.id.tasks_list_fab);
     fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
       @Override
@@ -129,41 +182,13 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   }
 
   @Override
-  public void onResume() {
-    super.onResume();
-    mPresenter.loadTasks();
-    setupRecyclerLayoutAnim();
-  }
-
-  /**
-   * Helper Method to load Layout anim to recyclerView items.
-   */
-  private void setupRecyclerLayoutAnim() {
-    //Setup Layout Animation for RecyclerView
-    LayoutAnimationController animationController = AnimationUtils.loadLayoutAnimation(
-        getContext(), R.anim.layout_animation_from_right
-    );
-    mRecyclerView.setLayoutAnimation(animationController);
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-    mPresenter.removeLoader();
-  }
-
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.tasks_list_menu, menu);
-  }
-
-  @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     switch (item.getItemId()) {
       case R.id.action_settings:
         showSettingsActivity();
         return true;
       case R.id.action_list_signout:
+        assert getContext() != null;
         AuthUI.getInstance()
             .signOut(getContext());
         return true;
@@ -171,15 +196,6 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         return super.onOptionsItemSelected(item);
     }
 
-  }
-
-  @Override
-  public void setLoadingIndecator(boolean state) {
-    if (state) {
-      mProgressBar.setVisibility(View.VISIBLE);
-    } else {
-      mProgressBar.setVisibility(View.INVISIBLE);
-    }
   }
 
   @Override
@@ -233,11 +249,12 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   }
 
   @Override
-  public void showSettingsActivity() {
-    Intent intent = new Intent(getContext(), SettingsActivity.class);
-    startActivity(intent);
-    // set Navigation Animation
-    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+  public void setLoadingIndicator(boolean state) {
+    if (state) {
+      mProgressBar.setVisibility(View.VISIBLE);
+    } else {
+      mProgressBar.setVisibility(View.INVISIBLE);
+    }
   }
 
   @Override
@@ -245,8 +262,13 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     mPresenter.result(requestCode, resultCode);
   }
 
-  private void showMessage(String message) {
-    Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+  @Override
+  public void showSettingsActivity() {
+    Intent intent = new Intent(getContext(), SettingsActivity.class);
+    startActivity(intent);
+    assert getActivity() != null;
+    // set Navigation Animation
+    getActivity().overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
   }
 
   @Override
@@ -254,22 +276,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
   }
 
-  TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
-    @Override
-    public void onItemClick(View v, int position, int taskType) {
-      long rawID = mAdapter.getItemId(position);
-      mPresenter.loadAddEditActivity(rawID, taskType);
-    }
-
-    @Override
-    public void onItemToggled(boolean active, int position) {
-      long rawID = mAdapter.getItemId(position);
-      mPresenter.updateComplete(active, rawID);
-    }
-
-    @Override
-    public void onSwipeDeleteClick(Uri taskUri) {
-      mPresenter.deleteTask(taskUri);
-    }
-  };
+  private void showMessage(String message) {
+    assert getView() != null;
+    Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
+  }
 }

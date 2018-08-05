@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksLocalDataSource;
@@ -48,7 +47,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
-        mTaskView.setLoadingIndecator(true);
+        mTaskView.setLoadingIndicator(true);
         return mTasksLoader.createTasksLoader();
     }
 
@@ -92,7 +91,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void showEmptyView() {
-        mTaskView.setLoadingIndecator(false);
+        mTaskView.setLoadingIndicator(false);
         mTaskView.showNoData();
     }
 
@@ -125,7 +124,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void onDataLoaded(Cursor data) {
-        mTaskView.setLoadingIndecator(false);
+        mTaskView.setLoadingIndicator(false);
         mTaskView.showTasks(data);
     }
 

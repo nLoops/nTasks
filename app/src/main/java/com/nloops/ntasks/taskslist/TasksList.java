@@ -64,19 +64,37 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
   private FirebaseAuth mFirebaseAuth;
   /* this listener will works to handle different user using cases */
   private FirebaseAuth.AuthStateListener mAuthStateListener;
-  public static final int RC_SIGN_IN = 101;
+  private static final int RC_SIGN_IN = 101;
   /* Current Auth User to use Firebase Database */
   private String mCurrentUser;
+  /**
+   * CallBack to Listen to DrawerItem Click
+   */
+  private final DrawerCallBack mDrawerCallback = new DrawerCallBack() {
+    @Override
+    public void onCalendarViewSelected() {
+      Intent intent = new Intent(TasksList.this, CalendarView.class);
+      startActivity(intent);
+      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+
+    @Override
+    public void onReportViewSelected() {
+      Intent intent = new Intent(TasksList.this, TasksReports.class);
+      startActivity(intent);
+      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    }
+  };
   /* Ref of Shared Preferences */
-  SharedPreferences preferences;
-  /*Ref of SpinKitView*/
-  SpinKitView mSpinKitView;
+  private SharedPreferences preferences;
   /*Ref of DrawerLayout*/
   private DrawerLayout mDrawer;
   /*Ref of PlaceHolder that contains the Drawer views.*/
   private PlaceHolderView mDrawerView;
   /*Ref of Activity toolbar*/
   private Toolbar mToolbar;
+  /*Ref of SpinKitView*/
+  private SpinKitView mSpinKitView;
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +107,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     mToolbar = findViewById(R.id.tasks_list_toolbar);
     mToolbar.inflateMenu(R.menu.tasks_list_menu);
     setSupportActionBar(mToolbar);
+    assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
     // get ref of Firebase Auth
@@ -139,11 +158,11 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
           /*Save User ID to push to his node in the Firebase DB*/
           userPreferences.edit().
               putString(getString(R.string.current_user_firebase), mCurrentUser)
-              .commit();
+              .apply();
           /*Save User Display name to add to DrawerLayout*/
           userPreferences.edit().
               putString(getString(R.string.current_user_display_name), user.getDisplayName())
-              .commit();
+              .apply();
           // user signed in
           if (isSyncEnabled() && !isScheduled()) {
             CloudSyncTasks.initialize(TasksList.this);
@@ -163,84 +182,6 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
       }
     };
-  }
-
-
-  /**
-   * if this is first run we launch a tutorial helping user to know the app interface
-   *
-   * @param toolbar {@link TasksList} mToolbar.
-   */
-  private void setupFirstRunGuide(Toolbar toolbar) {
-
-    if (isFirstTimeRun()) {
-      // get Display Size to Draw Rectangle in the Center of Screen
-      // with app Drawable
-      final Display display = getWindowManager().getDefaultDisplay();
-      final Drawable appDrawable = ContextCompat.getDrawable(this, R.drawable.ic_auth_calendar);
-      final Rect drawableRect = new Rect(0, 0, appDrawable.getIntrinsicWidth() * 2,
-          appDrawable.getIntrinsicHeight() * 2);
-      drawableRect.offset(display.getWidth() / 2, display.getHeight() / 2);
-
-      // Setup TapTargetView Guide.
-      // first we setup Sequence that will our Tutorial will go throw.
-      final TapTargetSequence sequence = new TapTargetSequence(this)
-          .targets(
-              TapTarget.forView(findViewById(R.id.tasks_list_fab),
-                  getString(R.string.task_list_fab_title),
-                  getString(R.string.task_list_fab_description))
-                  .cancelable(false)
-                  .drawShadow(true)
-                  .titleTextDimen(R.dimen.title_text_size)
-                  .tintTarget(false)
-                  .id(1),
-              TapTarget.forToolbarMenuItem(
-                  toolbar, R.id.action_settings,
-                  getString(R.string.task_list_settings_title),
-                  getString(R.string.task_list_settings_desc))
-                  .cancelable(false)
-                  .id(2),
-              TapTarget.forToolbarOverflow(toolbar, getString(R.string.task_list_overflow_title),
-                  getString(R.string.task_list_overflow_desc))
-                  .cancelable(false)
-                  .id(3)
-          ).listener(new TapTargetSequence.Listener() {
-            @Override
-            public void onSequenceFinish() {
-              Snackbar.make(findViewById(R.id.task_list_coordinator),
-                  getString(R.string.sequence_finish_message), Snackbar.LENGTH_LONG).show();
-              setupSpinKitAnimation(true);
-              /*Call backup check to get data from server*/
-              getDataFromServer();
-            }
-
-            @Override
-            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
-              // will implemented soon
-            }
-
-            @Override
-            public void onSequenceCanceled(TapTarget lastTarget) {
-              // will implemented soon
-            }
-          });
-
-      // Second we fire our Guide.
-      TapTargetView.showFor(this, TapTarget.forBounds(drawableRect,
-          getString(R.string.task_list_app_title),
-          getString(R.string.task_list_app_desc))
-          .cancelable(false)
-          .icon(appDrawable), new TapTargetView.Listener() {
-        @Override
-        public void onTargetClick(TapTargetView view) {
-          super.onTargetClick(view);
-          sequence.start();
-        }
-      });
-      preferences.edit()
-          .putBoolean(getString(R.string.str_is_first_run), false)
-          .commit();
-    }
   }
 
   @Override
@@ -475,23 +416,82 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
   }
 
   /**
-   * CallBack to Listen to DrawerItem Click
+   * if this is first run we launch a tutorial helping user to know the app interface
+   *
+   * @param toolbar {@link TasksList} mToolbar.
    */
-  private DrawerCallBack mDrawerCallback = new DrawerCallBack() {
-    @Override
-    public void onCalendarViewSelected() {
-      Intent intent = new Intent(TasksList.this, CalendarView.class);
-      startActivity(intent);
-      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
-    }
+  private void setupFirstRunGuide(Toolbar toolbar) {
 
-    @Override
-    public void onReportViewSelected() {
-      Intent intent = new Intent(TasksList.this, TasksReports.class);
-      startActivity(intent);
-      overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
+    if (isFirstTimeRun()) {
+      // get Display Size to Draw Rectangle in the Center of Screen
+      // with app Drawable
+      final Display display = getWindowManager().getDefaultDisplay();
+      final Drawable appDrawable = ContextCompat.getDrawable(this, R.drawable.ic_auth_calendar);
+      assert appDrawable != null;
+      final Rect drawableRect = new Rect(0, 0, appDrawable.getIntrinsicWidth() * 2,
+          appDrawable.getIntrinsicHeight() * 2);
+      drawableRect.offset(display.getWidth() / 2, display.getHeight() / 2);
+
+      // Setup TapTargetView Guide.
+      // first we setup Sequence that will our Tutorial will go throw.
+      final TapTargetSequence sequence = new TapTargetSequence(this)
+          .targets(
+              TapTarget.forView(findViewById(R.id.tasks_list_fab),
+                  getString(R.string.task_list_fab_title),
+                  getString(R.string.task_list_fab_description))
+                  .cancelable(false)
+                  .drawShadow(true)
+                  .titleTextDimen(R.dimen.title_text_size)
+                  .tintTarget(false)
+                  .id(1),
+              TapTarget.forToolbarMenuItem(
+                  toolbar, R.id.action_settings,
+                  getString(R.string.task_list_settings_title),
+                  getString(R.string.task_list_settings_desc))
+                  .cancelable(false)
+                  .id(2),
+              TapTarget.forToolbarOverflow(toolbar, getString(R.string.task_list_overflow_title),
+                  getString(R.string.task_list_overflow_desc))
+                  .cancelable(false)
+                  .id(3)
+          ).listener(new TapTargetSequence.Listener() {
+            @Override
+            public void onSequenceFinish() {
+              Snackbar.make(findViewById(R.id.task_list_coordinator),
+                  getString(R.string.sequence_finish_message), Snackbar.LENGTH_LONG).show();
+              setupSpinKitAnimation(true);
+              /*Call backup check to get data from server*/
+              getDataFromServer();
+            }
+
+            @Override
+            public void onSequenceStep(TapTarget lastTarget, boolean targetClicked) {
+              // will implemented soon
+            }
+
+            @Override
+            public void onSequenceCanceled(TapTarget lastTarget) {
+              // will implemented soon
+            }
+          });
+
+      // Second we fire our Guide.
+      TapTargetView.showFor(this, TapTarget.forBounds(drawableRect,
+          getString(R.string.task_list_app_title),
+          getString(R.string.task_list_app_desc))
+          .cancelable(false)
+          .icon(appDrawable), new TapTargetView.Listener() {
+        @Override
+        public void onTargetClick(TapTargetView view) {
+          super.onTargetClick(view);
+          sequence.start();
+        }
+      });
+      preferences.edit()
+          .putBoolean(getString(R.string.str_is_first_run), false)
+          .apply();
     }
-  };
+  }
 
   /**
    * This helper method will setup {@link #mDrawer} and add {@link #mDrawerView} which holds the
@@ -513,16 +513,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         mDrawer,
         mToolbar,
         R.string.open_drawer, R.string.close_drawer) {
-      @Override
-      public void onDrawerOpened(View drawerView) {
-        super.onDrawerOpened(drawerView);
 
-      }
-
-      @Override
-      public void onDrawerClosed(View drawerView) {
-        super.onDrawerClosed(drawerView);
-      }
     };
     mDrawer.addDrawerListener(drawerToggle);
     drawerToggle.syncState();

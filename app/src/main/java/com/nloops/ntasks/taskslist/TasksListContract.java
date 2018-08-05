@@ -2,14 +2,13 @@ package com.nloops.ntasks.taskslist;
 
 import android.database.Cursor;
 import android.net.Uri;
-
 import com.nloops.ntasks.data.BaseView;
 
 public interface TasksListContract {
 
     interface View extends BaseView<Presenter> {
 
-        void setLoadingIndecator(boolean state);
+        void setLoadingIndicator(boolean state);
 
         void showTasks(Cursor tasks);
 
