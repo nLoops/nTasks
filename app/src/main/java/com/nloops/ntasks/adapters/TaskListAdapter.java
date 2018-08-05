@@ -39,7 +39,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
   private Cursor mCursor;
   private OnItemClickListener mOnClickListener;
-  private Context mContext;
+  private final Context mContext;
 
   public TaskListAdapter(Cursor cursor, Context context) {
     this.mCursor = cursor;
@@ -143,9 +143,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
   }
 
   /**
-   * Helper Method that retrive a task from Cursor using Position.
+   * Helper Method that retrieve a task from Cursor using Position.
    */
-  public Task getItem(int position) {
+  private Task getItem(int position) {
     if (!mCursor.moveToPosition(position)) {
       throw new IllegalStateException("Invalid item position requested");
     }
@@ -188,7 +188,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
     FrameLayout fullView;
 
 
-    public TaskListViewHolder(View itemView) {
+    TaskListViewHolder(View itemView) {
       super(itemView);
       ButterKnife.bind(this, itemView);
       mCheckBox.setOnClickListener(this);

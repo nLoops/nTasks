@@ -30,6 +30,7 @@ public class CalendarViewAdapter extends ArrayAdapter<Task> {
     Task currentTask = getItem(position);
 
     TextView taskTitle = convertView.findViewById(R.id.tv_calendar_title);
+    assert currentTask != null;
     taskTitle.setText(currentTask.getTitle());
 
     TextView taskDate = convertView.findViewById(R.id.tv_calendar_date);
