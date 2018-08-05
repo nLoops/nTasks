@@ -89,7 +89,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     Task currentTask = getItem(position);
     holder.mTitleView.setText(currentTask.getTitle());
-    if (currentTask.isPriority()) {
+    if (currentTask.getIsPriority()) {
       holder.mPriorityView.
           setBackgroundColor(mContext.getResources().getColor(R.color.colorRed));
       if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
