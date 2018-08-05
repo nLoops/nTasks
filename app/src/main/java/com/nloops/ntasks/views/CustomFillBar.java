@@ -4,20 +4,18 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.LinearLayout;
-
 import com.nloops.ntasks.R;
 
 
 public class CustomFillBar extends FrameLayout {
 
-    private long mProgress = 0;
-    private Solid mSolid;
+    private final Solid mSolid;
+    private long mProgress;
     private double mMaxValue = 1.0;
 
 
@@ -54,7 +52,6 @@ public class CustomFillBar extends FrameLayout {
         mSolid.setLayoutParams(params);
     }
 
-
     private static class Solid extends View {
 
         private Paint progressPaint;
@@ -72,7 +69,7 @@ public class CustomFillBar extends FrameLayout {
             setLayoutParams(params);
         }
 
-        public void initPaint(int mFillColor) {
+        void initPaint(int mFillColor) {
             progressPaint = new Paint();
             progressPaint.setColor(mFillColor);
             progressPaint.setAlpha(125);

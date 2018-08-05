@@ -2,8 +2,6 @@ package com.nloops.ntasks.views;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.graphics.Typeface;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.AppCompatTextView;
@@ -15,7 +13,6 @@ public class TaskTitleView extends AppCompatTextView {
   public static final int NORMAL = 0;
   public static final int DONE = 1;
   public static final int OVERDUE = 2;
-  private int mState;
 
   public TaskTitleView(Context context) {
     super(context);
@@ -31,17 +28,8 @@ public class TaskTitleView extends AppCompatTextView {
   }
 
   /**
-   * Return the current display state of this view.
-   *
-   * @return One of {@link #NORMAL}, {@link #DONE}, or {@link #OVERDUE}.
-   */
-  public int getState() {
-    return mState;
-  }
-
-  /**
    * Update the text display state of this view. Normal status shows black text. Overdue displays in
-   * red. Completed draws a strikethrough line on the text.
+   * red. Completed draws a strike through line on the text.
    *
    * @param state New state. One of {@link #NORMAL}, {@link #DONE}, or {@link #OVERDUE}.
    */
@@ -60,15 +48,8 @@ public class TaskTitleView extends AppCompatTextView {
         setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
         break;
       default:
-        return;
     }
 
-    mState = state;
-  }
-
-
-  private Typeface setTextFont(@NonNull Context context) {
-    return Typeface.createFromAsset(context.getAssets(), "fonts/font_bold.ttf");
   }
 
 
