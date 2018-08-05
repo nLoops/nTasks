@@ -129,7 +129,7 @@ public class Task implements Parcelable {
     return mCompleted == TaskEntry.STATE_COMPLETED;
   }
 
-  public boolean isPriority() {
+  public boolean getIsPriority() {
     return mPriority == TaskEntry.PRIORTY_HIGH;
   }
 
