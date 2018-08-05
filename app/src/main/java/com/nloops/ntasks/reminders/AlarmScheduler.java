@@ -15,11 +15,9 @@ import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
-
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TasksDBContract;
-
 import java.util.Date;
 
 /**
@@ -102,6 +100,7 @@ public class AlarmScheduler {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, cName, importance);
             mChannel.setDescription(cDescription);
+            assert manager != null;
             manager.createNotificationChannel(mChannel);
         }
         // create unique notification ID
@@ -170,7 +169,8 @@ public class AlarmScheduler {
      * @param taskType Task Type
      * @return PendingIntent
      */
-    public static PendingIntent getReminderPendingIntent(Context context, Uri uri, Class<?> cls, int taskType) {
+    private static PendingIntent getReminderPendingIntent(Context context, Uri uri, Class<?> cls,
+        int taskType) {
         Intent intent = new Intent(context, cls);
         intent.putExtra("task_type", taskType);
         intent.setData(uri);
