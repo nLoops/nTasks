@@ -9,7 +9,6 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-import com.nloops.ntasks.data.TasksLocalDataSource;
 import com.nloops.ntasks.utils.GeneralUtils;
 
 /**
@@ -51,18 +50,15 @@ public class AddEditTasks extends AppCompatActivity {
     }
     // object of Loader that will return data using Cursor Adapter
     TaskLoader loader = new TaskLoader(this);
-    // LocalDataSource that will apply operations on DB using ContentResolver.
-    TasksLocalDataSource localDataSource = new TasksLocalDataSource
-        (getContentResolver(), AddEditTasks.this);
     switch (TASK_TYPE) {
       case TaskEntry.TYPE_NORMAL_NOTE:
-        setupNormalNote(loader, localDataSource);
+        setupNormalNote(loader);
         break;
       case TaskEntry.TYPE_AUDIO_NOTE:
-        setupAudioNote(loader, localDataSource);
+        setupAudioNote(loader);
         break;
       case TaskEntry.TYPE_TODO_NOTE:
-        setupTodoNote(loader, localDataSource);
+        setupTodoNote(loader);
         break;
     }
   }
@@ -72,9 +68,8 @@ public class AddEditTasks extends AppCompatActivity {
    * or NOT.
    *
    * @param loader {@link TaskLoader}
-   * @param localDataSource {@link TasksLocalDataSource}
    */
-  private void setupNormalNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+  private void setupNormalNote(TaskLoader loader) {
     // check if we have instance from the fragment it's okay
     // if not we get a new instance.
     TaskDetailFragment taskDetailFragment =
@@ -89,15 +84,13 @@ public class AddEditTasks extends AppCompatActivity {
     if (TASK_URI != null) {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           taskDetailFragment,
-          TASK_URI);
+          TASK_URI, this);
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           taskDetailFragment,
-          null);
+          null, this);
     }
   }
 
@@ -106,9 +99,8 @@ public class AddEditTasks extends AppCompatActivity {
    * NOT.
    *
    * @param loader {@link TaskLoader}
-   * @param localDataSource {@link TasksLocalDataSource}
    */
-  private void setupAudioNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+  private void setupAudioNote(TaskLoader loader) {
     // check if we have instance from the fragment it's okay
     // if not we get a new instance.
     AudioNoteFragment audioNoteFragment =
@@ -125,15 +117,13 @@ public class AddEditTasks extends AppCompatActivity {
     if (TASK_URI != null) {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           audioNoteFragment,
-          TASK_URI);
+          TASK_URI, this);
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           audioNoteFragment,
-          null);
+          null, this);
     }
   }
 
@@ -141,7 +131,7 @@ public class AddEditTasks extends AppCompatActivity {
    * Helper method to setup a new Object of {@link TaskTodoFragment} however passed TASK has URI or
    * NOT.
    */
-  private void setupTodoNote(TaskLoader loader, TasksLocalDataSource localDataSource) {
+  private void setupTodoNote(TaskLoader loader) {
     // check if we have instance from the fragment it's okay
     // if not we get a new instance.
     TaskTodoFragment taskTodoFragment =
@@ -155,15 +145,13 @@ public class AddEditTasks extends AppCompatActivity {
     if (TASK_URI != null) {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           taskTodoFragment,
-          TASK_URI);
+          TASK_URI, this);
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
-          localDataSource,
           taskTodoFragment,
-          null);
+          null, this);
     }
   }
 }

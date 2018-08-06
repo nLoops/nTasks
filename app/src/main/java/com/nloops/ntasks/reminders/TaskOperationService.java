@@ -17,6 +17,17 @@ public class TaskOperationService extends IntentService {
   public static final String ACTION_COMPLETE_TASK = "complete_task";
   public static final String ACTION_PLAY_NOTE_AUDIO = "audio_note";
   public static final String EXTRAS_NOTE_AUDIO_PATH = "audio_path";
+  public static final String ACTION_SAVE_NEW_TASK = "save_new_task";
+  public static final String EXTRAS_SAVE_NEW_TASK_DATA = "new_task_data";
+  public static final String ACTION_UPDATE_TASK = "update_existing_task";
+  public static final String EXTRAS_UPDATE_TASK_DATA = "update_task_data";
+  public static final String ACTION_DELETE_TASK = "delete-existing-task";
+  public static final String ACTION_COMPLETE_EXISTING_TASK = "complete-existing-task";
+  public static final String ACTION_COMPLETE_TODO = "complete-existing-todo";
+  public static final String EXTRAS_TASK_STATE = "task_state";
+  public static final String EXTRAS_TASK_ID = "task_id";
+  public static final String EXTRAS_TODO_STATE = "todo_state";
+  public static final String EXTRAS_TODO_ID = "todo_id";
 
 
   public TaskOperationService() {
@@ -27,11 +38,57 @@ public class TaskOperationService extends IntentService {
   protected void onHandleIntent(@Nullable Intent intent) {
     assert intent != null;
     assert intent.getAction() != null;
-    if (intent.getAction().equals(ACTION_COMPLETE_TASK)) {
-      performCompleteTask(intent);
-    } else if (intent.getAction().equals(ACTION_PLAY_NOTE_AUDIO)) {
-      String path = intent.getStringExtra(EXTRAS_NOTE_AUDIO_PATH);
-      performPlayNote(path);
+    switch (intent.getAction()) {
+      case ACTION_COMPLETE_TASK:
+        performCompleteTask(intent);
+        break;
+      case ACTION_PLAY_NOTE_AUDIO:
+        String path = intent.getStringExtra(EXTRAS_NOTE_AUDIO_PATH);
+        performPlayNote(path);
+
+        break;
+      case ACTION_SAVE_NEW_TASK: {
+        Task data = intent.getParcelableExtra(EXTRAS_SAVE_NEW_TASK_DATA);
+        TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+            .getInstance(getContentResolver(),
+                this);
+        mTasksDataSource.saveTask(data);
+
+        break;
+      }
+      case ACTION_UPDATE_TASK: {
+        assert intent.getData() != null;
+        Task data = intent.getParcelableExtra(EXTRAS_UPDATE_TASK_DATA);
+        TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+            .getInstance(getContentResolver(), this);
+        mTasksDataSource.updateTask(data, intent.getData());
+
+        break;
+      }
+      case ACTION_DELETE_TASK: {
+        assert intent.getData() != null;
+        TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+            .getInstance(getContentResolver(), this);
+        mTasksDataSource.deleteTask(intent.getData());
+        break;
+      }
+      case ACTION_COMPLETE_EXISTING_TASK: {
+        boolean state = intent.getBooleanExtra(EXTRAS_TASK_STATE, false);
+        long id = intent.getLongExtra(EXTRAS_TASK_ID, -1);
+        TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+            .getInstance(getContentResolver(), this);
+        mTasksDataSource.completeTask(state, id);
+
+        break;
+      }
+      case ACTION_COMPLETE_TODO: {
+        boolean state = intent.getBooleanExtra(EXTRAS_TODO_STATE, false);
+        long id = intent.getLongExtra(EXTRAS_TODO_ID, -1);
+        TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+            .getInstance(getContentResolver(), this);
+        mTasksDataSource.completeTODO(state, id);
+        break;
+      }
     }
   }
 
@@ -48,7 +105,7 @@ public class TaskOperationService extends IntentService {
     if (mediaPlayer.isPlaying()) {
       mediaPlayer.stopPlaying();
     }
-    TasksLocalDataSource mTasksDataSource = new TasksLocalDataSource(getContentResolver(),
+    TasksLocalDataSource mTasksDataSource = TasksLocalDataSource.getInstance(getContentResolver(),
         this);
     NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     long rawID = ContentUris.parseId(intent.getData());

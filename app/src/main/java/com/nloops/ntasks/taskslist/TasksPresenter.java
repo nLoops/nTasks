@@ -1,5 +1,7 @@
 package com.nloops.ntasks.taskslist;
 
+import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.v4.content.Loader;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.reminders.TaskOperationService;
 
 public class TasksPresenter implements TasksListContract.Presenter,
         LoaderManager.LoaderCallbacks<Cursor>, TasksLocalDataSource.LoadDataCallback {
@@ -24,15 +27,18 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @NonNull
     private final TaskLoader mTasksLoader;
 
-    @NonNull
-    private final TasksLocalDataSource mLocalDataSource;
 
-    public TasksPresenter(@NonNull TaskLoader taskLoader, @NonNull LoaderManager loaderManager,
-                          @NonNull TasksListContract.View tasksView, @NonNull TasksLocalDataSource dataSource) {
+    @NonNull
+    private final Context mContext;
+
+    public TasksPresenter(@NonNull TaskLoader taskLoader,
+        @NonNull LoaderManager loaderManager,
+        @NonNull TasksListContract.View tasksView,
+        @NonNull Context context) {
         this.mTasksLoader = taskLoader;
         this.mLoaderManager = loaderManager;
-        this.mLocalDataSource = dataSource;
         this.mTaskView = tasksView;
+        this.mContext = context;
     }
 
 
@@ -54,7 +60,7 @@ public class TasksPresenter implements TasksListContract.Presenter,
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         if (data != null) {
-            if (data.moveToLast() & data.getCount() > 0) {
+            if (data.moveToLast() && data.getCount() > 0) {
                 onDataLoaded(data);
             } else {
                 onDataEmpty();
@@ -102,7 +108,11 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void updateComplete(boolean state, long rawID) {
-        mLocalDataSource.completeTask(state, rawID);
+        Intent completeIntent = new Intent(mContext, TaskOperationService.class);
+        completeIntent.setAction(TaskOperationService.ACTION_COMPLETE_EXISTING_TASK);
+        completeIntent.putExtra(TaskOperationService.EXTRAS_TASK_STATE, state);
+        completeIntent.putExtra(TaskOperationService.EXTRAS_TASK_ID, rawID);
+        mContext.startService(completeIntent);
         removeLoader();
         initLoaderManager();
     }
@@ -116,7 +126,10 @@ public class TasksPresenter implements TasksListContract.Presenter,
 
     @Override
     public void deleteTask(Uri taskUri) {
-        mLocalDataSource.deleteTask(taskUri);
+        Intent deleteIntent = new Intent(mContext, TaskOperationService.class);
+        deleteIntent.setData(taskUri);
+        deleteIntent.setAction(TaskOperationService.ACTION_DELETE_TASK);
+        mContext.startService(deleteIntent);
         removeLoader();
         initLoaderManager();
     }

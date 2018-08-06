@@ -33,7 +33,6 @@ import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-import com.nloops.ntasks.data.TasksLocalDataSource;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
@@ -85,12 +84,9 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     assert getActivity() != null;
     assert getContext() != null;
     TaskLoader loader = new TaskLoader(getActivity());
-    // Create new instance of LocalDataSource
-    TasksLocalDataSource dataSource = new TasksLocalDataSource(getActivity().getContentResolver(),
-        getContext());
     // define Tasks.Presenter
     mPresenter = new TasksPresenter(loader, getActivity().getSupportLoaderManager(), this,
-        dataSource);
+        getContext());
   }
 
   @Override
