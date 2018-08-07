@@ -440,6 +440,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                   getString(R.string.task_list_fab_title),
                   getString(R.string.task_list_fab_description))
                   .cancelable(false)
+                  .outerCircleColor(R.color.colorDarkGreen)
+                  .outerCircleAlpha(0.96f)
                   .drawShadow(true)
                   .titleTextDimen(R.dimen.title_text_size)
                   .tintTarget(false)
@@ -449,10 +451,14 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
                   getString(R.string.task_list_settings_title),
                   getString(R.string.task_list_settings_desc))
                   .cancelable(false)
+                  .outerCircleColor(R.color.colorDarkGreen)
+                  .outerCircleAlpha(0.96f)
                   .id(2),
               TapTarget.forToolbarOverflow(toolbar, getString(R.string.task_list_overflow_title),
                   getString(R.string.task_list_overflow_desc))
                   .cancelable(false)
+                  .outerCircleColor(R.color.colorDarkGreen)
+                  .outerCircleAlpha(0.96f)
                   .id(3)
           ).listener(new TapTargetSequence.Listener() {
             @Override
@@ -480,6 +486,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
           getString(R.string.task_list_app_title),
           getString(R.string.task_list_app_desc))
           .cancelable(false)
+          .outerCircleColor(R.color.colorDarkGreen)
+          .outerCircleAlpha(0.96f)
           .icon(appDrawable), new TapTargetView.Listener() {
         @Override
         public void onTargetClick(TapTargetView view) {

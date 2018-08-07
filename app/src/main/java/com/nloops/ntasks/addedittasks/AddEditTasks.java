@@ -38,7 +38,6 @@ public class AddEditTasks extends AppCompatActivity {
     setSupportActionBar(toolbar);
     assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayShowTitleEnabled(false);
-    getSupportActionBar().setLogo(R.mipmap.ic_app_name);
     // get passed intent if available to load task data.
     TASK_URI = getIntent().getData();
     // get Task passed Task Type

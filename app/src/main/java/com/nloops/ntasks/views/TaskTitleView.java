@@ -41,7 +41,7 @@ public class TaskTitleView extends AppCompatTextView {
         break;
       case NORMAL:
         setPaintFlags(0);
-        setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));
+        setTextColor(ContextCompat.getColor(getContext(), R.color.colorDarkGreen));
         break;
       case OVERDUE:
         setPaintFlags(0);

@@ -89,6 +89,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     Task currentTask = getItem(position);
     holder.mTitleView.setText(currentTask.getTitle());
+
     if (currentTask.getIsPriority()) {
       holder.mPriorityView.
           setBackgroundColor(mContext.getResources().getColor(R.color.colorRed));
@@ -98,12 +99,13 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
       }
     } else {
       holder.mPriorityView.
-          setBackgroundColor(mContext.getResources().getColor(R.color.colorPrimaryLight));
+          setBackgroundColor(mContext.getResources().getColor(R.color.colorDarkGreen));
       if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
         holder.mCheckBox.setButtonTintList(
             ContextCompat.getColorStateList(mContext, R.color.normal_task_color_list));
       }
     }
+
     if (currentTask.getDate() != Long.MAX_VALUE) {
       holder.mDueDateView.setVisibility(View.VISIBLE);
       holder.mDueDateView.setText(GeneralUtils.formatDate(currentTask.getDate()));
