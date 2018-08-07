@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:name="com.nloops.ntasks.UI.SettingsActivity$TasksPreferenceFragment"
+<android.support.design.widget.CoordinatorLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:tools="http://schemas.android.com/tools"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+  <android.support.design.widget.AppBarLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.Toolbar
+      android:id="@+id/tasks_list_toolbar"
+      style="@style/MyToolBarStyle">
+      <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_gravity="center"
+          android:src="@mipmap/ic_app_name_two"
+          />
+      </FrameLayout>
+    </android.support.v7.widget.Toolbar>
+
+  </android.support.design.widget.AppBarLayout>
+  <fragment
+    android:id="@+id/fragment"
+    android:layout_marginTop="?android:attr/actionBarSize"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:name="com.nloops.ntasks.UI.SettingsActivity$TasksPreferenceFragment"
     tools:context=".UI.SettingsActivity">
 
-</fragment>
+  </fragment>
+</android.support.design.widget.CoordinatorLayout>

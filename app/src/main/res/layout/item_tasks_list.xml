@@ -26,7 +26,8 @@
         android:layout_height="50dp"
         android:background="@color/colorAccent"
         android:src="@drawable/ic_delete"
-        android:text="@string/str_action_detail_delete"/>
+        android:text="@string/str_action_detail_delete"
+        android:tint="@android:color/white"/>
 
     </LinearLayout>
 
@@ -38,7 +39,9 @@
     android:layout_height="80dp">
 
     <android.support.v7.widget.CardView
-      style="@style/MyTaskItemCardStyle">
+      style="@style/MyTaskItemCardStyle"
+      app:cardBackgroundColor="@color/colorPrimaryLight"
+      >
 
       <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -71,7 +74,7 @@
           android:layout_marginBottom="@dimen/dimen_eight_dp"
           android:layout_marginEnd="@dimen/dimen_four_dp"
           android:layout_marginRight="@dimen/dimen_four_dp"
-          android:background="@color/colorPrimaryLight"
+          android:background="@color/colorDarkGreen"
           app:layout_constraintBottom_toBottomOf="parent"
           app:layout_constraintRight_toRightOf="parent"
           app:layout_constraintTop_toTopOf="@id/tasks_list_check"
@@ -82,7 +85,7 @@
           style="@style/MyTaskDateStyle"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:textColor="@color/colorPrimary"
+          android:textColor="@color/colorAccent"
           app:layout_constraintLeft_toRightOf="@id/tasks_list_check"
           app:layout_constraintTop_toBottomOf="@id/tasks_list_title"
           tools:text="25-05"/>

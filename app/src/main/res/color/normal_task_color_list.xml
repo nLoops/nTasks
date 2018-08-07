@@ -10,5 +10,5 @@
     android:state_pressed="true"
     />
 
-  <item android:color="@color/colorPrimaryLight"/>
+  <item android:color="@color/colorDarkGreen"/>
 </selector>

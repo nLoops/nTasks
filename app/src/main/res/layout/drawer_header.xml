@@ -8,7 +8,7 @@
   android:paddingEnd="@dimen/drawer_header_padding_left"
   android:paddingLeft="@dimen/drawer_header_padding_left"
   android:paddingRight="@dimen/drawer_header_padding_left"
-  android:background="@color/colorPrimary"
+  android:background="@color/colorDarkGreen"
   android:orientation="vertical"
   >
 

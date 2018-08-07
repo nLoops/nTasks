@@ -9,12 +9,13 @@
     <item name="actionOverflowButtonStyle">@style/OverFlow</item>
     <item name="android:windowBackground">@color/colorBackgroundActivity</item>
     <item name="drawerArrowStyle">@style/MaterialDrawer.DrawerArrowStyle</item>
+    <item name="android:windowLightStatusBar">true</item>
   </style>
 
   <!--use item name="drawerArrowStyle" if you are using dark primaryColor in your app, else remove it-->
   <style name="MaterialDrawer.DrawerArrowStyle" parent="Widget.AppCompat.DrawerArrowToggle">
     <item name="spinBars">false</item>
-    <item name="color">#FFFFFF</item>
+    <item name="color">@color/colorDarkGreen</item>
   </style>
 
   <style name="SettingsTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -52,6 +53,7 @@
 
   <style name="OverFlow" parent="Widget.AppCompat.ActionButton.Overflow">
     <item name="android:src">@drawable/ic_action_navigation</item>
+    <item name="android:tint">@color/colorDarkGreen</item>
   </style>
 
   <!--For Custom Calendar TextColor and Appearance-->

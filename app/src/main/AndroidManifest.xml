@@ -79,8 +79,7 @@
     </service>
 
     <activity
-      android:name=".UI.SettingsActivity"
-      android:theme="@style/SettingsTheme">
+      android:name=".UI.SettingsActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>

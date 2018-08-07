@@ -65,9 +65,9 @@
       android:layout_gravity="bottom|end"
       app:fabGravity="bottom_end"
       app:fabMenu="@menu/task_fab_menu"
-      app:miniFabBackgroundTint="@color/colorPrimary"
+      app:miniFabBackgroundTint="@color/colorDarkGreen"
       app:miniFabDrawableTint="@color/colorBackgroundActivity"
-      app:miniFabTitleBackgroundTint="@color/colorPrimary"
+      app:miniFabTitleBackgroundTint="@color/colorDarkGreen"
       app:miniFabTitleTextColor="@color/colorBackgroundActivity"/>
 
   </android.support.design.widget.CoordinatorLayout>

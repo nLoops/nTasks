@@ -16,7 +16,9 @@
     android:id="@+id/itemIcon"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:src="@drawable/ic_empty_calender_small"/>
+    android:src="@drawable/ic_empty_calender_small"
+    android:tint="@color/colorDarkGreen"
+    />
 
   <TextView
     android:id="@+id/itemNameTxt"
@@ -24,7 +26,7 @@
     android:layout_height="wrap_content"
     android:layout_marginStart="@dimen/dimen_ten_dp"
     android:layout_marginLeft="@dimen/dimen_ten_dp"
-    android:textColor="@color/colorPrimaryDark"
+    android:textColor="@color/colorDarkGreen"
     android:textSize="@dimen/drawer_header_text_size"
     tools:text="Menu Item"/>
 
