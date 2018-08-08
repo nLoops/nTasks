@@ -7,7 +7,7 @@
 
   <android.support.v7.widget.CardView
     style="@style/MyFragmentsCardViewStyle"
-    app:cardBackgroundColor="@color/colorPrimaryLight"
+    app:cardBackgroundColor="@color/colorCardForeground"
     app:cardCornerRadius="@dimen/dimen_four_dp">
 
     <android.support.constraint.ConstraintLayout
@@ -15,6 +15,7 @@
       android:layout_width="match_parent"
       android:layout_height="match_parent"
       android:layout_marginTop="@dimen/dimen_sixteen_dp"
+      android:padding="@dimen/dimen_four_dp"
       android:focusableInTouchMode="true">
 
       <EditText

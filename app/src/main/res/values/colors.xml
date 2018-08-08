@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="colorBackgroundActivity">#FFFBE6</color>
+  <color name="colorBackgroundActivity">@color/colorCardBackgroundNew</color>
   <color name="colorPrimary">@color/colorBackgroundActivity</color>
   <color name="colorPrimaryDark">@color/colorBackgroundActivity</color>
   <color name="colorAccent">#FD5523</color>
@@ -18,7 +18,7 @@
   <color name="app_light_grey">#64000000</color>
   <color name="colorWidgetBackground">#60000000</color>
   <color name="colorSubWidgetBackground">#65000000</color>
-  <!--Swipe PagerFragment Color Collection that used into Reports Activity-->
-  <color name="tab_disable">#dddddd</color>
-  <color name="tab_enable">#FFFFFF</color>
+  <!--Items Foreground and Background Colors-->
+  <color name="colorCardForeground">#fcfcfc</color>
+  <color name="colorCardBackgroundNew">#f3f2f8</color>
 </resources>

@@ -40,7 +40,7 @@
 
     <android.support.v7.widget.CardView
       style="@style/MyTaskItemCardStyle"
-      app:cardBackgroundColor="@color/colorTaskCard"
+      app:cardBackgroundColor="@color/colorCardForeground"
       >
 
       <android.support.constraint.ConstraintLayout
