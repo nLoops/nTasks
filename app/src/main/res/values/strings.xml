@@ -125,5 +125,10 @@
   <string name="backup_message">Available Backup For This Account</string>
   <string name="backup_restore">Restore</string>
   <string name="backup_cancel">Cancel</string>
-
+  <!--Repeated-->
+  <string name="repeat_none">None</string>
+  <string name="repeat_daily">Daily</string>
+  <string name="repeat_weekly">Weekly</string>
+  <string name="repeat_monthly">Monthly</string>
+  <string name="repeat_yearly">Yearly</string>
 </resources>
