@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.Todo;
 import java.io.File;
 import java.text.SimpleDateFormat;
@@ -207,5 +208,24 @@ public class GeneralUtils {
     return strMonth;
   }
 
+  /**
+   * This Method takes the index of repeat and return the value.
+   *
+   * @param value repeatValue
+   * @return value of index
+   */
+  public static long getRepeatedValue(int value) {
+    long repeatValue = 0;
+    if (value == TaskEntry.REPEAT_DAILY) {
+      repeatValue = Constants.DAY_IN_MILLIS;
+    } else if (value == TaskEntry.REPEAT_WEEKLY) {
+      repeatValue = Constants.WEEK_IN_MILLIS;
+    } else if (value == TaskEntry.REPEAT_MONTHLY) {
+      repeatValue = Constants.MONTH_IN_MILLIS;
+    } else if (value == TaskEntry.REPEAT_YEARLY) {
+      repeatValue = Constants.YEAR_IN_MILLIS;
+    }
+    return repeatValue;
+  }
 
 }

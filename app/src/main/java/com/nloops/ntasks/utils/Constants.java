@@ -26,6 +26,12 @@ public final class Constants {
   public static final String FRIDAY = "Friday";
   public static final String SATURDAY = "Saturday";
 
+  /*Time in milliseconds*/
+  public static final long DAY_IN_MILLIS = 86400000;
+  public static final long WEEK_IN_MILLIS = 604800016L;
+  public static final long MONTH_IN_MILLIS = 2629800000L;
+  public static final long YEAR_IN_MILLIS = 31557600000L;
+
   public static final int ZERO_VALUE = 0;
 
 
