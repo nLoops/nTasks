@@ -36,6 +36,7 @@ public class Task implements Parcelable {
   private int mPriority;
   private long mDate;
   private int mCompleted;
+  private int mRepeat;
   private String mPath;
   private List<Todo> mTodos;
 
@@ -44,7 +45,7 @@ public class Task implements Parcelable {
   }
 
   public Task(String title, String body, int type, int priority,
-      long date, int completed, String path, List<Todo> todo) {
+      long date, int completed, int repeated, String path, List<Todo> todo) {
     this.mID = NO_ID;
     this.mTitle = title;
     this.mBody = body;
@@ -52,6 +53,7 @@ public class Task implements Parcelable {
     this.mPriority = priority;
     this.mDate = date;
     this.mCompleted = completed;
+    this.mRepeat = repeated;
     this.mPath = path;
     this.mTodos = todo;
   }
@@ -66,6 +68,7 @@ public class Task implements Parcelable {
     this.mTitle = getColumnString(cursor, TaskEntry.COLUMN_NAME_TITLE);
     this.mBody = getColumnString(cursor, TaskEntry.COLUMN_NAME_BODY);
     this.mCompleted = getColumnInt(cursor, TaskEntry.COLUMN_NAME_COMPLETE);
+    this.mRepeat = getColumnInt(cursor, TaskEntry.COLUMN_NAME_REPEAT);
     this.mDate = getColumnLong(cursor, TaskEntry.COLUMN_NAME_DATE);
     this.mPath = getColumnString(cursor, TaskEntry.COLUMN_NAME_PATH);
     this.mPriority = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
@@ -81,6 +84,7 @@ public class Task implements Parcelable {
     this.mPriority = in.readInt();
     this.mDate = in.readLong();
     this.mCompleted = in.readInt();
+    this.mRepeat = in.readInt();
     this.mPath = in.readString();
     this.mTodos = in.createTypedArrayList(Todo.CREATOR);
   }
@@ -113,6 +117,10 @@ public class Task implements Parcelable {
     return mCompleted;
   }
 
+  public int getRepeated() {
+    return mRepeat;
+  }
+
   public String getPath() {
     return mPath;
   }
@@ -129,8 +137,16 @@ public class Task implements Parcelable {
     return mCompleted == TaskEntry.STATE_COMPLETED;
   }
 
+  public boolean isRepeated() {
+    return mRepeat != TaskEntry.REPEAT_NONE;
+  }
+
   public boolean getIsPriority() {
     return mPriority == TaskEntry.PRIORTY_HIGH;
+  }
+
+  public void setTaskDate(long date) {
+    mDate = date;
   }
 
   @Override
@@ -162,6 +178,7 @@ public class Task implements Parcelable {
     dest.writeInt(this.mPriority);
     dest.writeLong(this.mDate);
     dest.writeInt(this.mCompleted);
+    dest.writeInt(this.mRepeat);
     dest.writeString(this.mPath);
     dest.writeTypedList(this.mTodos);
   }
