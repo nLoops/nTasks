@@ -52,6 +52,8 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_marginTop="@dimen/dimen_eight_dp"
+          android:layout_marginStart="@dimen/dimen_eight_dp"
+          android:layout_marginLeft="@dimen/dimen_eight_dp"
           app:layout_constraintLeft_toLeftOf="parent"
           app:layout_constraintTop_toTopOf="parent"
           />
@@ -83,12 +85,25 @@
         <TextView
           android:id="@+id/task_list_due_date"
           style="@style/MyTaskDateStyle"
-          android:layout_width="wrap_content"
+          android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:textColor="@color/colorAccent"
           app:layout_constraintLeft_toRightOf="@id/tasks_list_check"
+          app:layout_constraintRight_toLeftOf="@id/task_priority_view"
           app:layout_constraintTop_toBottomOf="@id/tasks_list_title"
           tools:text="25-05"/>
+
+        <ImageView
+          android:id="@+id/task_repeat_view"
+          android:layout_width="@dimen/dimen_twenty_dp"
+          android:layout_height="@dimen/dimen_twenty_dp"
+          android:src="@drawable/ic_repeat"
+          android:tint="@color/colorDarkGreen"
+          android:visibility="gone"
+          app:layout_constraintLeft_toLeftOf="@id/task_list_due_date"
+          app:layout_constraintTop_toBottomOf="@id/task_list_due_date"
+          tools:visibility="visible"
+          />
 
       </android.support.constraint.ConstraintLayout>
 

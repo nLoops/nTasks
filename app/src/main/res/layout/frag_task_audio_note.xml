@@ -4,6 +4,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   android:layout_width="match_parent"
   android:layout_height="match_parent"
+  xmlns:tools="http://schemas.android.com/tools"
   android:orientation="vertical">
   <android.support.v7.widget.CardView
     style="@style/MyFragmentsCardViewStyle"
@@ -48,8 +49,75 @@
         android:background="?attr/selectableItemBackgroundBorderless"
         android:clickable="true"
         android:text="@string/label_date_not_set"
+        android:textColor="@color/colorAccent"
         app:layout_constraintRight_toRightOf="@id/audio_note_switch_priority"
         app:layout_constraintTop_toBottomOf="@id/audio_note_switch_priority"/>
+
+      <ImageButton
+        android:id="@+id/ib_repeat_audio"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:src="@drawable/ic_repeat"
+        android:tint="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="@id/task_audio_title"
+        app:layout_constraintTop_toBottomOf="@id/audionote_detail_date"
+        />
+
+      <LinearLayout
+        android:id="@+id/repeats_container_audio"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_eight_dp"
+        android:animateLayoutChanges="true"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="@id/task_audio_title"
+        app:layout_constraintTop_toBottomOf="@id/ib_repeat_audio"
+        tools:visibility="visible">
+
+        <RadioGroup
+          android:id="@+id/audio_repeat_group"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:orientation="horizontal"
+          >
+
+          <RadioButton
+            android:id="@+id/rb_none_repeat_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_none"
+            />
+
+          <RadioButton
+            android:id="@+id/rb_daily_repeat_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_daily"
+            />
+
+          <RadioButton
+            android:id="@+id/rb_weekly_repeat_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_weekly"
+            />
+          <RadioButton
+            android:id="@+id/rb_monthly_repeat_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_monthly"
+            />
+          <RadioButton
+            android:id="@+id/rb_yearly_repeat_audio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/repeat_yearly"
+            />
+        </RadioGroup>
+
+      </LinearLayout>
+
 
     </android.support.constraint.ConstraintLayout>
   </android.support.v7.widget.CardView>

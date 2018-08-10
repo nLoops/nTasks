@@ -16,6 +16,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fontFamily="@font/worksans_medium"
+    android:ellipsize="end"
+    android:maxLines="1"
     android:hint="@string/body_hint"
     android:textSize="@dimen/subtitle_text_size"
     />
