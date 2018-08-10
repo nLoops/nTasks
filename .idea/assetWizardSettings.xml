@@ -55,9 +55,9 @@
                           <map>
                             <entry key="assetSourceType" value="FILE" />
                             <entry key="autoMirrored" value="true" />
-                            <entry key="outputName" value="ic_pie_chart" />
+                            <entry key="outputName" value="ic_repeat_daily" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\samar\Desktop\nTasksData\drawables\ic_pie_chart.svg" />
+                            <entry key="sourceFile" value="C:\Users\samar\Desktop\nTasksData\ic_repeat_daily.svg" />
                           </map>
                         </option>
                       </PersistentState>
