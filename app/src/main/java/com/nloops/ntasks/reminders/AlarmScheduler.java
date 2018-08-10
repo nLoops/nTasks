@@ -17,7 +17,9 @@ import android.support.v4.app.TaskStackBuilder;
 import android.support.v4.content.ContextCompat;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.utils.GeneralUtils;
 import java.util.Date;
 
 /**
@@ -80,8 +82,10 @@ public class AlarmScheduler {
     Cursor cursor = context.getContentResolver().query(data, null, null, null, null);
     String taskTitle = "";
     String taskPath = "";
+    Task task = null;
     try {
       if (cursor != null && cursor.moveToFirst()) {
+        task = new Task(cursor);
         taskTitle = TasksDBContract
             .getColumnString(cursor, TasksDBContract.TaskEntry.COLUMN_NAME_TITLE);
         taskPath = TasksDBContract
@@ -111,12 +115,22 @@ public class AlarmScheduler {
 
     // add Notifications Actions
     Intent completeIntent = new Intent(context, TaskOperationService.class);
-    // add Action filter
-    completeIntent.setAction(TaskOperationService.ACTION_COMPLETE_TASK);
-    // add Notification ID so after hit action button we will dismiss the notification bar
-    completeIntent.putExtra(TaskOperationService.EXTRAS_NOTIFICATION_ID, NOTIFICATION_ID);
-    // put passed uri to extract it's ID
-    completeIntent.setData(data);
+    assert task != null;
+    if (task.isRepeated()) {
+      long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
+      task.setTaskDate(nextDate);
+      completeIntent.setAction(TaskOperationService.ACTION_UPDATE_TASK_NOTIFICATION);
+      completeIntent.putExtra(TaskOperationService.EXTRAS_UPDATE_TASK_DATA, task);
+      completeIntent.putExtra(TaskOperationService.EXTRAS_NOTIFICATION_ID, NOTIFICATION_ID);
+      completeIntent.setData(data);
+    } else {
+      // add Action filter
+      completeIntent.setAction(TaskOperationService.ACTION_COMPLETE_TASK);
+      // add Notification ID so after hit action button we will dismiss the notification bar
+      completeIntent.putExtra(TaskOperationService.EXTRAS_NOTIFICATION_ID, NOTIFICATION_ID);
+      // put passed uri to extract it's ID
+      completeIntent.setData(data);
+    }
     PendingIntent actionComplete = PendingIntent.getService(context, 1, completeIntent,
         PendingIntent.FLAG_UPDATE_CURRENT);
 

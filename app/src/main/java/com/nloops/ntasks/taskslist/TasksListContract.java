@@ -3,47 +3,50 @@ package com.nloops.ntasks.taskslist;
 import android.database.Cursor;
 import android.net.Uri;
 import com.nloops.ntasks.data.BaseView;
+import com.nloops.ntasks.data.Task;
 
 public interface TasksListContract {
 
-    interface View extends BaseView<Presenter> {
+  interface View extends BaseView<Presenter> {
 
-        void setLoadingIndicator(boolean state);
+    void setLoadingIndicator(boolean state);
 
-        void showTasks(Cursor tasks);
+    void showTasks(Cursor tasks);
 
-        void showNoData();
+    void showNoData();
 
-        void showDataReset();
+    void showDataReset();
 
-        void showAddEditUI(long taskID, int taskType);
+    void showAddEditUI(long taskID, int taskType);
 
-        void showDeletedMessage();
+    void showDeletedMessage();
 
-        void showUpdatedMessage();
+    void showUpdatedMessage();
 
-        void showAddedMessage();
+    void showAddedMessage();
 
-        void showSettingsActivity();
-    }
+    void showSettingsActivity();
+  }
 
 
-    interface Presenter {
+  interface Presenter {
 
-        void result(int requestCode, int resultCode);
+    void result(int requestCode, int resultCode);
 
-        void loadTasks();
+    void loadTasks();
 
-        void showEmptyView();
+    void showEmptyView();
 
-        void loadAddEditActivity(long taskID, int taskType);
+    void loadAddEditActivity(long taskID, int taskType);
 
-        void updateComplete(boolean state, long rawID);
+    void updateComplete(boolean state, long rawID);
 
-        void removeLoader();
+    void updateTask(Task task, Uri uri);
 
-        void deleteTask(Uri taskUri);
-    }
+    void removeLoader();
+
+    void deleteTask(Uri taskUri);
+  }
 
 
 }

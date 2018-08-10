@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 
@@ -106,6 +107,13 @@ public class TasksPresenter implements TasksListContract.Presenter,
   @Override
   public void updateComplete(boolean state, long rawID) {
     mDataSource.completeTask(state, rawID);
+    removeLoader();
+    initLoaderManager();
+  }
+
+  @Override
+  public void updateTask(Task task, Uri uri) {
+    mDataSource.updateTask(task, uri);
     removeLoader();
     initLoaderManager();
   }

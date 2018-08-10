@@ -30,10 +30,12 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.UI.SettingsActivity;
 import com.nloops.ntasks.adapters.TaskListAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
+import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.utils.GeneralUtils;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
 
@@ -56,8 +58,15 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
     @Override
     public void onItemToggled(boolean active, int position) {
-      long rawID = mAdapter.getItemId(position);
-      mPresenter.updateComplete(active, rawID);
+      Task task = mAdapter.getItem(position);
+      if (task.isRepeated()) {
+        long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
+        task.setTaskDate(nextDate);
+        mPresenter.updateTask(task, TasksDBContract.getTaskUri(task));
+      } else {
+        long rawID = mAdapter.getItemId(position);
+        mPresenter.updateComplete(active, rawID);
+      }
     }
 
     @Override
@@ -274,7 +283,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
 
   @Override
   public void setPresenter(TasksListContract.Presenter presenter) {
-
+    /*to implement in the future*/
   }
 
   private void showMessage(String message) {

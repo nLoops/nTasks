@@ -28,6 +28,7 @@ public class TaskOperationService extends IntentService {
   public static final String EXTRAS_TASK_ID = "task_id";
   public static final String EXTRAS_TODO_STATE = "todo_state";
   public static final String EXTRAS_TODO_ID = "todo_id";
+  public static final String ACTION_UPDATE_TASK_NOTIFICATION = "notification_update";
 
 
   public TaskOperationService() {
@@ -89,6 +90,9 @@ public class TaskOperationService extends IntentService {
         mTasksDataSource.completeTODO(state, id);
         break;
       }
+      case ACTION_UPDATE_TASK_NOTIFICATION:
+        performUpdateTask(intent);
+        break;
     }
   }
 
@@ -123,6 +127,17 @@ public class TaskOperationService extends IntentService {
   private void performPlayNote(String audioPath) {
     TasksMediaPlayer mediaPlayer = TasksMediaPlayer.getInstance(this);
     mediaPlayer.handleMediaPlayer(audioPath);
+  }
+
+  private void performUpdateTask(Intent intent) {
+    assert intent.getData() != null;
+    Task data = intent.getParcelableExtra(EXTRAS_UPDATE_TASK_DATA);
+    TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+        .getInstance(getContentResolver(), this);
+    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    mTasksDataSource.updateTask(data, intent.getData());
+    assert manager != null;
+    manager.cancel(intent.getIntExtra(EXTRAS_NOTIFICATION_ID, 0));
   }
 
 }
