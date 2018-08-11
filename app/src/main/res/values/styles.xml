@@ -115,7 +115,7 @@
 
   <style name="MyCustomViewStyle">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">90dp</item>
+    <item name="android:layout_height">100dp</item>
     <item name="android:layout_gravity">center_vertical</item>
     <item name="android:elevation">@dimen/dimen_four_dp</item>
   </style>
