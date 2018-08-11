@@ -3,6 +3,8 @@ package com.nloops.ntasks.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -216,16 +218,39 @@ public class GeneralUtils {
    */
   public static long getRepeatedValue(int value) {
     long repeatValue = 0;
-    if (value == TaskEntry.REPEAT_DAILY) {
-      repeatValue = Constants.DAY_IN_MILLIS;
-    } else if (value == TaskEntry.REPEAT_WEEKLY) {
-      repeatValue = Constants.WEEK_IN_MILLIS;
-    } else if (value == TaskEntry.REPEAT_MONTHLY) {
-      repeatValue = Constants.MONTH_IN_MILLIS;
-    } else if (value == TaskEntry.REPEAT_YEARLY) {
-      repeatValue = Constants.YEAR_IN_MILLIS;
+    switch (value) {
+      case TaskEntry.REPEAT_DAILY:
+        repeatValue = Constants.DAY_IN_MILLIS;
+        break;
+      case TaskEntry.REPEAT_WEEKLY:
+        repeatValue = Constants.WEEK_IN_MILLIS;
+        break;
+      case TaskEntry.REPEAT_MONTHLY:
+        repeatValue = Constants.MONTH_IN_MILLIS;
+        break;
+      case TaskEntry.REPEAT_YEARLY:
+        repeatValue = Constants.YEAR_IN_MILLIS;
+        break;
     }
     return repeatValue;
+  }
+
+
+  /**
+   * @return state of current network True if internet available , false if not.
+   */
+  public Boolean isNetworkConnected(Context context) {
+    ConnectivityManager conMgr = (ConnectivityManager)
+        context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+    final NetworkInfo networkInfo = conMgr != null ? conMgr.getActiveNetworkInfo() : null;
+
+    if (networkInfo != null && networkInfo.isConnected()) {
+      return true;
+    } else {
+      return false;
+    }
+
   }
 
 }
