@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
@@ -147,7 +148,7 @@ public class AlarmScheduler {
         contentTitle = context.getString(R.string.reminder_audionote);
         break;
     }
-
+    long[] pattern = {500, 500, 500, 500};
     // Build a Notification.
     NotificationCompat.Builder note = new NotificationCompat.Builder(context)
         .setColor(ContextCompat.getColor(context, R.color.colorAccent))
@@ -158,6 +159,9 @@ public class AlarmScheduler {
         .setChannelId(NOTIFICATION_CHANNEL_ID)
         .addAction(R.drawable.ic_done_white, context.getString(R.string.notify_action_complete)
             , actionComplete)
+        .setPriority(NotificationCompat.PRIORITY_HIGH)
+        .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        .setVibrate(pattern)
         .setAutoCancel(true);
 
     if (!taskPath.isEmpty()) {
