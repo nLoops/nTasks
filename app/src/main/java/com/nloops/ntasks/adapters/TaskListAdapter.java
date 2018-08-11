@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -89,6 +90,11 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     Task currentTask = getItem(position);
     holder.mTitleView.setText(currentTask.getTitle());
+    if (currentTask.isRepeated()) {
+      holder.mRepeatImageView.setVisibility(View.VISIBLE);
+    } else {
+      holder.mRepeatImageView.setVisibility(View.GONE);
+    }
 
     if (currentTask.getIsPriority()) {
       holder.mPriorityView.
@@ -147,7 +153,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
   /**
    * Helper Method that retrieve a task from Cursor using Position.
    */
-  private Task getItem(int position) {
+  public Task getItem(int position) {
     if (!mCursor.moveToPosition(position)) {
       throw new IllegalStateException("Invalid item position requested");
     }
@@ -181,6 +187,9 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     @BindView(R.id.item_delete_button)
     ImageButton mSwipeDeleteBtn;
+
+    @BindView(R.id.task_repeat_view)
+    ImageView mRepeatImageView;
 
     @BindView(R.id.item_swipe_layout)
     SwipeRevealLayout mSwipeLayout;

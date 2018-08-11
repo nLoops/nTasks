@@ -15,9 +15,14 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 import android.widget.TextView;
 import android.widget.TimePicker;
 import butterknife.BindView;
@@ -27,6 +32,7 @@ import com.nloops.ntasks.UI.DatePickerFragment;
 import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.utils.GeneralUtils;
 import java.util.Calendar;
 
@@ -42,7 +48,14 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
   SwitchCompat mPrioritySwitch;
   @BindView(R.id.task_detail_date)
   TextView mDateText;
+  @BindView(R.id.ib_repeat)
+  ImageButton mRepeatButton;
+  @BindView(R.id.repeats_container)
+  LinearLayout mRepeatsContainer;
+  @BindView(R.id.detail_repeat_group)
+  RadioGroup mRepeatRadioContainer;
 
+  private int mTaskRepeatType;
   private long mDueDate = Long.MAX_VALUE;
   private int mYear;
   private int mMonth;
@@ -128,7 +141,64 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
       }
     });
 
+    mRepeatButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mRepeatsContainer.getVisibility() == View.GONE) {
+          mRepeatsContainer.setVisibility(View.VISIBLE);
+          setRadioGroupCheck(mRepeatRadioContainer);
+        } else if (mRepeatsContainer.getVisibility() == View.VISIBLE) {
+          mRepeatsContainer.setVisibility(View.GONE);
+        }
+      }
+    });
+
+    mRepeatRadioContainer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+          case R.id.rb_daily_repeat_detail:
+            mTaskRepeatType = TaskEntry.REPEAT_DAILY;
+            break;
+          case R.id.rb_weekly_repeat_detail:
+            mTaskRepeatType = TaskEntry.REPEAT_WEEKLY;
+
+            break;
+          case R.id.rb_monthly_repeat_detail:
+            mTaskRepeatType = TaskEntry.REPEAT_MONTHLY;
+
+            break;
+          case R.id.rb_yearly_repeat_detail:
+            mTaskRepeatType = TaskEntry.REPEAT_YEARLY;
+
+            break;
+          case R.id.rb_none_repeat_detail:
+            mTaskRepeatType = TaskEntry.REPEAT_NONE;
+            break;
+        }
+      }
+    });
     return rootView;
+  }
+
+  private void setRadioGroupCheck(RadioGroup groupContainer) {
+    switch (mTaskRepeatType) {
+      case TaskEntry.REPEAT_DAILY:
+        groupContainer.check(R.id.rb_daily_repeat_detail);
+        break;
+      case TaskEntry.REPEAT_WEEKLY:
+        groupContainer.check(R.id.rb_weekly_repeat_detail);
+        break;
+      case TaskEntry.REPEAT_MONTHLY:
+        groupContainer.check(R.id.rb_monthly_repeat_detail);
+        break;
+      case TaskEntry.REPEAT_YEARLY:
+        groupContainer.check(R.id.rb_yearly_repeat_detail);
+        break;
+      case TaskEntry.REPEAT_NONE:
+      default:
+        groupContainer.check(R.id.rb_none_repeat_detail);
+    }
   }
 
   @Override
@@ -136,6 +206,7 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     mTitle.setText(task.getTitle());
     mBody.setText(task.getBody());
     setDateSelection(task.getDate());
+    mTaskRepeatType = task.getRepeated();
     if (task.getIsPriority()) {
       mPrioritySwitch.setChecked(true);
     }
@@ -183,8 +254,14 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
         mPresenter.deleteTask(AddEditTasks.TASK_URI);
         break;
       case R.id.action_detail_done:
-        long rawID = ContentUris.parseId(AddEditTasks.TASK_URI);
-        mPresenter.completeTask(true, rawID);
+        if (mTaskRepeatType != TaskEntry.REPEAT_NONE) {
+          mDueDate = mDueDate + GeneralUtils.getRepeatedValue(mTaskRepeatType);
+          setDateSelection(mDueDate);
+          mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+        } else {
+          long rawID = ContentUris.parseId(AddEditTasks.TASK_URI);
+          mPresenter.completeTask(true, rawID);
+        }
         break;
       case R.id.action_detail_reminder:
         mPresenter.launchDatePicker();
@@ -219,8 +296,10 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
   private void updateDateDisplay() {
     if (getDateSelection() == Long.MAX_VALUE) {
       mDateText.setText(getString(R.string.label_date_not_set));
+      mDateText.setTextColor(getResources().getColor(R.color.colorAccent));
     } else {
       mDateText.setText(GeneralUtils.formatDate(mDueDate));
+      mDateText.setTextColor(getResources().getColor(R.color.colorDarkGreen));
     }
   }
 
@@ -265,12 +344,16 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
   }
 
   private Task getTask() {
+    if (mDueDate == Long.MAX_VALUE) {
+      mTaskRepeatType = TaskEntry.REPEAT_NONE;
+    }
     return new Task(mTitle.getText().toString(),
         mBody.getText().toString(),
         AddEditTasks.TASK_TYPE,
         GeneralUtils.getTaskPriority(mPrioritySwitch),
         mDueDate,
-        TasksDBContract.TaskEntry.STATE_NOT_COMPLETED
+        TasksDBContract.TaskEntry.STATE_NOT_COMPLETED,
+        mTaskRepeatType
         , "", null);
   }
 
