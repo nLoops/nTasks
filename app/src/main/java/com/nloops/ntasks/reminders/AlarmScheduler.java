@@ -117,7 +117,7 @@ public class AlarmScheduler {
     // add Notifications Actions
     Intent completeIntent = new Intent(context, TaskOperationService.class);
     assert task != null;
-    if (task.isRepeated()) {
+    if (task.getIsRepeated()) {
       long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
       task.setTaskDate(nextDate);
       completeIntent.setAction(TaskOperationService.ACTION_UPDATE_TASK_NOTIFICATION);

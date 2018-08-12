@@ -59,7 +59,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     @Override
     public void onItemToggled(boolean active, int position) {
       Task task = mAdapter.getItem(position);
-      if (task.isRepeated()) {
+      if (task.getIsRepeated()) {
         long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
         task.setTaskDate(nextDate);
         mPresenter.updateTask(task, TasksDBContract.getTaskUri(task));

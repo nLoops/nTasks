@@ -90,7 +90,7 @@ public class TaskListAdapter extends RecyclerView.Adapter<TaskListAdapter.TaskLi
 
     Task currentTask = getItem(position);
     holder.mTitleView.setText(currentTask.getTitle());
-    if (currentTask.isRepeated()) {
+    if (currentTask.getIsRepeated()) {
       holder.mRepeatImageView.setVisibility(View.VISIBLE);
     } else {
       holder.mRepeatImageView.setVisibility(View.GONE);

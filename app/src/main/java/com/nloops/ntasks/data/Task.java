@@ -137,7 +137,7 @@ public class Task implements Parcelable {
     return mCompleted == TaskEntry.STATE_COMPLETED;
   }
 
-  public boolean isRepeated() {
+  public boolean getIsRepeated() {
     return mRepeat != TaskEntry.REPEAT_NONE;
   }
 

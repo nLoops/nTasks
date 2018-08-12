@@ -239,7 +239,7 @@ public class GeneralUtils {
   /**
    * @return state of current network True if internet available , false if not.
    */
-  public Boolean isNetworkConnected(Context context) {
+  public static Boolean isNetworkConnected(Context context) {
     ConnectivityManager conMgr = (ConnectivityManager)
         context.getSystemService(Context.CONNECTIVITY_SERVICE);
 

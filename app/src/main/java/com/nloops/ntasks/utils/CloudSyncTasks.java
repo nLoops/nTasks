@@ -37,32 +37,35 @@ public class CloudSyncTasks {
   private static int SYNC_FLEXTIME_SECONDS;
 
   public static void syncData(Cursor cursor, Context context) {
-    // get ref of whole database
-    FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
-    // get UserID from SharedPreferences
-    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-    String currentUser =
-        preferences.getString
-            (context.getString(R.string.current_user_firebase), "");
-    while (cursor.moveToNext()) {
-      Task task = new Task(cursor);
-      /*we got list-todos data if existing*/
-      if (task.getType() == TasksDBContract.TaskEntry.TYPE_TODO_NOTE) {
-        String[] selectionArgs = new String[]{String.valueOf(task.getID())};
-        task.setTodos(GeneralUtils.getTodoData(context, selectionArgs));
+    if (GeneralUtils.isNetworkConnected(context)) {
+      // get ref of whole database
+      FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
+      // get UserID from SharedPreferences
+      SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+      String currentUser =
+          preferences.getString
+              (context.getString(R.string.current_user_firebase), "");
+      while (cursor.moveToNext()) {
+        Task task = new Task(cursor);
+        /*we got list-todos data if existing*/
+        if (task.getType() == TasksDBContract.TaskEntry.TYPE_TODO_NOTE) {
+          String[] selectionArgs = new String[]{String.valueOf(task.getID())};
+          task.setTodos(GeneralUtils.getTodoData(context, selectionArgs));
 
+        }
+        // get ref of tasks node in the database.
+        DatabaseReference mFireDatabaseReference =
+            mFireDataBase.getReference().child(TASKS_DATABASE_REFERENCE)
+                // The node will be like
+                // ***tasks root node
+                //   *****User
+                //        ***** Tasks Data
+                .child(currentUser)
+                .child(String.valueOf(task.getID()));
+        // Push Data to RealTimeDB
+        mFireDatabaseReference.setValue(task);
       }
-      // get ref of tasks node in the database.
-      DatabaseReference mFireDatabaseReference =
-          mFireDataBase.getReference().child(TASKS_DATABASE_REFERENCE)
-              // The node will be like
-              // ***tasks root node
-              //   *****User
-              //        ***** Tasks Data
-              .child(currentUser)
-              .child(String.valueOf(task.getID()));
-      // Push Data to RealTimeDB
-      mFireDatabaseReference.setValue(task);
+
     }
   }
 
