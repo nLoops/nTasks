@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_login_bg"
+  >
+
+  <FrameLayout
+    android:layout_width="320dp"
+    android:layout_height="480dp"
+    android:layout_centerInParent="true"
+    android:paddingTop="30dp">
+
+    <android.support.v7.widget.CardView
+      android:id="@+id/cv_add"
+      android:layout_width="match_parent"
+      android:layout_height="400dp"
+      android:layout_marginTop="10dp"
+      android:layout_gravity="center_horizontal"
+      app:cardBackgroundColor="#2ea67f"
+      app:cardCornerRadius="6dp"
+      app:cardElevation="3dp"
+      app:cardUseCompatPadding="true">
+
+      <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/dimen_twenty_dp">
+
+        <android.support.constraint.Guideline
+          android:id="@+id/guideline"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal"
+          app:layout_constraintGuide_begin="76dp"/>
+
+        <TextView
+          android:textStyle="bold"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/str_register"
+          android:textColor="#fff"
+          android:textSize="16sp"
+          app:layout_constraintBottom_toTopOf="@id/guideline"
+          app:layout_constraintLeft_toLeftOf="parent"/>
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/til_username"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dimen_eight_dp"
+          android:textColorHint="#f0f7f4"
+          android:theme="@style/TextLabel"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/guideline">
+
+          <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_eight_dp"
+            android:background="@drawable/selector_bg_edit_2"
+            android:hint="@string/str_email_hint"
+            android:inputType="textEmailAddress"
+            android:textColor="#f0f7f4"
+            android:textCursorDrawable="@drawable/bg_input_cursor_2"
+            android:textSize="14sp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/til_password"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dimen_sixteen_dp"
+          android:textColorHint="#f0f7f4"
+          android:theme="@style/TextLabel"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_username"
+          >
+
+          <EditText
+            android:id="@+id/et_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_eight_dp"
+            android:background="@drawable/selector_bg_edit_2"
+            android:hint="@string/str_password_hint"
+            android:inputType="textPassword"
+            android:textColor="#f0f7f4"
+            android:textCursorDrawable="@drawable/bg_input_cursor_2"
+            android:textSize="14sp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+          android:id="@+id/til_repeat_password"
+          android:layout_width="0dp"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dimen_sixteen_dp"
+          android:textColorHint="#f0f7f4"
+          android:theme="@style/TextLabel"
+          app:layout_constraintLeft_toLeftOf="parent"
+          app:layout_constraintRight_toRightOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_password"
+          >
+
+          <EditText
+            android:id="@+id/et_repeatpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dimen_eight_dp"
+            android:background="@drawable/selector_bg_edit_2"
+            android:hint="@string/str_repeat_password_hint"
+            android:inputType="textPassword"
+            android:textColor="#f0f7f4"
+            android:textCursorDrawable="@drawable/bg_input_cursor_2"
+            android:textSize="14sp"/>
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+          android:id="@+id/bt_go"
+          android:layout_width="150dp"
+          android:layout_height="50dp"
+          android:layout_marginTop="20dp"
+          android:layout_gravity="center_horizontal"
+          android:background="@drawable/bt_shape_2"
+          android:stateListAnimator="@animator/state_list_animator_z"
+          android:text="@string/str_button_go"
+          android:textColor="#2fa881"
+          app:layout_constraintLeft_toRightOf="parent"
+          app:layout_constraintRight_toLeftOf="parent"
+          app:layout_constraintTop_toBottomOf="@id/til_repeat_password"
+          />
+
+      </android.support.constraint.ConstraintLayout>
+
+
+    </android.support.v7.widget.CardView>
+
+    <android.support.design.widget.FloatingActionButton
+      android:id="@+id/fab"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_gravity="center_horizontal|top"
+      android:src="@drawable/plus_x"
+      android:transitionName="loginFab"
+      app:fabSize="normal"/>
+
+  </FrameLayout>
+
+
+</RelativeLayout>

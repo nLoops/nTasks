@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent"
+  android:background="@drawable/ic_login_bg">
+
+  <android.support.v7.widget.CardView
+    android:id="@+id/cv"
+    android:layout_width="300dp"
+    android:layout_height="300dp"
+    android:layout_centerInParent="true"
+    app:cardCornerRadius="6dp"
+    app:cardElevation="3dp"
+    app:cardUseCompatPadding="true">
+
+
+    <android.support.constraint.ConstraintLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical">
+
+      <RelativeLayout
+        android:id="@+id/relative_holder"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+
+        <View
+          android:layout_width="8dp"
+          android:layout_height="match_parent"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:background="@color/colorDarkGreen"/>
+
+        <TextView
+          android:textStyle="bold"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginStart="50dp"
+          android:layout_marginLeft="50dp"
+          android:layout_centerVertical="true"
+          android:text="@string/str_txt_login"
+          android:textColor="#FFCC00"
+          android:textSize="18sp"/>
+      </RelativeLayout>
+
+      <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_four_dp"
+        android:layout_marginStart="@dimen/dimen_eight_dp"
+        android:layout_marginEnd="@dimen/dimen_eight_dp"
+        android:layout_marginLeft="@dimen/dimen_eight_dp"
+        android:layout_marginRight="@dimen/dimen_eight_dp"
+        android:textColorHint="#c5c5c5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/relative_holder"
+        >
+
+        <EditText
+          android:id="@+id/et_username"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="@dimen/dimen_eight_dp"
+          android:background="@drawable/selector_bg_edit"
+          android:hint="@string/str_username_hint"
+          android:inputType="textEmailAddress"
+          android:textColor="#2fa881"
+          android:textCursorDrawable="@drawable/bg_input_cursor"
+          android:textSize="14sp"
+
+          />
+
+      </android.support.design.widget.TextInputLayout>
+
+      <android.support.design.widget.TextInputLayout
+        android:id="@+id/password_holder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_sixteen_dp"
+        android:layout_marginStart="@dimen/dimen_eight_dp"
+        android:layout_marginEnd="@dimen/dimen_eight_dp"
+        android:layout_marginLeft="@dimen/dimen_eight_dp"
+        android:layout_marginRight="@dimen/dimen_eight_dp"
+        android:textColorHint="#c5c5c5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/email_holder"
+        >
+
+        <EditText
+          android:id="@+id/et_password"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:paddingTop="@dimen/dimen_eight_dp"
+          android:background="@drawable/selector_bg_edit"
+          android:hint="@string/str_password_hint"
+          android:inputType="textPassword"
+          android:textColor="#2fa881"
+          android:textCursorDrawable="@drawable/bg_input_cursor"
+          android:textSize="14sp"/>
+
+      </android.support.design.widget.TextInputLayout>
+
+      <RelativeLayout
+        android:id="@+id/button_relative"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/password_holder"
+        >
+
+        <Button
+          android:id="@+id/bt_go"
+          android:layout_width="150dp"
+          android:layout_height="50dp"
+          android:background="@drawable/bt_shape"
+          android:onClick="clickLogin"
+          android:stateListAnimator="@animator/state_list_animator_z"
+          android:text="@string/str_button_go"
+          android:textColor="@color/colorDarkGreen"/>
+
+      </RelativeLayout>
+
+      <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:onClick="clickResetPassword"
+        android:text="@string/txt_forget_password"
+        android:textColor="#9a9a9a"
+        android:textSize="12sp"
+        app:layout_constraintLeft_toRightOf="parent"
+        app:layout_constraintRight_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/button_relative"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+  </android.support.v7.widget.CardView>
+
+  <android.support.design.widget.FloatingActionButton
+    android:id="@+id/fab"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="25dp"
+    android:layout_marginEnd="-20dp"
+    android:layout_marginRight="-20dp"
+    android:layout_alignEnd="@id/cv"
+    android:layout_alignRight="@id/cv"
+    android:layout_alignTop="@id/cv"
+    android:onClick="clickRegisterLayout"
+    android:src="@drawable/ic_signup"
+    android:transitionName="loginFab"
+    app:fabSize="normal"/>
+
+</RelativeLayout>

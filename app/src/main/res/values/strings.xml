@@ -131,4 +131,27 @@
   <string name="repeat_weekly">Weekly</string>
   <string name="repeat_monthly">Monthly</string>
   <string name="repeat_yearly">Yearly</string>
+  <!--Register Strings & Login-->
+  <string name="str_register">Register</string>
+  <string name="str_email_hint">Enter Your Email Address</string>
+  <string name="str_password_hint">Password</string>
+  <string name="str_repeat_password_hint">Repeat Password</string>
+  <string name="str_button_go">GO</string>
+  <string name="str_txt_login">Login</string>
+  <string name="str_msg_invaild_email">Invalid email or empty password</string>
+  <string name="str_msg_reset">Invalid email</string>
+  <string name="str_msg_loading">Registering....</string>
+  <string name="str_msg_false">Register failed</string>
+  <string name="str_msg_email_exist">Email exist or weak password!</string>
+  <string name="str_dialog_ok">ok</string>
+  <string name="str_login_sucess">Register and Login success</string>
+  <string name="str_login_process">Login....</string>
+  <string name="str_login_failed">Login failed</string>
+  <string name="str_login_email_wrong">Email not exist or wrong password!</string>
+  <string name="str_reset_failed">Failed</string>
+  <string name="str_reset_failed_message">Failed to sent email to</string>
+  <string name="str_reset_okay">Password Recovery</string>
+  <string name="str_reset_okay_message">Sent email to</string>
+  <string name="str_username_hint">Email</string>
+  <string name="txt_forget_password">forgot your password?</string>
 </resources>

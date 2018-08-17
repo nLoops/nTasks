@@ -147,4 +147,9 @@
     <item name="android:textSize">@dimen/item_task_date_size</item>
   </style>
 
+  <style name="TextLabel" parent="Theme.AppCompat.Light.NoActionBar">
+    <!-- Label color in TRUE state and bar color FALSE and TRUE State -->
+    <item name="colorControlActivated">#FFCC00</item>
+  </style>
+
 </resources>
