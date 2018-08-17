@@ -19,11 +19,6 @@
     <activity
       android:launchMode="singleTop"
       android:name=".taskslist.TasksList">
-      <intent-filter>
-        <action android:name="android.intent.action.MAIN"/>
-
-        <category android:name="android.intent.category.LAUNCHER"/>
-      </intent-filter>
     </activity>
     <activity android:name=".addedittasks.AddEditTasks">
       <meta-data
@@ -78,8 +73,7 @@
       </intent-filter>
     </service>
 
-    <activity
-      android:name=".UI.SettingsActivity">
+    <activity android:name=".UI.SettingsActivity">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
@@ -89,11 +83,27 @@
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
     </activity>
-    <activity
-      android:name=".reports.TasksReports">
+    <activity android:name=".reports.TasksReports">
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
+    </activity>
+    <activity
+      android:launchMode="singleTop"
+      android:name=".login.RegisterActivity"
+      android:screenOrientation="portrait"
+      >
+    </activity>
+    <activity
+      android:launchMode="singleTop"
+      android:name=".login.LoginActivity"
+      android:screenOrientation="portrait"
+      >
+      <intent-filter>
+        <action android:name="android.intent.action.MAIN"/>
+
+        <category android:name="android.intent.category.LAUNCHER"/>
+      </intent-filter>
     </activity>
   </application>
 

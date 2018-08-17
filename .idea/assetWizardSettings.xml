@@ -21,8 +21,8 @@
                                       <entry key="assetType" value="IMAGE" />
                                       <entry key="backgroundColor" value="000000" />
                                       <entry key="iconShape" value="NONE" />
-                                      <entry key="imageAsset" value="C:\Users\samar\Desktop\nTasksData\nTasks.png" />
-                                      <entry key="outputName" value="ic_app_name_two" />
+                                      <entry key="imageAsset" value="C:\Users\samar\Desktop\nTasksData\ic_login_bg.png" />
+                                      <entry key="outputName" value="ic_login_bg" />
                                     </map>
                                   </option>
                                 </PersistentState>
