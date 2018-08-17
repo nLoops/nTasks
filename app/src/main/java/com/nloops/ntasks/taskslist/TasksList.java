@@ -2,7 +2,6 @@ package com.nloops.ntasks.taskslist;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentValues;
 import android.content.DialogInterface;
@@ -23,14 +22,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Display;
 import android.view.View;
-import com.firebase.ui.auth.AuthUI;
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetSequence;
 import com.getkeepsafe.taptargetview.TapTargetView;
 import com.github.ybq.android.spinkit.SpinKitView;
 import com.github.ybq.android.spinkit.style.Wave;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -49,10 +45,10 @@ import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.reports.TasksReports;
 import com.nloops.ntasks.utils.CloudSyncTasks;
+import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.DatabaseValues;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -60,13 +56,6 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     SharedPreferences.OnSharedPreferenceChangeListener {
 
   private static final int PERMISSION_REQ_CODE = 225;
-  /* ref of Auth to signUser In and handle Authentication*/
-  private FirebaseAuth mFirebaseAuth;
-  /* this listener will works to handle different user using cases */
-  private FirebaseAuth.AuthStateListener mAuthStateListener;
-  private static final int RC_SIGN_IN = 101;
-  /* Current Auth User to use Firebase Database */
-  private String mCurrentUser;
   /**
    * CallBack to Listen to DrawerItem Click
    */
@@ -110,8 +99,6 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-    // get ref of Firebase Auth
-    mFirebaseAuth = FirebaseAuth.getInstance();
     TasksFragment tasksFragment =
         (TasksFragment) getSupportFragmentManager().findFragmentById(R.id.tasks_list_container);
     if (tasksFragment == null) {
@@ -129,10 +116,6 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
     preferences.registerOnSharedPreferenceChangeListener(this);
 
-    // we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES
-    getPermissions();
-    // Check and sign user in to make operations to Server Database.
-    signAccountIn();
     // Launch first Run Tutorial
     setupFirstRunGuide(mToolbar);
     // setupDrawer
@@ -140,78 +123,13 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
   }
 
-  /**
-   * Helper Method using {@link #mAuthStateListener} to sign user in to make Server Database
-   * Operations.
-   */
-  private void signAccountIn() {
-
-    //set Firebase Auth Listener
-    mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-      @Override
-      public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-        if (user != null) {
-          mCurrentUser = user.getUid();
-          SharedPreferences userPreferences = PreferenceManager.
-              getDefaultSharedPreferences(TasksList.this);
-          /*Save User ID to push to his node in the Firebase DB*/
-          userPreferences.edit().
-              putString(getString(R.string.current_user_firebase), mCurrentUser)
-              .apply();
-          /*Save User Display name to add to DrawerLayout*/
-          userPreferences.edit().
-              putString(getString(R.string.current_user_display_name), user.getDisplayName())
-              .apply();
-          // user signed in
-          if (isSyncEnabled() && !isScheduled()) {
-            CloudSyncTasks.initialize(TasksList.this);
-          }
-        } else {
-          startActivityForResult(
-              AuthUI.getInstance()
-                  .createSignInIntentBuilder()
-                  .setIsSmartLockEnabled(true)
-                  .setLogo(R.drawable.ic_auth_logo)
-                  .setTheme(R.style.AuthTheme)
-                  .setAvailableProviders(Arrays.asList(
-                      new AuthUI.IdpConfig.EmailBuilder().build(),
-                      new AuthUI.IdpConfig.GoogleBuilder().build()
-                  )).build(), RC_SIGN_IN);
-        }
-
-      }
-    };
-  }
 
   @Override
   protected void onResume() {
     super.onResume();
-    mFirebaseAuth.addAuthStateListener(mAuthStateListener);
-  }
-
-  @Override
-  protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-    super.onActivityResult(requestCode, resultCode, data);
-    if (requestCode == RC_SIGN_IN) {
-      if (resultCode == Activity.RESULT_OK) {
-        Snackbar
-            .make(findViewById(R.id.task_list_coordinator), getString(R.string.firebase_signed_in),
-                Snackbar.LENGTH_LONG).show();
-      } else if (resultCode == Activity.RESULT_CANCELED) {
-        Snackbar
-            .make(findViewById(R.id.task_list_coordinator), getString(R.string.firebase_signed_out),
-                Snackbar.LENGTH_LONG).show();
-        finish();
-      }
-    }
-  }
-
-  @Override
-  protected void onPause() {
-    super.onPause();
-    if (mAuthStateListener != null) {
-      mFirebaseAuth.removeAuthStateListener(mAuthStateListener);
+    // user signed in
+    if (isSyncEnabled() && !isScheduled()) {
+      CloudSyncTasks.initialize(TasksList.this);
     }
   }
 
@@ -292,16 +210,12 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
    * This method helps to get Backup from server onFirstRun if it's available.
    */
   private void getDataFromServer() {
-    final String TASKS_DATABASE_REFERENCE = "tasks";
     // get ref of whole database
     final FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
-    String currentUser =
-        preferences.getString
-            (getString(R.string.current_user_firebase), "");
     // get ref of tasks node in the database.
     DatabaseReference mFireDatabaseReference =
-        mFireDataBase.getReference().child(TASKS_DATABASE_REFERENCE)
-            .child(currentUser);
+        mFireDataBase.getReference().child(Constants.TASKS_DATABASE_REFERENCE)
+            .child(Constants.UID);
     mFireDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {
@@ -320,6 +234,8 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
           }
         } else {
           setupSpinKitAnimation(false);
+          /* we need to get required permissions to allow app to RECORD AUDIO_NOTES and SAVE FILES*/
+          getPermissions();
         }
 
       }
@@ -354,6 +270,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
               public void onClick(DialogInterface dialog, int which) {
                 if (dialog != null) {
                   dialog.dismiss();
+                  getPermissions();
                 }
               }
             });
@@ -403,6 +320,9 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     /*Insert data to DB*/
     getContentResolver().bulkInsert(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         values);
+
+    /*then get permissions*/
+    getPermissions();
   }
 
   private void setupSpinKitAnimation(boolean state) {
