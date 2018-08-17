@@ -119,7 +119,7 @@ public class AlarmScheduler {
     assert task != null;
     if (task.getIsRepeated()) {
       long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
-      task.setTaskDate(nextDate);
+      task.setDate(nextDate);
       completeIntent.setAction(TaskOperationService.ACTION_UPDATE_TASK_NOTIFICATION);
       completeIntent.putExtra(TaskOperationService.EXTRAS_UPDATE_TASK_DATA, task);
       completeIntent.putExtra(TaskOperationService.EXTRAS_NOTIFICATION_ID, NOTIFICATION_ID);

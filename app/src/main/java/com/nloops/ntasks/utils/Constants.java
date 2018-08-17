@@ -33,6 +33,15 @@ public final class Constants {
   public static final long YEAR_IN_MILLIS = 31557600000L;
 
   public static final int ZERO_VALUE = 0;
+  public static final String TASKS_DATABASE_REFERENCE = "tasks";
+  public static final String USERS_DATABASE_REFERENCE = "users";
+
+  /*Login and Register Constants*/
+  public static int REQUEST_CODE_REGISTER = 2000;
+  public static String STR_EXTRA_ACTION = "action";
+  public static String STR_EXTRA_USERNAME = "username";
+  public static String STR_EXTRA_PASSWORD = "password";
+  public static String UID = "";
 
 
 }
