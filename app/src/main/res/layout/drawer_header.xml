@@ -30,4 +30,13 @@
     android:textSize="@dimen/drawer_header_text_size"
     tools:text="User Name"/>
 
+  <TextView
+    android:id="@+id/email_address"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dimen_four_dp"
+    android:textColor="@android:color/white"
+    android:textSize="@dimen/drawer_header_text_size"
+    tools:text="a.elgammal112@gmail.com"/>
+
 </LinearLayout>
