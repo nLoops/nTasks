@@ -16,7 +16,8 @@ import java.util.List;
 
 public class Task implements Parcelable {
 
-  public static final Parcelable.Creator<Task> CREATOR = new Parcelable.Creator<Task>() {
+
+  public static final Creator<Task> CREATOR = new Creator<Task>() {
     @Override
     public Task createFromParcel(Parcel source) {
       return new Task(source);
@@ -27,8 +28,6 @@ public class Task implements Parcelable {
       return new Task[size];
     }
   };
-  /*Constants for missing data*/
-  private static final long NO_ID = -1;
   private long mID;
   private String mTitle;
   private String mBody;
@@ -75,19 +74,6 @@ public class Task implements Parcelable {
     this.mType = getColumnInt(cursor, TaskEntry.COLUMN_NAME_TYPE);
   }
 
-
-  private Task(Parcel in) {
-    this.mID = in.readLong();
-    this.mTitle = in.readString();
-    this.mBody = in.readString();
-    this.mType = in.readInt();
-    this.mPriority = in.readInt();
-    this.mDate = in.readLong();
-    this.mCompleted = in.readInt();
-    this.mRepeat = in.readInt();
-    this.mPath = in.readString();
-    this.mTodos = in.createTypedArrayList(Todo.CREATOR);
-  }
 
   public long getID() {
     return mID;
@@ -145,24 +131,50 @@ public class Task implements Parcelable {
     return mPriority == TaskEntry.PRIORTY_HIGH;
   }
 
-  public void setTaskDate(long date) {
+  /*Constants for missing data*/
+  private long NO_ID = -1;
+
+  protected Task(Parcel in) {
+    this.mID = in.readLong();
+    this.mTitle = in.readString();
+    this.mBody = in.readString();
+    this.mType = in.readInt();
+    this.mPriority = in.readInt();
+    this.mDate = in.readLong();
+    this.mCompleted = in.readInt();
+    this.mRepeat = in.readInt();
+    this.mPath = in.readString();
+    this.mTodos = in.createTypedArrayList(Todo.CREATOR);
+  }
+
+  public void setDate(long date) {
     mDate = date;
   }
 
-  @Override
-  public String toString() {
-    return "Task{" +
-        "mID=" + mID +
-        ", mTitle='" + mTitle + '\'' +
-        ", mBody='" + mBody + '\'' +
-        ", mType=" + mType +
-        ", mPriority=" + mPriority +
-        ", mDate=" + mDate +
-        ", mCompleted=" + mCompleted +
-        ", mPath='" + mPath + '\'' +
-        ", mTodos=" + mTodos +
-        '}';
+  public void setTitle(String mTitle) {
+    this.mTitle = mTitle;
   }
+
+  public void setBody(String mBody) {
+    this.mBody = mBody;
+  }
+
+  public void setID(long mID) {
+    this.mID = mID;
+  }
+
+  public void setType(int mType) {
+    this.mType = mType;
+  }
+
+  public void setPriorty(int mPriorty) {
+    this.mPriority = mPriorty;
+  }
+
+  public void setCompleted(int mCompleted) {
+    this.mCompleted = mCompleted;
+  }
+
 
   @Override
   public int describeContents() {
@@ -181,5 +193,13 @@ public class Task implements Parcelable {
     dest.writeInt(this.mRepeat);
     dest.writeString(this.mPath);
     dest.writeTypedList(this.mTodos);
+  }
+
+  public void setPath(String mPath) {
+    this.mPath = mPath;
+  }
+
+  public void setRepeated(int mRepeat) {
+    this.mRepeat = mRepeat;
   }
 }
