@@ -81,6 +81,12 @@
   <string name="settings_completed_show">Show</string>
   <string name="settings_completed_hide">Hide</string>
 
+  <!--High Quality Recording-->
+  <string name="settings_recording_title">Audio Recoding Quality</string>
+  <string name="settings_recording_key">recording_quality</string>
+  <string name="settings_recording_high">High Quality</string>
+  <string name="settings_recording_low">Low Quality</string>
+
   <!--Cloud Sync-->
   <string name="settings_cat_sync_label">Cloud Backup</string>
   <string name="settings_cat_sync_key" translatable="false">cloud_sync</string>

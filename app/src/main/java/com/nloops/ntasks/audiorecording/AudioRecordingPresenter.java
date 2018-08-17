@@ -1,9 +1,14 @@
 package com.nloops.ntasks.audiorecording;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
+import android.media.MediaRecorder.AudioEncoder;
+import android.media.MediaRecorder.OutputFormat;
+import android.preference.PreferenceManager;
+import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AudioNoteFragment;
 import com.nloops.ntasks.audiorecording.AudioRecordingContract.Presenter;
 import com.nloops.ntasks.utils.GeneralUtils;
@@ -86,6 +91,8 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
   private boolean isRecording = false;
   private boolean isPlaying = false;
   private boolean isPausing = false;
+  // Shared Pref
+  private Context mContext;
 
 
   /**
@@ -99,7 +106,7 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
       Context context) {
     mView = audioViewCallbacks;
     mAudioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
+    this.mContext = context;
 
   }
 
@@ -117,13 +124,22 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
         // we don't need the service for a long time
         AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
     if (audioResult == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
+      SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+      boolean pref = preferences.getBoolean(mContext.getString(R.string.settings_recording_key),
+          mContext.getResources().getBoolean(R.bool.high_quality_recording));
       mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
-      mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
       mRecorder.setOutputFile(mFileName);
-      mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-      mRecorder.setAudioEncodingBitRate(16);
-      mRecorder.setAudioSamplingRate(44100);
-
+      if (pref) {
+        mRecorder.setOutputFormat(OutputFormat.MPEG_4);
+        mRecorder.setAudioEncoder(AudioEncoder.AAC);
+        mRecorder.setAudioEncodingBitRate(96000);
+        mRecorder.setAudioSamplingRate(44100);
+      } else {
+        mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
+        mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
+        mRecorder.setAudioEncodingBitRate(12200);
+        mRecorder.setAudioSamplingRate(44100);
+      }
       try {
         mRecorder.prepare();
       } catch (IOException e) {

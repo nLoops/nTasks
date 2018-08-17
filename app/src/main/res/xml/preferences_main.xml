@@ -15,7 +15,14 @@
         android:summaryOn="@string/settings_completed_show"
         android:title="@string/settings_completed_title" />
 
-    <PreferenceCategory
+  <CheckBoxPreference
+    android:defaultValue="@bool/high_quality_recording"
+    android:key="@string/settings_recording_key"
+    android:summaryOff="@string/settings_recording_low"
+    android:summaryOn="@string/settings_recording_high"
+    android:title="@string/settings_recording_title"/>
+
+  <PreferenceCategory
         android:key="@string/settings_cat_sync_key"
         android:title="@string/settings_cat_sync_label">
 
