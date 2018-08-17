@@ -32,7 +32,7 @@ public class AudioCounterView extends AppCompatTextView {
   public void setState(int state) {
     switch (state) {
       case IS_RECORDING:
-        setTextColor(ContextCompat.getColor(getContext(), R.color.colorRed));
+        setTextColor(ContextCompat.getColor(getContext(), R.color.colorAccent));
         break;
       case IS_PLAYING:
         setTextColor(ContextCompat.getColor(getContext(), R.color.colorBlack));

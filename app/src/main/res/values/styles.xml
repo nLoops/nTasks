@@ -59,6 +59,7 @@
   <!--For Custom Calendar TextColor and Appearance-->
   <style name="CustomTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
     <item name="android:textColor">@drawable/my_date_text_color</item>
+    <item name="android:textSize">@dimen/subtitle_text_size</item>
   </style>
 
   <style name="CustomWeekDayTextAppearance" parent="TextAppearance.MaterialCalendarWidget.Date">
