@@ -86,6 +86,21 @@ public class GeneralUtils {
   }
 
   /**
+   * This Helper Method will Delete the Audio File when Task Completed or Deleted.
+   *
+   * @param path Audio Path in Device Storage.
+   */
+  public static void deleteRecordedAudio(String path) {
+    if (path != null && path.length() > 0) {
+      File audioFile = new File(path);
+      if (audioFile.exists()) {
+        audioFile.delete();
+      }
+    }
+  }
+
+
+  /**
    * This helper method takes stored Millis and return into String shape.
    *
    * @param time Stored Date

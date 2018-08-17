@@ -14,6 +14,7 @@ import android.support.annotation.NonNull;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
+import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 
 /**
@@ -73,6 +74,17 @@ public class TasksLocalDataSource implements TasksDataSource {
 
   @Override
   public void deleteTask(@NonNull Uri taskUri) {
+    // delete Recorded Audio if exists
+    Cursor cursor = mContentResolver.query(taskUri, null, null, null, null);
+    assert cursor != null;
+    if (cursor.moveToNext()) {
+      Task task = new Task(cursor);
+      if (task.getPath().length() > 0) {
+        GeneralUtils.deleteRecordedAudio(task.getPath());
+      }
+    }
+    cursor.close();
+
     mContentResolver.delete(taskUri, null, null);
     String[] selectionArgs = new String[]{taskUri.getLastPathSegment()};
     mContentResolver.delete(TasksDBContract.TodoEntry.CONTENT_TODO_URI, null, selectionArgs);
@@ -95,7 +107,18 @@ public class TasksLocalDataSource implements TasksDataSource {
         rawID);
     ContentValues values = new ContentValues(1);
     values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
+    // delete Recorded Audio if exists
     mContentResolver.update(rawUri, values, null, null);
+    Cursor cursor = mContentResolver.query(rawUri, null, null, null, null);
+    assert cursor != null;
+    if (cursor.moveToNext()) {
+      Task task = new Task(cursor);
+      if (task.getPath().length() > 0) {
+        GeneralUtils.deleteRecordedAudio(task.getPath());
+      }
+    }
+    cursor.close();
+
     // if this task has scheduled Reminder we will cancel it to prevent notify.
     PendingIntent operation =
         AlarmScheduler.getReminderPendingIntent(mContext, rawUri, AlarmReceiver.class);
