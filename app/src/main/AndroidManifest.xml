@@ -16,11 +16,18 @@
     android:roundIcon="@mipmap/ic_white_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
+
     <activity
       android:launchMode="singleTop"
-      android:name=".taskslist.TasksList">
+      android:name=".taskslist.TasksList"
+      android:screenOrientation="portrait"
+      >
     </activity>
-    <activity android:name=".addedittasks.AddEditTasks">
+
+    <activity
+      android:name=".addedittasks.AddEditTasks"
+      android:screenOrientation="portrait"
+      >
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
@@ -73,27 +80,45 @@
       </intent-filter>
     </service>
 
-    <activity android:name=".UI.SettingsActivity">
+    <service
+      android:exported="false"
+      android:name=".utils.CloudOperationsService"
+      />
+
+    <activity
+      android:name=".UI.SettingsActivity"
+      android:screenOrientation="portrait"
+      >
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
     </activity>
-    <activity android:name=".calenderview.CalendarView">
+
+    <activity
+      android:name=".calenderview.CalendarView"
+      android:screenOrientation="portrait"
+      >
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
     </activity>
-    <activity android:name=".reports.TasksReports">
+
+    <activity
+      android:name=".reports.TasksReports"
+      android:screenOrientation="portrait"
+      >
       <meta-data
         android:name="android.support.PARENT_ACTIVITY"
         android:value=".taskslist.TasksList"/>
     </activity>
+
     <activity
       android:launchMode="singleTop"
       android:name=".login.RegisterActivity"
       android:screenOrientation="portrait"
       >
     </activity>
+
     <activity
       android:launchMode="singleTop"
       android:name=".login.LoginActivity"
@@ -105,6 +130,7 @@
         <category android:name="android.intent.category.LAUNCHER"/>
       </intent-filter>
     </activity>
+
   </application>
 
 </manifest>
