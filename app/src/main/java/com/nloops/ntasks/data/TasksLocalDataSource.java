@@ -11,6 +11,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
@@ -136,6 +137,11 @@ public class TasksLocalDataSource implements TasksDataSource {
     ContentValues values = new ContentValues(1);
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
     mContentResolver.update(rawUri, values, null, null);
+  }
+
+  @Override
+  public void deleteAll() {
+    mContentResolver.delete(TaskEntry.CONTENT_TASK_URI, null, null);
   }
 
   @Override

@@ -22,4 +22,6 @@ public interface TasksDataSource {
 
     void completeTODO(boolean state, long rawID);
 
+    void deleteAll();
+
 }
