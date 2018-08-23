@@ -27,7 +27,9 @@ public class TasksDBHelper extends SQLiteOpenHelper {
           TasksDBContract.TaskEntry.COLUMN_NAME_DATE + INTEGER_TYPE + COMMA +
           TasksDBContract.TaskEntry.COLUMN_NAME_PRIORTY + INTEGER_TYPE + COMMA +
           TasksDBContract.TaskEntry.COLUMN_NAME_TYPE + INTEGER_TYPE + COMMA +
-          TaskEntry.COLUMN_NAME_REPEAT + INTEGER_TYPE +
+          TaskEntry.COLUMN_NAME_REPEAT + INTEGER_TYPE + COMMA +
+          TaskEntry.COLUMN_NAME_USER + TEXT_TYPE + COMMA +
+          TaskEntry.COLUMN_NAME_SHARED_WITH + TEXT_TYPE +
           ")";
 
   private static final String SQL_CREATE_TODO_ENTRY =

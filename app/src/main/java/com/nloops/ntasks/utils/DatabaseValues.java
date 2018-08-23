@@ -22,6 +22,8 @@ public class DatabaseValues {
     values.put(TasksDBContract.TaskEntry.COLUMN_NAME_DATE, task.getDate());
     values.put(TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE, task.getCompleted());
     values.put(TaskEntry.COLUMN_NAME_REPEAT, task.getRepeated());
+    values.put(TaskEntry.COLUMN_NAME_USER, task.getCurrentUser());
+    values.put(TaskEntry.COLUMN_NAME_SHARED_WITH, task.getSharedWith());
 
     return values;
   }

@@ -17,6 +17,15 @@ import java.util.List;
 public class Task implements Parcelable {
 
 
+  private long mID;
+  private String mTitle;
+  private String mBody;
+  private int mType;
+  private int mPriority;
+  private long mDate;
+  private int mCompleted;
+  private int mRepeat;
+  private String mPath;
   public static final Creator<Task> CREATOR = new Creator<Task>() {
     @Override
     public Task createFromParcel(Parcel source) {
@@ -28,23 +37,18 @@ public class Task implements Parcelable {
       return new Task[size];
     }
   };
-  private long mID;
-  private String mTitle;
-  private String mBody;
-  private int mType;
-  private int mPriority;
-  private long mDate;
-  private int mCompleted;
-  private int mRepeat;
-  private String mPath;
+  private String mCurrentUser;
   private List<Todo> mTodos;
 
   public Task() {
     /*for Firebase Database*/
   }
 
+  private String mSharedWith;
+
   public Task(String title, String body, int type, int priority,
-      long date, int completed, int repeated, String path, List<Todo> todo) {
+      long date, int completed, int repeated, String path,
+      String user, List<Todo> todo, String sharedWith) {
     this.mID = NO_ID;
     this.mTitle = title;
     this.mBody = body;
@@ -55,23 +59,8 @@ public class Task implements Parcelable {
     this.mRepeat = repeated;
     this.mPath = path;
     this.mTodos = todo;
-  }
-
-  /**
-   * Create A Task from Cursor.
-   *
-   * @param cursor {@link Cursor}
-   */
-  public Task(Cursor cursor) {
-    this.mID = getColumnLong(cursor, TaskEntry._ID);
-    this.mTitle = getColumnString(cursor, TaskEntry.COLUMN_NAME_TITLE);
-    this.mBody = getColumnString(cursor, TaskEntry.COLUMN_NAME_BODY);
-    this.mCompleted = getColumnInt(cursor, TaskEntry.COLUMN_NAME_COMPLETE);
-    this.mRepeat = getColumnInt(cursor, TaskEntry.COLUMN_NAME_REPEAT);
-    this.mDate = getColumnLong(cursor, TaskEntry.COLUMN_NAME_DATE);
-    this.mPath = getColumnString(cursor, TaskEntry.COLUMN_NAME_PATH);
-    this.mPriority = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
-    this.mType = getColumnInt(cursor, TaskEntry.COLUMN_NAME_TYPE);
+    this.mCurrentUser = user;
+    this.mSharedWith = sharedWith;
   }
 
 
@@ -111,6 +100,41 @@ public class Task implements Parcelable {
     return mPath;
   }
 
+  /**
+   * Create A Task from Cursor.
+   *
+   * @param cursor {@link Cursor}
+   */
+  public Task(Cursor cursor) {
+    this.mID = getColumnLong(cursor, TaskEntry._ID);
+    this.mTitle = getColumnString(cursor, TaskEntry.COLUMN_NAME_TITLE);
+    this.mBody = getColumnString(cursor, TaskEntry.COLUMN_NAME_BODY);
+    this.mCompleted = getColumnInt(cursor, TaskEntry.COLUMN_NAME_COMPLETE);
+    this.mRepeat = getColumnInt(cursor, TaskEntry.COLUMN_NAME_REPEAT);
+    this.mDate = getColumnLong(cursor, TaskEntry.COLUMN_NAME_DATE);
+    this.mPath = getColumnString(cursor, TaskEntry.COLUMN_NAME_PATH);
+    this.mCurrentUser = getColumnString(cursor, TaskEntry.COLUMN_NAME_USER);
+    this.mSharedWith = getColumnString(cursor, TaskEntry.COLUMN_NAME_SHARED_WITH);
+    this.mPriority = getColumnInt(cursor, TaskEntry.COLUMN_NAME_PRIORTY);
+    this.mType = getColumnInt(cursor, TaskEntry.COLUMN_NAME_TYPE);
+  }
+
+  protected Task(Parcel in) {
+    this.mID = in.readLong();
+    this.mTitle = in.readString();
+    this.mBody = in.readString();
+    this.mType = in.readInt();
+    this.mPriority = in.readInt();
+    this.mDate = in.readLong();
+    this.mCompleted = in.readInt();
+    this.mRepeat = in.readInt();
+    this.mPath = in.readString();
+    this.mCurrentUser = in.readString();
+    this.mSharedWith = in.readString();
+    this.mTodos = in.createTypedArrayList(Todo.CREATOR);
+    this.NO_ID = in.readLong();
+  }
+
   public List<Todo> getTodos() {
     return mTodos;
   }
@@ -133,19 +157,6 @@ public class Task implements Parcelable {
 
   /*Constants for missing data*/
   private long NO_ID = -1;
-
-  protected Task(Parcel in) {
-    this.mID = in.readLong();
-    this.mTitle = in.readString();
-    this.mBody = in.readString();
-    this.mType = in.readInt();
-    this.mPriority = in.readInt();
-    this.mDate = in.readLong();
-    this.mCompleted = in.readInt();
-    this.mRepeat = in.readInt();
-    this.mPath = in.readString();
-    this.mTodos = in.createTypedArrayList(Todo.CREATOR);
-  }
 
   public void setDate(long date) {
     mDate = date;
@@ -175,10 +186,34 @@ public class Task implements Parcelable {
     this.mCompleted = mCompleted;
   }
 
+  public String getCurrentUser() {
+    return mCurrentUser;
+  }
+
+  public void setCurrentUser(String mCurrentUser) {
+    this.mCurrentUser = mCurrentUser;
+  }
+
+  public String getSharedWith() {
+    return mSharedWith;
+  }
+
+  public void setSharedWith(String mSharedWith) {
+    this.mSharedWith = mSharedWith;
+  }
+
 
   @Override
   public int describeContents() {
     return 0;
+  }
+
+  public void setPath(String mPath) {
+    this.mPath = mPath;
+  }
+
+  public void setRepeated(int mRepeat) {
+    this.mRepeat = mRepeat;
   }
 
   @Override
@@ -192,14 +227,9 @@ public class Task implements Parcelable {
     dest.writeInt(this.mCompleted);
     dest.writeInt(this.mRepeat);
     dest.writeString(this.mPath);
+    dest.writeString(this.mCurrentUser);
+    dest.writeString(this.mSharedWith);
     dest.writeTypedList(this.mTodos);
-  }
-
-  public void setPath(String mPath) {
-    this.mPath = mPath;
-  }
-
-  public void setRepeated(int mRepeat) {
-    this.mRepeat = mRepeat;
+    dest.writeLong(this.NO_ID);
   }
 }

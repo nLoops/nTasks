@@ -65,6 +65,8 @@ public class TasksDBContract {
     public static final String COLUMN_NAME_TYPE = "type";
     public static final String COLUMN_NAME_COMPLETE = "is_complete";
     public static final String COLUMN_NAME_REPEAT = "is_repeat";
+    public static final String COLUMN_NAME_USER = "current_user";
+    public static final String COLUMN_NAME_SHARED_WITH = "shared_with";
     //Content Uri for table task
     public static final Uri CONTENT_TASK_URI = BASE_CONTENT_URI.buildUpon()
         .appendPath(TABLE_NAME).build();
