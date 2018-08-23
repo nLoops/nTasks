@@ -46,6 +46,7 @@
   <string name="pause">Pause</string>
   <string name="rep_weekly">Weekly Tasks</string>
   <string name="rep_active">Active Days</string>
+  <string name="cannot_find_audio_file">Cannot find this audio file</string>
   <!--This string CurrentUser will help when background job runs to backup data under user root-->
   <string name="current_user_firebase">current_user</string>
   <string name="current_user_display_name">user_display_name</string>

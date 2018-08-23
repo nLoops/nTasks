@@ -77,6 +77,9 @@ public class TasksMediaPlayer {
   }
 
   public void handleMediaPlayer(String path) {
+    if (path.length() <= 0) {
+      return;
+    }
     if (!isPlaying) {
       playRecording(path);
     } else {

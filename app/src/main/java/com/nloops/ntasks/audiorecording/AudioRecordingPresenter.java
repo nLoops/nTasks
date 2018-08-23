@@ -8,6 +8,7 @@ import android.media.MediaRecorder;
 import android.media.MediaRecorder.AudioEncoder;
 import android.media.MediaRecorder.OutputFormat;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AudioNoteFragment;
 import com.nloops.ntasks.audiorecording.AudioRecordingContract.Presenter;
@@ -171,6 +172,12 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
 
   @Override
   public void playRecording() {
+//    if the recorded is empty we return
+    if (mFileName.isEmpty()) {
+      Toast.makeText(mContext, mContext.getString(R.string.cannot_find_audio_file)
+          , Toast.LENGTH_LONG).show();
+      return;
+    }
     // first we need to be sure that we released the prev resources before start a new play.
     if (isPausing) {
       playerSeekTo(getCurrentPosition());
