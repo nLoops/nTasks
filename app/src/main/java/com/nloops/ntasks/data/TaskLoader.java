@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.utils.Constants;
 import java.util.Calendar;
 
 /**
@@ -44,9 +45,16 @@ public class TaskLoader {
     String selection = null;
     String[] selectionArgs = null;
 
+//    String of current user saved
+    String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
+
     if (!pref) {
-      selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=?";
-      selectionArgs = new String[]{String.valueOf(TasksDBContract.TaskEntry.STATE_NOT_COMPLETED)};
+      selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=? and " + currentUserSelection;
+      selectionArgs = new String[]{String.valueOf(TasksDBContract.TaskEntry.STATE_NOT_COMPLETED),
+          Constants.UID};
+    } else {
+      selection = currentUserSelection;
+      selectionArgs = new String[]{Constants.UID};
     }
     return new CursorLoader(mContext,
         TasksDBContract.TaskEntry.CONTENT_TASK_URI,
@@ -60,11 +68,15 @@ public class TaskLoader {
   }
 
   public Loader<Cursor> getAllTasks() {
-    String selection = TaskEntry.COLUMN_NAME_DATE + ">=? and " + TaskEntry.COLUMN_NAME_DATE + "<=?";
+    //    String of current user saved
+    String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
+    String selection = TaskEntry.COLUMN_NAME_DATE + ">=? and " +
+        TaskEntry.COLUMN_NAME_DATE + "<=? and " + currentUserSelection;
     Calendar calendar = Calendar.getInstance();
+    calendar.add(Calendar.DAY_OF_WEEK, +1);
     calendar.add(Calendar.DAY_OF_WEEK, -7);
     String[] selectionArgs = {String.valueOf(calendar.getTimeInMillis())
-        , String.valueOf(System.currentTimeMillis())};
+        , String.valueOf(System.currentTimeMillis()), Constants.UID};
     return new CursorLoader(mContext,
         TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         null,

@@ -123,8 +123,10 @@ public class GeneralUtils {
    * @return Cursor with {@link Task } that stored into DB
    */
   public static Cursor getData(Context context) {
+    String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
+    String[] selectionArgs = new String[]{Constants.UID};
     return context.getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
-        null, null, null, null);
+        null, currentUserSelection, selectionArgs, null);
   }
 
   public static List<Todo> getTodoData(Context context, String[] selectionArgs) {
