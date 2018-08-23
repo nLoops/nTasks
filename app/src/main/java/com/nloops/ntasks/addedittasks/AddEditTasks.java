@@ -84,12 +84,12 @@ public class AddEditTasks extends AppCompatActivity {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           taskDetailFragment,
-          TASK_URI, this);
+          TASK_URI, getApplicationContext());
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           taskDetailFragment,
-          null, this);
+          null, getApplicationContext());
     }
   }
 
@@ -117,12 +117,12 @@ public class AddEditTasks extends AppCompatActivity {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           audioNoteFragment,
-          TASK_URI, this);
+          TASK_URI, getApplicationContext());
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           audioNoteFragment,
-          null, this);
+          null, getApplicationContext());
     }
   }
 
@@ -145,12 +145,12 @@ public class AddEditTasks extends AppCompatActivity {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           taskTodoFragment,
-          TASK_URI, this);
+          TASK_URI, getApplicationContext());
     } else {
       mPresenter = new TasksDetailPresenter(getSupportLoaderManager(),
           loader,
           taskTodoFragment,
-          null, this);
+          null, getApplicationContext());
     }
   }
 }

@@ -97,8 +97,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     TaskLoader loader = new TaskLoader(getActivity());
     // Create new instance of LocalDataSource
     TasksLocalDataSource dataSource = TasksLocalDataSource
-        .getInstance(getActivity().getContentResolver(),
-            getContext());
+        .getInstance(getActivity().getApplicationContext().getContentResolver(),
+            getActivity().getApplicationContext());
     // define Tasks.Presenter
     mPresenter = new TasksPresenter(loader, getActivity().getSupportLoaderManager(),
         this, dataSource);
@@ -199,17 +199,24 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         showSettingsActivity();
         return true;
       case R.id.action_list_signout:
-        assert getContext() != null;
-        assert getActivity() != null;
-        FirebaseAuth.getInstance().signOut();
-        Intent loginIntent = new Intent(getContext(), LoginActivity.class);
-        startActivity(loginIntent);
-        getActivity().finish();
+        prepareUserSignOut();
         return true;
       default:
         return super.onOptionsItemSelected(item);
     }
 
+  }
+
+  /**
+   * This helper method will perform to make sure that user sign-out and the data backed up.
+   */
+  private void prepareUserSignOut() {
+    assert getContext() != null;
+    assert getActivity() != null;
+    FirebaseAuth.getInstance().signOut();
+    Intent loginIntent = new Intent(getContext(), LoginActivity.class);
+    startActivity(loginIntent);
+    getActivity().finish();
   }
 
   @Override
