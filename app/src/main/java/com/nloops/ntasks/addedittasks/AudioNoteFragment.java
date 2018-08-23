@@ -36,6 +36,7 @@ import com.nloops.ntasks.audiorecording.AudioRecordingPresenter;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.views.AudioCounterView;
 import com.nloops.ntasks.views.CustomFillBar;
@@ -122,9 +123,9 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    assert getContext() != null;
+    assert getActivity() != null;
     mAudioPresenter = new AudioRecordingPresenter(this,
-        getContext());
+        getActivity().getApplicationContext());
 
   }
 
@@ -384,6 +385,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     if (mDueDate == Long.MAX_VALUE) {
       mTaskRepeatType = TaskEntry.REPEAT_NONE;
     }
+    String currentUser = Constants.UID.length() > 0 ? Constants.UID : "UnKnown";
     return new Task(mTitleView.getText().toString(),
         "",
         AddEditTasks.TASK_TYPE,
@@ -391,7 +393,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         mDueDate,
         TasksDBContract.TaskEntry.STATE_NOT_COMPLETED,
         mTaskRepeatType
-        , mAudioPresenter.getFileName(), null);
+        , mAudioPresenter.getFileName(), currentUser, null, "");
   }
 
   private void getDatePicker() {
