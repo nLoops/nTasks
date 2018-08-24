@@ -108,6 +108,7 @@ public class AlarmScheduler {
       int importance = NotificationManager.IMPORTANCE_DEFAULT;
       mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_ID, cName, importance);
       mChannel.setDescription(cDescription);
+      mChannel.setShowBadge(true);
       assert manager != null;
       manager.createNotificationChannel(mChannel);
     }
@@ -161,6 +162,7 @@ public class AlarmScheduler {
             , actionComplete)
         .setPriority(NotificationCompat.PRIORITY_HIGH)
         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+        .setBadgeIconType(NotificationCompat.BADGE_ICON_SMALL)
         .setVibrate(pattern)
         .setAutoCancel(true);
 
