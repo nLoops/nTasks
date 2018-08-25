@@ -4,7 +4,7 @@
     android:initialLayout="@layout/add_note_widget"
     android:minResizeWidth="196dp"
     android:minWidth="196dp"
-    android:previewImage="@drawable/ic_add_big"
+  android:previewImage="@drawable/add_widget_pic"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="1800000"
     android:widgetCategory="home_screen|keyguard" />
