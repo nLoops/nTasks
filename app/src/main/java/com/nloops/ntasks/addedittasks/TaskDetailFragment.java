@@ -33,8 +33,8 @@ import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import java.util.Calendar;
 
 public class TaskDetailFragment extends Fragment implements TaskDetailContract.View {
@@ -348,7 +348,9 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
     if (mDueDate == Long.MAX_VALUE) {
       mTaskRepeatType = TaskEntry.REPEAT_NONE;
     }
-    String currentUser = Constants.UID.length() > 0 ? Constants.UID : "UnKnown";
+    String userUID = SharedPreferenceHelper.getInstance(getActivity().getApplicationContext())
+        .getUID();
+    String currentUser = userUID.length() > 0 ? userUID : "UnKnown";
     return new Task(mTitle.getText().toString(),
         mBody.getText().toString(),
         AddEditTasks.TASK_TYPE,

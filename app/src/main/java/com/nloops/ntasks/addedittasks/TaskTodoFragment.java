@@ -44,8 +44,8 @@ import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.Todo;
-import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -335,7 +335,9 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     if (mDueDate == Long.MAX_VALUE) {
       mTaskRepeatType = TaskEntry.REPEAT_NONE;
     }
-    String currentUser = Constants.UID.length() > 0 ? Constants.UID : "UnKnown";
+    String userUID = SharedPreferenceHelper.getInstance(getActivity().getApplicationContext())
+        .getUID();
+    String currentUser = userUID.length() > 0 ? userUID : "UnKnown";
     return new Task(mTitle.getText().toString(),
         "",
         AddEditTasks.TASK_TYPE,

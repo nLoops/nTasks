@@ -124,7 +124,7 @@ public class GeneralUtils {
    */
   public static Cursor getData(Context context) {
     String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
-    String[] selectionArgs = new String[]{Constants.UID};
+    String[] selectionArgs = new String[]{SharedPreferenceHelper.getInstance(context).getUID()};
     return context.getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         null, currentUserSelection, selectionArgs, null);
   }

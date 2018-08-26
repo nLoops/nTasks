@@ -47,6 +47,7 @@ import com.nloops.ntasks.reports.TasksReports;
 import com.nloops.ntasks.utils.CloudSyncTasks;
 import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.DatabaseValues;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 import java.util.ArrayList;
 import java.util.List;
@@ -215,7 +216,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     // get ref of tasks node in the database.
     DatabaseReference mFireDatabaseReference =
         mFireDataBase.getReference().child(Constants.TASKS_DATABASE_REFERENCE)
-            .child(Constants.UID);
+            .child(SharedPreferenceHelper.getInstance(getApplicationContext()).getUID());
     mFireDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {

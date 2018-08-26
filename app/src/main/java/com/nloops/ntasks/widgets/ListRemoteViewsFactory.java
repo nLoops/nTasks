@@ -7,8 +7,8 @@ import android.widget.RemoteViewsService;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 
 
 public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
@@ -98,7 +98,8 @@ public class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFac
     String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
     String selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE
         + "=? and " + currentUserSelection;
-    String[] selectionArgs = new String[]{"0", Constants.UID};
+    String[] selectionArgs = new String[]{"0",
+        SharedPreferenceHelper.getInstance(mContext).getUID()};
     if (mCursor != null) {
       mCursor.close();
       mCursor = null;

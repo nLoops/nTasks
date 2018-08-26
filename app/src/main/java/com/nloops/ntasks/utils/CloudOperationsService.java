@@ -72,7 +72,7 @@ public class CloudOperationsService extends IntentService {
                 // ***tasks root node
                 //   *****User
                 //        ***** Tasks Data
-                .child(Constants.UID)
+                .child(SharedPreferenceHelper.getInstance(getApplicationContext()).getUID())
                 .child(String.valueOf(task.getID()));
         // Push Data to RealTimeDB
         mFireDatabaseReference.setValue(task);
@@ -92,7 +92,7 @@ public class CloudOperationsService extends IntentService {
     // get ref of tasks node in the database.
     DatabaseReference mFireDatabaseReference =
         mFireDataBase.getReference().child(Constants.TASKS_DATABASE_REFERENCE)
-            .child(Constants.UID);
+            .child(SharedPreferenceHelper.getInstance(getApplicationContext()).getUID());
     mFireDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
       @Override
       public void onDataChange(@NonNull final DataSnapshot dataSnapshot) {

@@ -53,7 +53,7 @@ public class CloudSyncTasks {
                 // ***tasks root node
                 //   *****User
                 //        ***** Tasks Data
-                .child(Constants.UID)
+                .child(SharedPreferenceHelper.getInstance(context).getUID())
                 .child(String.valueOf(task.getID()));
         // Push Data to RealTimeDB
         mFireDatabaseReference.setValue(task);

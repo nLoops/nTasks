@@ -36,8 +36,8 @@ import com.nloops.ntasks.audiorecording.AudioRecordingPresenter;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
-import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.views.AudioCounterView;
 import com.nloops.ntasks.views.CustomFillBar;
 import java.util.Calendar;
@@ -385,7 +385,9 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     if (mDueDate == Long.MAX_VALUE) {
       mTaskRepeatType = TaskEntry.REPEAT_NONE;
     }
-    String currentUser = Constants.UID.length() > 0 ? Constants.UID : "UnKnown";
+    String userUID = SharedPreferenceHelper.getInstance(getActivity().getApplicationContext())
+        .getUID();
+    String currentUser = userUID.length() > 0 ? userUID : "UnKnown";
     return new Task(mTitleView.getText().toString(),
         "",
         AddEditTasks.TASK_TYPE,
