@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import java.util.Calendar;
 
@@ -51,10 +52,10 @@ public class TaskLoader {
     if (!pref) {
       selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=? and " + currentUserSelection;
       selectionArgs = new String[]{String.valueOf(TasksDBContract.TaskEntry.STATE_NOT_COMPLETED),
-          SharedPreferenceHelper.getInstance(mContext).getUID()};
+          getUserUID()};
     } else {
       selection = currentUserSelection;
-      selectionArgs = new String[]{SharedPreferenceHelper.getInstance(mContext).getUID()};
+      selectionArgs = new String[]{getUserUID()};
     }
     return new CursorLoader(mContext,
         TasksDBContract.TaskEntry.CONTENT_TASK_URI,
@@ -77,7 +78,7 @@ public class TaskLoader {
     calendar.add(Calendar.DAY_OF_WEEK, -7);
     String[] selectionArgs = {String.valueOf(calendar.getTimeInMillis())
         , String.valueOf(System.currentTimeMillis()),
-        SharedPreferenceHelper.getInstance(mContext).getUID()};
+        getUserUID()};
     return new CursorLoader(mContext,
         TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         null,
@@ -108,6 +109,18 @@ public class TaskLoader {
         selectionArgs,
         null
     );
+  }
+
+  /**
+   * This Method will check if the Constants UID available will get the value if not will get it
+   * from SharedPreferences.
+   *
+   * @return FirebaseAuth User UID.
+   */
+  private String getUserUID() {
+    String userUID = Constants.UID.length() > 0 ? Constants.UID
+        : SharedPreferenceHelper.getInstance(mContext).getUID();
+    return userUID;
   }
 }
 
