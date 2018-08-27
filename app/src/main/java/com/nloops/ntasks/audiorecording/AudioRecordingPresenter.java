@@ -173,7 +173,7 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
   @Override
   public void playRecording() {
 //    if the recorded is empty we return
-    if (mFileName.isEmpty()) {
+    if (mFileName == null) {
       Toast.makeText(mContext, mContext.getString(R.string.cannot_find_audio_file)
           , Toast.LENGTH_LONG).show();
       return;
@@ -277,11 +277,25 @@ public class AudioRecordingPresenter implements AudioRecordingContract.Presenter
   }
 
   public int getTrackDuration() {
-    return mMediaPlayer.getDuration();
+    //    if the recorded is empty we return
+    if (mFileName == null) {
+      Toast.makeText(mContext, mContext.getString(R.string.cannot_find_audio_file)
+          , Toast.LENGTH_LONG).show();
+      return 0;
+    } else {
+      return mMediaPlayer.getDuration();
+    }
   }
 
   public int getCurrentPosition() {
-    return mMediaPlayer.getCurrentPosition();
+    //    if the recorded is empty we return
+    if (mFileName == null) {
+      Toast.makeText(mContext, mContext.getString(R.string.cannot_find_audio_file)
+          , Toast.LENGTH_LONG).show();
+      return 0;
+    } else {
+      return mMediaPlayer.getCurrentPosition();
+    }
   }
 
 }

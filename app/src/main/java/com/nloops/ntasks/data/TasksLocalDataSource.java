@@ -80,7 +80,7 @@ public class TasksLocalDataSource implements TasksDataSource {
     assert cursor != null;
     if (cursor.moveToNext()) {
       Task task = new Task(cursor);
-      if (task.getPath().length() > 0) {
+      if (task.getPath() != null) {
         GeneralUtils.deleteRecordedAudio(task.getPath());
       }
     }
