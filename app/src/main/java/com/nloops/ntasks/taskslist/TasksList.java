@@ -7,12 +7,18 @@ import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ShortcutInfo;
+import android.content.pm.ShortcutManager;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.os.Build;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
@@ -37,9 +43,11 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.UI.DrawerHeader;
 import com.nloops.ntasks.UI.DrawerMenuItem;
 import com.nloops.ntasks.UI.DrawerMenuItem.DrawerCallBack;
+import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.calenderview.CalendarView;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
@@ -50,6 +58,7 @@ import com.nloops.ntasks.utils.DatabaseValues;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import pub.devrel.easypermissions.EasyPermissions;
 
@@ -57,6 +66,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     SharedPreferences.OnSharedPreferenceChangeListener {
 
   private static final int PERMISSION_REQ_CODE = 225;
+  private static final String SHORTCUT_INTENT_ACTION = "ACTION_TRUE";
   /**
    * CallBack to Listen to DrawerItem Click
    */
@@ -121,6 +131,10 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     setupFirstRunGuide(mToolbar);
     // setupDrawer
     setupDrawer();
+
+    if (VERSION.SDK_INT >= VERSION_CODES.N_MR1) {
+      setupAppShortcuts();
+    }
 
   }
 
@@ -446,5 +460,51 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     };
     mDrawer.addDrawerListener(drawerToggle);
     drawerToggle.syncState();
+  }
+
+  @RequiresApi(api = VERSION_CODES.N_MR1)
+  private void setupAppShortcuts() {
+
+//    ref of Shortcut manager
+    final ShortcutManager shortcutManager = getSystemService(ShortcutManager.class);
+// build shortcut of Normal Task
+    ShortcutInfo normalTask = new ShortcutInfo.Builder(this, getString(R.string.normal_task_id))
+        .setShortLabel(getString(R.string.normal_task_short_label))
+        .setLongLabel(getString(R.string.normal_task_long_label))
+        .setDisabledMessage(getString(R.string.shortcut_disable_message))
+        .setIcon(Icon.createWithResource(this, R.drawable.ic_add_shortcut))
+        .setIntent(getTaskFragmentIntent(TaskEntry.TYPE_NORMAL_NOTE))
+        .setRank(0)
+        .build();
+// build shortcut of TODOList Task
+    ShortcutInfo listTask = new ShortcutInfo.Builder(this, getString(R.string.list_task_id))
+        .setShortLabel(getString(R.string.list_task_short_label))
+        .setLongLabel(getString(R.string.list_task_long_label))
+        .setDisabledMessage(getString(R.string.shortcut_disable_message))
+        .setIcon(Icon.createWithResource(this, R.drawable.ic_list_shortcut))
+        .setIntent(getTaskFragmentIntent(TaskEntry.TYPE_TODO_NOTE))
+        .setRank(1)
+        .build();
+// build shortcut of Audio Note Task
+    ShortcutInfo audioTask = new ShortcutInfo.Builder(this, getString(R.string.audio_task_id))
+        .setShortLabel(getString(R.string.audio_task_short_label))
+        .setLongLabel(getString(R.string.audio_task_long_label))
+        .setDisabledMessage(getString(R.string.shortcut_disable_message))
+        .setIcon(Icon.createWithResource(this, R.drawable.ic_mic_shortcut))
+        .setIntent(getTaskFragmentIntent(TaskEntry.TYPE_AUDIO_NOTE))
+        .setRank(2)
+        .build();
+
+    assert shortcutManager != null;
+    shortcutManager.addDynamicShortcuts(Arrays.asList(normalTask, listTask, audioTask));
+
+  }
+
+  @RequiresApi(api = VERSION_CODES.N_MR1)
+  private Intent getTaskFragmentIntent(int taskType) {
+    Intent addEditIntent = new Intent(TasksList.this, AddEditTasks.class);
+    addEditIntent.putExtra(AddEditTasks.EXTRAS_TASK_TYPE, taskType);
+    addEditIntent.setAction(SHORTCUT_SERVICE);
+    return addEditIntent;
   }
 }
