@@ -500,8 +500,20 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
         .setRank(2)
         .build();
 
+    ShortcutInfo calendarView = new ShortcutInfo.Builder
+        (this, getString(R.string.calendar_shortcut_id))
+        .setShortLabel(getString(R.string.calendar_shortcut_short_label))
+        .setLongLabel(getString(R.string.calendar_shortcut_long_label))
+        .setDisabledMessage(getString(R.string.calendar_shortcut_dissable_message))
+        .setIcon(Icon.createWithResource(this, R.drawable.ic_calender_shortcut))
+        .setIntent(new Intent(TasksList.this, CalendarView.class)
+            .setAction(SHORTCUT_SERVICE))
+        .setRank(3)
+        .build();
+
     assert shortcutManager != null;
-    shortcutManager.addDynamicShortcuts(Arrays.asList(normalTask, listTask, audioTask));
+    shortcutManager
+        .addDynamicShortcuts(Arrays.asList(normalTask, listTask, audioTask, calendarView));
 
   }
 
