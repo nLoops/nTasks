@@ -54,6 +54,8 @@ public class SharedPreferenceHelper {
 
   public void updateUserUID() {
     editor.putString(SHARE_KEY_UID, "");
+    editor.putString(SHARE_KEY_NAME, "");
+    editor.putString(SHARE_KEY_EMAIL, "");
     editor.apply();
   }
 }

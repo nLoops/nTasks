@@ -42,6 +42,8 @@ public final class Constants {
   public static String STR_EXTRA_USERNAME = "username";
   public static String STR_EXTRA_PASSWORD = "password";
   public static String UID = "";
+  public static String CURRENT_USERNAME = "";
+  public static String CURRENT_USEREMAIL = "";
 
 
 }

@@ -9,6 +9,7 @@ import com.mindorks.placeholderview.annotations.Resolve;
 import com.mindorks.placeholderview.annotations.View;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.login.LocalUser;
+import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 
 /**
@@ -41,7 +42,7 @@ public class DrawerHeader {
   @Resolve
   private void onResolved() {
     LocalUser user = SharedPreferenceHelper.getInstance(mContext).getUserInfo();
-    mUserName.setText(user.name);
-    mEmailAddress.setText(user.email);
+    mUserName.setText(user.name.equals("") ? Constants.CURRENT_USERNAME : user.name);
+    mEmailAddress.setText(user.email.equals("") ? Constants.CURRENT_USEREMAIL : user.email);
   }
 }

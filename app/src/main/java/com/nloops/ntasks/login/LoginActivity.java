@@ -100,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
         if (user != null) {
           // User is signed in
           Constants.UID = user.getUid();
+//          sync data
+          authUtils.saveUserInfo();
           // if first open app goes to TaskList
           if (firstTimeAccess) {
             startActivity(new Intent(LoginActivity.this, TasksList.class));
@@ -369,6 +371,8 @@ public class LoginActivity extends AppCompatActivity {
               LocalUser userInfo = new LocalUser();
               userInfo.name = (String) hashUser.get("name");
               userInfo.email = (String) hashUser.get("email");
+              Constants.CURRENT_USERNAME = userInfo.name;
+              Constants.CURRENT_USEREMAIL = userInfo.email;
               SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(userInfo);
             }
 
