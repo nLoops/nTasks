@@ -16,6 +16,8 @@ import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -283,6 +285,34 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
       }
     });
 
+    mItemEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//later
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        String currentString = charSequence.toString();
+        int lineCounts = currentString.split("[\n]").length;
+        if (lineCounts > 1) {
+          String[] lines = currentString.split("[\n]");
+          for (String line : lines) {
+            mTodoList.add(new Todo(line,
+                TasksDBContract.TodoEntry.STATE_NOT_COMPLETED));
+          }
+
+          mAdapter.swapTodoList(mTodoList);
+          mItemEditText.setText("");
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+//later
+      }
+    });
+
     return rootView;
   }
 
@@ -324,6 +354,11 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
   @Override
   public void showSaveEmptyError() {
     Snackbar.make(mTitle, getString(R.string.cannot_save_empty), Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void showDenyPermissions() {
+// implement in the future.
   }
 
   @Override
