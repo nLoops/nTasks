@@ -232,6 +232,11 @@ public class TaskDetailFragment extends Fragment implements TaskDetailContract.V
   }
 
   @Override
+  public void showDenyPermissions() {
+
+  }
+
+  @Override
   public void setPresenter(TaskDetailContract.Presenter presenter) {
     mPresenter = presenter;
   }

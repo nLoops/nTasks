@@ -25,6 +25,7 @@ public class AddEditTasks extends AppCompatActivity {
   public static final int RESULT_DELETE_TASK = 100;
   public static final int RESULT_UPDATE_TASK = 101;
   public static final int RESULT_ADD_TASK = 102;
+  public static final int RESULT_DENY_PERMISSIONS = 103;
   public static final String EXTRAS_TASK_TYPE = "task_type";
   public static Uri TASK_URI;
   public static int TASK_TYPE = TasksDBContract.TaskEntry.NO_TASK_TYPE;

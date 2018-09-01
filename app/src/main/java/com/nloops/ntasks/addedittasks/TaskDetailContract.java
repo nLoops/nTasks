@@ -2,7 +2,6 @@ package com.nloops.ntasks.addedittasks;
 
 import android.net.Uri;
 import android.support.annotation.NonNull;
-
 import com.nloops.ntasks.data.BaseView;
 import com.nloops.ntasks.data.Task;
 
@@ -21,6 +20,8 @@ public interface TaskDetailContract {
         void showDateTimePicker();
 
         void showSaveEmptyError();
+
+      void showDenyPermissions();
 
     }
 

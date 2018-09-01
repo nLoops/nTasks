@@ -462,6 +462,11 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     drawerToggle.syncState();
   }
 
+  /***
+   * This helper method will provide devices running API > 25
+   * by adding home launcher icon shortcut after long press
+   * Official Docs (https://developer.android.com/guide/topics/ui/shortcuts/)
+   */
   @RequiresApi(api = VERSION_CODES.N_MR1)
   private void setupAppShortcuts() {
 
@@ -500,6 +505,9 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
 
   }
 
+  /**
+   * This method returns {@link Intent} to various {@link Task} types.
+   */
   @RequiresApi(api = VERSION_CODES.N_MR1)
   private Intent getTaskFragmentIntent(int taskType) {
     Intent addEditIntent = new Intent(TasksList.this, AddEditTasks.class);

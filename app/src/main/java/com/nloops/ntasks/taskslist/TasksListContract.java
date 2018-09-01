@@ -26,6 +26,8 @@ public interface TasksListContract {
     void showAddedMessage();
 
     void showSettingsActivity();
+
+    void showDenyPermissionsMessage();
   }
 
 

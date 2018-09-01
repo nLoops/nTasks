@@ -298,6 +298,11 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   }
 
   @Override
+  public void showDenyPermissionsMessage() {
+    showMessage(getString(R.string.deny_permissions_message));
+  }
+
+  @Override
   public void setPresenter(TasksListContract.Presenter presenter) {
     /*to implement in the future*/
   }

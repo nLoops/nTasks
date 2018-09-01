@@ -1,5 +1,7 @@
 package com.nloops.ntasks.addedittasks;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.ContentUris;
@@ -41,10 +43,12 @@ import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.views.AudioCounterView;
 import com.nloops.ntasks.views.CustomFillBar;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class AudioNoteFragment extends Fragment implements TaskDetailContract.View,
-    AudioRecordingContract.View {
+    AudioRecordingContract.View, EasyPermissions.PermissionCallbacks {
 
   private TaskDetailContract.Presenter mPresenter;
   private AudioRecordingPresenter mAudioPresenter;
@@ -79,6 +83,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   private long timeInMilliseconds = 0L;
   private long timeSwapBuff = 0L;
 
+  private static final int PERMISSION_REQ_CODE = 125;
 
   /**
    * Empty Constructor required by Platform
@@ -126,6 +131,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
     assert getActivity() != null;
     mAudioPresenter = new AudioRecordingPresenter(this,
         getActivity().getApplicationContext());
+    getPermissions();
 
   }
 
@@ -150,6 +156,7 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         timeSwapBuff += timeInMilliseconds;
         customHandler.removeCallbacks(updateTimerThread);
       } else {
+        getPermissions();
         mAudioPresenter.startRecording();
         mPlayTimer.setState(AudioCounterView.IS_RECORDING);
         startHTime = SystemClock.uptimeMillis();
@@ -313,6 +320,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   @Override
   public void showSaveEmptyError() {
     Snackbar.make(mTitleView, getString(R.string.cannot_save_empty), Snackbar.LENGTH_LONG).show();
+  }
+
+  @Override
+  public void showDenyPermissions() {
+    assert getActivity() != null;
+    getActivity().setResult(AddEditTasks.RESULT_DENY_PERMISSIONS);
+    getActivity().finish();
   }
 
   @Override
@@ -482,4 +496,40 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   private void updateSeekBar() {
     customHandler.postDelayed(refreshPlayingTimer, 100);
   }
+
+  /**
+   * This Method will check if we have the required permissions to RECORD and SAVE files, if not we
+   * will alert USER to get the permissions.
+   */
+  @TargetApi(23)
+  private void getPermissions() {
+    assert getContext() != null;
+    assert getActivity() != null;
+    String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
+        Manifest.permission.RECORD_AUDIO};
+    if (!EasyPermissions.hasPermissions(getContext(), permissions)) {
+      EasyPermissions.requestPermissions(this,
+          getString(R.string.permissions_required),
+          PERMISSION_REQ_CODE, permissions);
+    }
+  }
+
+  @TargetApi(23)
+  @Override
+  public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+      @NonNull int[] grantResults) {
+    EasyPermissions.onRequestPermissionsResult
+        (requestCode, permissions, grantResults, this);
+  }
+
+  @Override
+  public void onPermissionsGranted(int requestCode, @NonNull List<String> perms) {
+    // will implemented soon
+  }
+
+  @Override
+  public void onPermissionsDenied(int requestCode, @NonNull List<String> perms) {
+    showDenyPermissions();
+  }
+
 }

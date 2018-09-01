@@ -85,6 +85,8 @@ public class TasksPresenter implements TasksListContract.Presenter,
       } else if (AddEditTasks.RESULT_DELETE_TASK == resultCode) {
         mTaskView.showDeletedMessage();
       }
+    } else if (AddEditTasks.RESULT_DENY_PERMISSIONS == resultCode) {
+      mTaskView.showDenyPermissionsMessage();
     }
   }
 
