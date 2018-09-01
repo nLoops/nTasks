@@ -31,6 +31,7 @@
   <string name="permissions_required">App requires RECORD_AUDIO permission to access mic and
     WRITE_EXTERNAL_STORAGE to save recorded audio
   </string>
+  <string name="deny_permissions_message">Permissions are required to allow App recording and save your notes.</string>
   <string name="permissions_alert_title">Permissions Required</string>
   <string name="content_playback_btn">Play Back Button</string>
   <string name="label_due_date">Due Date</string>
@@ -161,4 +162,30 @@
   <string name="str_reset_okay_message">Sent email to</string>
   <string name="str_username_hint">Email</string>
   <string name="txt_forget_password">forgot your password?</string>
+
+  <!--App Shortcuts strings-->
+  <string name="normal_task_id">shortcut_normal_task</string>
+  <string name="normal_task_short_label">Normal Task</string>
+  <string name="normal_task_long_label">tap to add normal task</string>
+  <string name="shortcut_disable_message">new task shortcut</string>
+
+  <string name="list_task_id">shortcut_list_task</string>
+  <string name="list_task_short_label">TODO List Task</string>
+  <string name="list_task_long_label">tap to add todo task</string>
+
+  <string name="audio_task_id">shortcut_audio_task</string>
+  <string name="audio_task_short_label">Audio Note Task</string>
+  <string name="audio_task_long_label">tap to add audio task</string>
+
+  <string name="calendar_shortcut_id">calendar_view</string>
+  <string name="calendar_shortcut_short_label">Calendar View</string>
+  <string name="calendar_shortcut_long_label">tap to launch calendar view</string>
+  <string name="calendar_shortcut_dissable_message">Calendar View</string>
+
+  <!--Add new task from Calendar Strings-->
+  <string name="calendar_add_task">Add New Task</string>
+  <string name="calendar_edit_hint">Enter your note</string>
+  <string name="img_button_alarm">Time Picker Button</string>
+  <string name="img_button_add">Add New Task Button</string>
+
 </resources>

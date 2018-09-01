@@ -1,7 +1,10 @@
 package com.nloops.ntasks.calenderview;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.TimePickerDialog;
 import android.content.ContentUris;
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -10,25 +13,37 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.app.NavUtils;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import com.nloops.ntasks.R;
+import com.nloops.ntasks.UI.TimePickerFragment;
 import com.nloops.ntasks.adapters.CalendarViewAdapter;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.reminders.TaskOperationService;
 import com.nloops.ntasks.utils.GeneralUtils;
+import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
@@ -54,6 +69,22 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
   TextView mTextViewToday;
   @BindView(R.id.empty_calendar_view)
   TextView mEmptyView;
+  //  adds 3 hours into milliseconds
+  private final long THREE_HOURS = 10800000;
+  @BindView(R.id.bottom_sheet)
+  View mBottomSheetView;
+  @BindView(R.id.calendar_task_ed)
+  TextInputEditText mNewTaskEditText;
+  @BindView(R.id.calendar_btn_date)
+  ImageButton mAlarmButton;
+  @BindView(R.id.calendar_btn_save)
+  ImageButton mSaveTaskButton;
+  @BindView(R.id.tv_calendar_tap_on)
+  TextView mAddNewTV;
+  @BindView(R.id.calendar_view_container)
+  CoordinatorLayout mLayoutContainer;
+  @BindView(R.id.tv_calendar_date_view)
+  TextView mTvDateView;
   /*Ref of Cursor to load the data*/
   private Cursor mCursor;
   /*FORMATTER to display Selected Date on ToolBar Title*/
@@ -62,6 +93,37 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
   private TaskLoader mTaskLoader;
   /*get Ref of CalendarAdapter*/
   private CalendarViewAdapter mAdapter;
+  //  Ref of Bottom Behavior
+  private BottomSheetBehavior mBottomSheetBehavior;
+  //  ref of Current mDueDate
+  private long mDueDate;
+  private final TimePickerDialog.OnTimeSetListener mSetTimePicker = new TimePickerDialog.OnTimeSetListener() {
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+      Calendar c = Calendar.getInstance();
+      c.set(Calendar.YEAR, mCalendarView.getSelectedDate().getYear());
+      c.set(Calendar.MONTH, mCalendarView.getSelectedDate().getMonth());
+      c.set(Calendar.DAY_OF_MONTH, mCalendarView.getSelectedDate().getDay());
+      c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+      c.set(Calendar.MINUTE, minute);
+
+      setDateSelection(c.getTimeInMillis());
+    }
+  };
+
+  /**
+   * This helper method will force the keyboard to hide when Activity Started
+   *
+   * @param activity {@link Activity} to get SystemServices.
+   */
+  public static void hideKeyboard(Activity activity) {
+    View view = activity.findViewById(android.R.id.content);
+    if (view != null) {
+      InputMethodManager imm = (InputMethodManager) activity
+          .getSystemService(Context.INPUT_METHOD_SERVICE);
+      imm.hideSoftInputFromWindow(view.getWindowToken(), InputMethodManager.HIDE_IMPLICIT_ONLY);
+    }
+  }
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
@@ -89,10 +151,16 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
     CalendarDay day = CalendarDay.from(instance.getTime());
     mTextViewToday.setText(FORMATTER.format(day.getDate()));
     GeneralUtils.slideInFromTop(mTextViewToday, this);
+//    init the DueDate
+    long initDate = System.currentTimeMillis() + THREE_HOURS;
+    setDateSelection(initDate);
     /*Init Adapter and ListView*/
     mAdapter = new CalendarViewAdapter(this, new ArrayList<Task>());
     mListView.setAdapter(mAdapter);
     mListView.setEmptyView(mEmptyView);
+
+    mBottomSheetBehavior = BottomSheetBehavior.from(mBottomSheetView);
+
 
     /*Run Task to apply DotSpan on upcoming Tasks dates*/
     new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
@@ -113,22 +181,46 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
         startActivityForResult(addEditIntent, AddEditTasks.REQUEST_EDIT_TASK);
       }
     });
-  }
 
-  @Override
-  public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView,
-      @NonNull CalendarDay calendarDay, boolean b) {
-    mTextViewToday.setText(b ? FORMATTER.format(calendarDay.getDate()) : "No Selection");
-    GeneralUtils.slideInFromTop(mTextViewToday, CalendarView.this);
-    getSupportLoaderManager().restartLoader(0, null, this);
-  }
+    mAddNewTV.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+          mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+          mNewTaskEditText.setVisibility(View.VISIBLE);
+        } else {
+          mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+          mNewTaskEditText.setVisibility(View.INVISIBLE);
+        }
+      }
+    });
 
-  @Override
-  public void onBackPressed() {
-    super.onBackPressed();
-    NavUtils.navigateUpFromSameTask(this);
-    // set Navigation Animation
-    overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    mAlarmButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        getTimePicker();
+      }
+    });
+
+    mSaveTaskButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View view) {
+        if (mNewTaskEditText.getText().length() > 0) {
+          mSaveTaskButton.setEnabled(false);
+          mAlarmButton.setEnabled(false);
+          saveNewTask(getTask());
+          new ApiSimulator().executeOnExecutor(Executors.newSingleThreadExecutor());
+          mNewTaskEditText.setText("");
+          mSaveTaskButton.setEnabled(true);
+          mAlarmButton.setEnabled(true);
+
+          Snackbar.make(mLayoutContainer, getString(R.string.msg_task_added)
+              , Snackbar.LENGTH_LONG).show();
+        }
+
+      }
+    });
+
   }
 
   @Override
@@ -150,23 +242,12 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
   }
 
   @Override
-  public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-    ArrayList<Task> tasks = new ArrayList<>();
-    Calendar calendar = Calendar.getInstance();
-    if (data != null && data.getCount() > 0) {
-      mAdapter.clear();
-      while (data.moveToNext()) {
-        Task currentTask = new Task(data);
-        long taskDate = currentTask.getDate();
-        calendar.setTimeInMillis(taskDate);
-        CalendarDay day = CalendarDay.from(calendar);
-        if (day.getDate().equals(mCalendarView.getSelectedDate().getDate())) {
-          tasks.add(currentTask);
-        }
-      }
-      mAdapter.addAll(tasks);
-    }
-
+  public void onDateSelected(@NonNull MaterialCalendarView materialCalendarView,
+      @NonNull CalendarDay calendarDay, boolean b) {
+    mTextViewToday.setText(b ? FORMATTER.format(calendarDay.getDate()) : "No Selection");
+    GeneralUtils.slideInFromTop(mTextViewToday, CalendarView.this);
+    getSupportLoaderManager().restartLoader(0, null, this);
+    setDateSelection(calendarDay.getCalendar().getTimeInMillis());
   }
 
   @Override
@@ -217,18 +298,104 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
     }
   }
 
+  @Override
+  public void onBackPressed() {
+    if (mBottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+      mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    } else {
+      NavUtils.navigateUpFromSameTask(this);
+      // set Navigation Animation
+      overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_right);
+    }
+  }
+
+  @Override
+  public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+    ArrayList<Task> tasks = new ArrayList<>();
+    Calendar calendar = Calendar.getInstance();
+    if (data != null && data.getCount() > 0) {
+      mAdapter.clear();
+      while (data.moveToNext()) {
+        Task currentTask = new Task(data);
+        long taskDate = currentTask.getDate();
+        calendar.setTimeInMillis(taskDate);
+        CalendarDay day = CalendarDay.from(calendar);
+        if (day.getDate().equals(mCalendarView.getSelectedDate().getDate())) {
+          tasks.add(currentTask);
+        }
+      }
+      mAdapter.addAll(tasks);
+    }
+
+    // Set it as collapsed initially
+    int BOTTOM_SHEET_HEIGHT = 120;
+    mBottomSheetBehavior.setPeekHeight(BOTTOM_SHEET_HEIGHT);
+    mBottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+
+  }
 
   /**
    * @return Cursor of {@link Task}
    */
   private Cursor getData() {
     String[] projections = new String[]{TasksDBContract.TaskEntry.COLUMN_NAME_DATE};
-    String selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=?";
-    String[] selectionArgs = new String[]{"0"};
+    String currentUserSelection = TaskEntry.COLUMN_NAME_USER + "=?";
+    String selection = TasksDBContract.TaskEntry.COLUMN_NAME_COMPLETE + "=? and " +
+        currentUserSelection;
+    String[] selectionArgs = new String[]{"0", SharedPreferenceHelper
+        .getInstance(CalendarView.this).getUID()};
     Cursor cursor;
     cursor = getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         projections, selection, selectionArgs, null);
     return cursor;
+  }
+
+  /**
+   * This method will launch {@link TimePickerFragment} to let user choose his task time.
+   */
+  private void getTimePicker() {
+    TimePickerFragment pickerFragment = new TimePickerFragment();
+    pickerFragment.setOnTimeSetListener(mSetTimePicker);
+    pickerFragment.show(getSupportFragmentManager(), "TimeFragmentCal");
+
+  }
+
+  private void setDateSelection(long selectedTimestamp) {
+    mDueDate = selectedTimestamp;
+    mTvDateView.setText(GeneralUtils.formatDate(mDueDate));
+
+  }
+
+  /**
+   * This Helper method will return {@link Task} with current Data
+   */
+  private Task getTask() {
+
+    String userUID = SharedPreferenceHelper.getInstance(getApplicationContext())
+        .getUID();
+    String currentUser = userUID.length() > 0 ? userUID : "UnKnown";
+    return new Task(mNewTaskEditText.getText().toString(),
+        "",
+        TaskEntry.TYPE_NORMAL_NOTE,
+        TaskEntry.PRIORTY_NORMAL,
+        mDueDate,
+        TasksDBContract.TaskEntry.STATE_NOT_COMPLETED,
+        TaskEntry.REPEAT_NONE
+        , "",
+        currentUser,
+        null, "");
+  }
+
+  /**
+   * This Helper method will launch background service to add new Task
+   *
+   * @param task {@link Task}
+   */
+  private void saveNewTask(Task task) {
+    Intent saveIntent = new Intent(CalendarView.this, TaskOperationService.class);
+    saveIntent.setAction(TaskOperationService.ACTION_SAVE_NEW_TASK);
+    saveIntent.putExtra(TaskOperationService.EXTRAS_SAVE_NEW_TASK_DATA, task);
+    startService(saveIntent);
   }
 
 }
