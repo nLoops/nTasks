@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.data.Todo;
 
 /**
@@ -34,6 +35,7 @@ public class DatabaseValues {
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_TODO, todo.getTodo());
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE, todo.getIsCompleted());
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_TASK_ID, todo.getTaskID());
+    values.put(TodoEntry.COLUMN_NAME_LIST_DATE, todo.getDueDate());
 
     return values;
   }

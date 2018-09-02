@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.text.TextUtils;
 import android.util.Log;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -48,7 +49,8 @@ public class TasksDBHelper extends SQLiteOpenHelper {
           TasksDBContract.TodoEntry._ID + INTEGER_TYPE + " PRIMARY KEY AUTOINCREMENT," +
           TasksDBContract.TodoEntry.COLUMN_NAME_TODO + TEXT_TYPE + COMMA +
           TasksDBContract.TodoEntry.COLUMN_NAME_TASK_ID + INTEGER_TYPE + COMMA +
-          TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE + INTEGER_TYPE +
+          TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE + INTEGER_TYPE + COMMA +
+          TodoEntry.COLUMN_NAME_LIST_DATE + INTEGER_TYPE +
           ")";
 
 

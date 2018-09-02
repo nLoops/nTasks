@@ -97,6 +97,7 @@ public class TasksDBContract {
     public static final String COLUMN_NAME_TODO = "txttodo";
     public static final String COLUMN_NAME_TASK_ID = "taskid";
     public static final String COLUMN_NAME_COMPLETE = "is_complete";
+    public static final String COLUMN_NAME_LIST_DATE = "due_date";
     //Content Uri for tabletodo
     public static final Uri CONTENT_TODO_URI = BASE_CONTENT_URI.buildUpon()
         .appendPath(TABLE_NAME).build();

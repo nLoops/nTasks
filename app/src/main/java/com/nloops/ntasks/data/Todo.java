@@ -18,6 +18,17 @@ public class Todo implements Parcelable {
     private String mTodo;
     private int mIsCompleted;
     private int mTaskID;
+    public static final Creator<Todo> CREATOR = new Creator<Todo>() {
+        @Override
+        public Todo createFromParcel(Parcel source) {
+            return new Todo(source);
+        }
+
+        @Override
+        public Todo[] newArray(int size) {
+            return new Todo[size];
+        }
+    };
 
     /**
      * Empty Constructor for Firebase Server service.
@@ -25,13 +36,7 @@ public class Todo implements Parcelable {
     public Todo() {
     }
 
-    public Todo(Cursor cursor) {
-        this.mID = getColumnLong(cursor, TodoEntry._ID);
-        this.mTodo = getColumnString(cursor, TodoEntry.COLUMN_NAME_TODO);
-        this.mTaskID = getColumnInt(cursor, TodoEntry.COLUMN_NAME_TASK_ID);
-        this.mIsCompleted = getColumnInt(cursor, TodoEntry.COLUMN_NAME_COMPLETE);
-
-    }
+    private long mDueDate = Long.MAX_VALUE;
 
     /**
      * Public Constructor.
@@ -67,10 +72,35 @@ public class Todo implements Parcelable {
         this.mTaskID = mTaskID;
     }
 
+    public Todo(Cursor cursor) {
+        this.mID = getColumnLong(cursor, TodoEntry._ID);
+        this.mTodo = getColumnString(cursor, TodoEntry.COLUMN_NAME_TODO);
+        this.mTaskID = getColumnInt(cursor, TodoEntry.COLUMN_NAME_TASK_ID);
+        this.mIsCompleted = getColumnInt(cursor, TodoEntry.COLUMN_NAME_COMPLETE);
+        this.mDueDate = getColumnLong(cursor, TodoEntry.COLUMN_NAME_LIST_DATE);
+
+    }
+
+    protected Todo(Parcel in) {
+        this.mID = in.readLong();
+        this.mTodo = in.readString();
+        this.mIsCompleted = in.readInt();
+        this.mTaskID = in.readInt();
+        this.mDueDate = in.readLong();
+    }
+
 
     @Override
     public int describeContents() {
         return 0;
+    }
+
+    public long getDueDate() {
+        return mDueDate;
+    }
+
+    public void setDueDate(long mDueDate) {
+        this.mDueDate = mDueDate;
     }
 
     @Override
@@ -79,24 +109,6 @@ public class Todo implements Parcelable {
         dest.writeString(this.mTodo);
         dest.writeInt(this.mIsCompleted);
         dest.writeInt(this.mTaskID);
+        dest.writeLong(this.mDueDate);
     }
-
-    private Todo(Parcel in) {
-        this.mID = in.readLong();
-        this.mTodo = in.readString();
-        this.mIsCompleted = in.readInt();
-        this.mTaskID = in.readInt();
-    }
-
-    public static final Parcelable.Creator<Todo> CREATOR = new Parcelable.Creator<Todo>() {
-        @Override
-        public Todo createFromParcel(Parcel source) {
-            return new Todo(source);
-        }
-
-        @Override
-        public Todo[] newArray(int size) {
-            return new Todo[size];
-        }
-    };
 }
