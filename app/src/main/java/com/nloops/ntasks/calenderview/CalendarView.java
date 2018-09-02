@@ -130,6 +130,7 @@ public class CalendarView extends AppCompatActivity implements OnDateSelectedLis
     super.onCreate(savedInstanceState);
     setContentView(R.layout.activity_calendar_view);
     ButterKnife.bind(this);
+    GeneralUtils.checkIfSingedIn(CalendarView.this);
     /*Calendar View Setup*/
     mCalendarView.setOnDateChangedListener(this);
     Calendar instance = Calendar.getInstance();

@@ -1,6 +1,8 @@
 package com.nloops.ntasks.utils;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
@@ -16,11 +18,13 @@ import android.text.format.DateUtils;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import com.google.firebase.auth.FirebaseAuth;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
 import com.nloops.ntasks.data.Todo;
+import com.nloops.ntasks.login.LoginActivity;
 import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -268,6 +272,14 @@ public class GeneralUtils {
       return false;
     }
 
+  }
+
+  public static void checkIfSingedIn(Activity activity) {
+    if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+      Intent backToSign = new Intent(activity.getApplicationContext(), LoginActivity.class);
+      activity.startActivity(backToSign);
+      activity.finish();
+    }
   }
 
 }

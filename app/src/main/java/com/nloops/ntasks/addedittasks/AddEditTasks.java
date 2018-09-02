@@ -39,6 +39,8 @@ public class AddEditTasks extends AppCompatActivity {
     setSupportActionBar(toolbar);
     assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayShowTitleEnabled(false);
+//    check first if the user is signed in.
+    GeneralUtils.checkIfSingedIn(AddEditTasks.this);
     // get passed intent if available to load task data.
     TASK_URI = getIntent().getData();
     // get Task passed Task Type
