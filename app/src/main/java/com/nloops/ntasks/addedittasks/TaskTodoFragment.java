@@ -79,6 +79,19 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
 
   private int mTaskRepeatType;
   private long mDueDate = Long.MAX_VALUE;
+  private final DatePickerDialog.OnDateSetListener mListDatePicker = new DatePickerDialog.OnDateSetListener() {
+    @Override
+    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+      mYear = year;
+      mMonth = month;
+      mDay = dayOfMonth;
+      TimePickerFragment pickerFragment = new TimePickerFragment();
+      pickerFragment.setOnTimeSetListener(mListTimePicker);
+      assert getActivity() != null;
+      pickerFragment.show(getActivity().getSupportFragmentManager(), "ListTimeFragment");
+
+    }
+  };
   private int mYear;
   private int mMonth;
   private int mDay;
@@ -96,14 +109,7 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     return new TaskTodoFragment();
   }
 
-  private final TodoListAdapter.onItemClickListener onItemClickListener = new TodoListAdapter.onItemClickListener() {
-    @Override
-    public void onItemToggled(boolean active, int position) {
-      long rawID = mAdapter.getItemId(position);
-      mPresenter.completeTODO(active, rawID);
-      mTodoList.clear();
-    }
-  };
+  private int currentItemPos = -1;
 
   /**
    * Helper method that takes EditText String and add to {@link #mTodoList}
@@ -483,4 +489,54 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
   public void onLoaderReset(@NonNull Loader<Cursor> loader) {
     mAdapter.swapTodoList(null);
   }
+
+  private final TodoListAdapter.onItemClickListener onItemClickListener = new TodoListAdapter.onItemClickListener() {
+    @Override
+    public void onItemToggled(boolean active, int position) {
+      long rawID = mAdapter.getItemId(position);
+      mPresenter.completeTODO(active, rawID, (long) mAdapter.getItem(position).getTaskID());
+      mTodoList.clear();
+      getActivity().getSupportLoaderManager().restartLoader(0, null,
+          TaskTodoFragment.this);
+
+    }
+
+    @Override
+    public void onAlarmClick(int position) {
+      currentItemPos = position;
+      getListPicker();
+    }
+
+    @Override
+    public void onDeleteClick(int position) {
+      mTodoList.remove(position);
+      mAdapter.swapTodoList(mTodoList);
+    }
+  };
+  private final TimePickerDialog.OnTimeSetListener mListTimePicker = new TimePickerDialog.OnTimeSetListener() {
+    @Override
+    public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+      Calendar c = Calendar.getInstance();
+      c.set(Calendar.YEAR, mYear);
+      c.set(Calendar.MONTH, mMonth);
+      c.set(Calendar.DAY_OF_MONTH, mDay);
+      c.set(Calendar.HOUR_OF_DAY, hourOfDay);
+      c.set(Calendar.MINUTE, minute);
+
+      long mListDueDate = c.getTimeInMillis();
+      if (currentItemPos > -1) {
+        mTodoList.get(currentItemPos).setDueDate(mListDueDate);
+        mAdapter.swapTodoList(mTodoList);
+      }
+    }
+  };
+
+  private void getListPicker() {
+    DatePickerFragment pickerFragment = new DatePickerFragment();
+    pickerFragment.setDateListener(mListDatePicker);
+    assert getActivity() != null;
+    pickerFragment.show(getActivity().getSupportFragmentManager(), "ListDateFragment");
+
+  }
+
 }
