@@ -496,8 +496,6 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
       long rawID = mAdapter.getItemId(position);
       mPresenter.completeTODO(active, rawID, (long) mAdapter.getItem(position).getTaskID());
       mTodoList.clear();
-      getActivity().getSupportLoaderManager().restartLoader(0, null,
-          TaskTodoFragment.this);
 
     }
 
