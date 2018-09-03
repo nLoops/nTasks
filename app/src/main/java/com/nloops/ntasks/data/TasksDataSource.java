@@ -20,7 +20,7 @@ public interface TasksDataSource {
 
     void updateTask(@NonNull Task task, @NonNull Uri uri);
 
-    void completeTODO(boolean state, long rawID);
+    void completeTODO(boolean state, long rawID, long taskID);
 
     void deleteAll();
 

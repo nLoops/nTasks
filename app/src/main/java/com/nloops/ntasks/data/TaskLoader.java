@@ -10,6 +10,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import java.util.Calendar;
@@ -100,6 +101,7 @@ public class TaskLoader {
   }
 
   public Loader<Cursor> createTODOLoader(String taskID) {
+    String sortOrderItems = String.format("%s ASC", TodoEntry.COLUMN_NAME_COMPLETE);
     String[] selectionArgs = new String[]{taskID};
     return new CursorLoader(
         mContext,
@@ -107,7 +109,7 @@ public class TaskLoader {
         null,
         null,
         selectionArgs,
-        null
+        sortOrderItems
     );
   }
 

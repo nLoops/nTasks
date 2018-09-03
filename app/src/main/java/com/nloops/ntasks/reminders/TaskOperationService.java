@@ -27,6 +27,7 @@ public class TaskOperationService extends IntentService {
   public static final String EXTRAS_TASK_STATE = "task_state";
   public static final String EXTRAS_TASK_ID = "task_id";
   public static final String EXTRAS_TODO_STATE = "todo_state";
+  public static final String EXTRAS_TODO_TASK_ID = "item_task_id";
   public static final String EXTRAS_TODO_ID = "todo_id";
   public static final String ACTION_UPDATE_TASK_NOTIFICATION = "notification_update";
 
@@ -85,9 +86,10 @@ public class TaskOperationService extends IntentService {
       case ACTION_COMPLETE_TODO: {
         boolean state = intent.getBooleanExtra(EXTRAS_TODO_STATE, false);
         long id = intent.getLongExtra(EXTRAS_TODO_ID, -1);
+        long taskID = intent.getLongExtra(EXTRAS_TODO_TASK_ID, -1);
         TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
             .getInstance(getContentResolver(), this);
-        mTasksDataSource.completeTODO(state, id);
+        mTasksDataSource.completeTODO(state, id, taskID);
         break;
       }
       case ACTION_UPDATE_TASK_NOTIFICATION:

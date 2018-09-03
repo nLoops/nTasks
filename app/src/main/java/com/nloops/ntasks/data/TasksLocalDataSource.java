@@ -69,6 +69,17 @@ public class TasksLocalDataSource implements TasksDataSource {
       }
     }
 
+    if (task.getTodos() != null) {
+      for (Todo item : task.getTodos()) {
+        if (item.getDueDate() != Long.MAX_VALUE) {
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            AlarmScheduler.scheduleAlarm(mContext,
+                item.getDueDate(), uri, AlarmReceiver.class, task.getType());
+          }
+        }
+      }
+    }
+
     // Update Home Widget
     WidgetIntentService.startActionChangeList(mContext);
   }
@@ -114,7 +125,7 @@ public class TasksLocalDataSource implements TasksDataSource {
     assert cursor != null;
     if (cursor.moveToNext()) {
       Task task = new Task(cursor);
-      if (task.getPath().length() > 0) {
+      if (task.getPath() != null) {
         GeneralUtils.deleteRecordedAudio(task.getPath());
       }
     }
@@ -132,11 +143,19 @@ public class TasksLocalDataSource implements TasksDataSource {
   }
 
   @Override
-  public void completeTODO(boolean state, long rawID) {
+  public void completeTODO(boolean state, long rawID, long taskID) {
     Uri rawUri = ContentUris.withAppendedId(TasksDBContract.TodoEntry.CONTENT_TODO_URI, rawID);
     ContentValues values = new ContentValues(1);
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
     mContentResolver.update(rawUri, values, null, null);
+
+    // if this task has scheduled Reminder we will cancel it to prevent notify.
+    Uri taskUri = ContentUris.withAppendedId(TaskEntry.CONTENT_TASK_URI, taskID);
+    PendingIntent operation =
+        AlarmScheduler.getReminderPendingIntent(mContext, taskUri, AlarmReceiver.class);
+    AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+    assert manager != null;
+    manager.cancel(operation);
   }
 
   @Override

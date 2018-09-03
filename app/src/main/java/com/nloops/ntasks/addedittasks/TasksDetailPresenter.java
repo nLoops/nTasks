@@ -130,11 +130,12 @@ public class TasksDetailPresenter implements TaskDetailContract.Presenter,
   }
 
   @Override
-  public void completeTODO(boolean state, long rawID) {
+  public void completeTODO(boolean state, long rawID, long taskID) {
     Intent completeIntent = new Intent(mContext, TaskOperationService.class);
     completeIntent.setAction(TaskOperationService.ACTION_COMPLETE_TODO);
     completeIntent.putExtra(TaskOperationService.EXTRAS_TODO_STATE, state);
     completeIntent.putExtra(TaskOperationService.EXTRAS_TODO_ID, rawID);
+    completeIntent.putExtra(TaskOperationService.EXTRAS_TODO_TASK_ID, taskID);
     mContext.startService(completeIntent);
   }
 
