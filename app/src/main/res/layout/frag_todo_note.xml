@@ -145,7 +145,7 @@
           android:id="@+id/task_todo_item_edittext"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:fontFamily="@font/worksans_medium"
+          android:fontFamily="@font/roboto_regular"
           android:hint="@string/todo_list_button"
           android:imeOptions="actionDone"
           android:inputType="text"

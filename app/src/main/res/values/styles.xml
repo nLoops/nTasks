@@ -72,7 +72,7 @@
     <item name="android:layout_height">@dimen/dimen_fifty_dp</item>
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_marginTop">@dimen/dimen_eight_dp</item>
-    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:gravity">center</item>
     <item name="android:textSize">@dimen/title_text_size</item>
   </style>
@@ -94,7 +94,7 @@
     <item name="android:paddingLeft">@dimen/dimen_two_dp</item>
     <item name="android:paddingRight">@dimen/dimen_two_dp</item>
     <item name="android:text">@string/task_priority</item>
-    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:textSize">@dimen/title_text_size</item>
     <item name="android:textColor">?android:textColorSecondary</item>
   </style>
@@ -102,7 +102,7 @@
   <style name="MyEditTextStyle">
     <item name="android:layout_width">0dp</item>
     <item name="android:layout_height">wrap_content</item>
-    <item name="android:fontFamily">@font/worksans_semibold</item>
+    <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:inputType">textAutoComplete|text|textCapWords</item>
     <item name="android:textSize">@dimen/title_text_size</item>
     <item name="android:hint">@string/title_hint</item>
@@ -136,7 +136,7 @@
     <item name="android:paddingLeft">@dimen/dimen_four_dp</item>
     <item name="android:paddingStart">@dimen/dimen_four_dp</item>
     <item name="android:ellipsize">end</item>
-    <item name="android:fontFamily">@font/worksans_semibold</item>
+    <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:maxLines">1</item>
     <item name="android:textSize">@dimen/title_text_size</item>
     <item name="android:autoLink">all</item>
@@ -144,7 +144,7 @@
 
   <style name="MyTaskDateStyle">
     <item name="android:textStyle">italic</item>
-    <item name="android:fontFamily">@font/worksans_medium</item>
+    <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:textSize">@dimen/item_task_date_size</item>
   </style>
 

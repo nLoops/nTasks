@@ -19,6 +19,7 @@
   <color name="colorWidgetBackground">#60000000</color>
   <color name="colorSubWidgetBackground">#65000000</color>
   <!--Items Foreground and Background Colors-->
-  <color name="colorCardForeground">#fcfcfc</color>
-  <color name="colorCardBackgroundNew">#f3f2f8</color>
+  <color name="colorCardForeground">#FFFFFF</color>
+  <color name="colorCardBackgroundNew">#FAFAFA</color>
+  <color name="colorNewText">#3D3D3D</color>
 </resources>

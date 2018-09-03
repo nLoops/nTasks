@@ -188,4 +188,9 @@
   <string name="img_button_alarm">Time Picker Button</string>
   <string name="img_button_add">Add New Task Button</string>
 
+  <!--Item TODOList image button content description-->
+  <string name="list_alarm_button">add todo alarm button</string>
+  <string name="list_delete_button">add todo delete button</string>
+
+
 </resources>
