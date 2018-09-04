@@ -52,6 +52,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   RecyclerView mRecyclerView;
   @BindView(R.id.tasks_list_progress)
   ProgressBar mProgressBar;
+  private FabSpeedDial fabSpeedDial;
   private final TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
     @Override
     public void onItemClick(View v, int position, int taskType) {
@@ -70,6 +71,9 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
         long rawID = mAdapter.getItemId(position);
         mPresenter.updateComplete(active, rawID);
       }
+
+//      'Show' FAB after check_complete
+      fabSpeedDial.show();
     }
 
     @Override
@@ -159,7 +163,7 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     mRecyclerView.setLayoutManager(manager);
     mRecyclerView.setHasFixedSize(true);
     // ref of Activity menu_fab
-    final FabSpeedDial fabSpeedDial = getActivity()
+    fabSpeedDial = getActivity()
         .findViewById(R.id.tasks_list_fab);
     fabSpeedDial.setMenuListener(new SimpleMenuListenerAdapter() {
       @Override
