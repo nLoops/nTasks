@@ -132,9 +132,9 @@
 
   <style name="MyTaskTitleStyle">
     <item name="android:paddingRight">@dimen/dimen_four_dp</item>
-    <item name="android:paddingEnd">@dimen/dimen_four_dp</item>
+    <item name="android:paddingEnd">@dimen/dimen_eight_dp</item>
     <item name="android:paddingLeft">@dimen/dimen_four_dp</item>
-    <item name="android:paddingStart">@dimen/dimen_four_dp</item>
+    <item name="android:paddingStart">@dimen/dimen_eight_dp</item>
     <item name="android:ellipsize">end</item>
     <item name="android:fontFamily">@font/roboto_regular</item>
     <item name="android:maxLines">1</item>
