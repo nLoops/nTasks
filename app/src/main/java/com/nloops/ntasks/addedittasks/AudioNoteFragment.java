@@ -14,6 +14,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -140,28 +142,38 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
    */
   private void handlePlayButtonClick() {
     if (AddEditTasks.TASK_URI != null) {
-      if (mAudioPresenter.isPlaying()) {
-        mAudioPresenter.pausePlaying();
-        customHandler.removeCallbacks(refreshPlayingTimer);
-      } else {
-        mAudioPresenter.playRecording();
-        mPlayTimer.setState(AudioCounterView.IS_PLAYING);
-        mSeekBar.setMaxValue(mAudioPresenter.getTrackDuration());
-        updateSeekBar();
-
-      }
+      handlePlayAudio();
     } else {
-      if (mAudioPresenter.isRecording()) {
-        mAudioPresenter.stopRecording();
-        timeSwapBuff += timeInMilliseconds;
-        customHandler.removeCallbacks(updateTimerThread);
-      } else {
-        getPermissions();
-        mAudioPresenter.startRecording();
-        mPlayTimer.setState(AudioCounterView.IS_RECORDING);
-        startHTime = SystemClock.uptimeMillis();
-        customHandler.postDelayed(updateTimerThread, 0);
-      }
+      handleRecordingAudio();
+      Log.d("TESA", "handlePlayButtonClick: " + mAudioPresenter.isRecording());
+    }
+  }
+
+  private void handlePlayAudio() {
+    if (mAudioPresenter.isPlaying()) {
+      mAudioPresenter.pausePlaying();
+      customHandler.removeCallbacks(refreshPlayingTimer);
+    } else {
+      mAudioPresenter.playRecording();
+      mPlayTimer.setState(AudioCounterView.IS_PLAYING);
+      mSeekBar.setMaxValue(mAudioPresenter.getTrackDuration());
+      updateSeekBar();
+
+    }
+  }
+
+  private void handleRecordingAudio() {
+    if (mAudioPresenter.isRecording()) {
+      mAudioPresenter.stopRecording();
+      timeSwapBuff += timeInMilliseconds;
+      customHandler.removeCallbacks(updateTimerThread);
+    } else if (!mAudioPresenter.isRecording() && mAudioPresenter.getFileName() != null) {
+      handlePlayAudio();
+    } else {
+      mAudioPresenter.startRecording();
+      mPlayTimer.setState(AudioCounterView.IS_RECORDING);
+      startHTime = SystemClock.uptimeMillis();
+      customHandler.postDelayed(updateTimerThread, 0);
     }
   }
 
@@ -192,6 +204,28 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   public void onResume() {
     super.onResume();
     mPresenter.loadTaskData();
+    if (getView() == null) {
+      return;
+    }
+
+    getView().setFocusableInTouchMode(true);
+    getView().requestFocus();
+    getView().setOnKeyListener(new View.OnKeyListener() {
+      @Override
+      public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+          // handle back button's click listener
+          if (mAudioPresenter.getFileName() != null) {
+            mAudioPresenter.deleteAudioFile();
+            assert getActivity() != null;
+            getActivity().finish();
+          }
+          return true;
+        }
+        return false;
+      }
+    });
   }
 
   @Nullable
@@ -440,8 +474,18 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       mPlayBackBtn.setImageResource(
           mAudioPresenter.isPlaying() ? R.drawable.ic_pause_btn : R.drawable.ic_play_btn);
     } else {
-      mPlayBackBtn.setImageResource(
-          mAudioPresenter.isRecording() ? R.drawable.ic_stop_btn : R.drawable.ic_red_mic);
+      if (mAudioPresenter.getFileName() == null) {
+        mPlayBackBtn.setImageResource(
+            mAudioPresenter.isRecording() ? R.drawable.ic_stop_btn : R.drawable.ic_red_mic);
+      } else {
+        if (mAudioPresenter.isPlaying()) {
+          mPlayBackBtn.setImageResource(
+              mAudioPresenter.isPlaying() ? R.drawable.ic_pause_btn : R.drawable.ic_play_btn);
+        } else {
+          mPlayBackBtn.setImageResource(
+              mAudioPresenter.isRecording() ? R.drawable.ic_stop_btn : R.drawable.ic_play_btn);
+        }
+      }
     }
   }
 

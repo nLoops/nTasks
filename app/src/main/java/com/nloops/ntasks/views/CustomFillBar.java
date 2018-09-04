@@ -3,6 +3,7 @@ package com.nloops.ntasks.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
@@ -24,11 +25,10 @@ public class CustomFillBar extends FrameLayout {
         /* Load styled attributes */
         final TypedArray attributes = context.getTheme()
                 .obtainStyledAttributes(attrs, R.styleable.FillSeekBar, R.attr.fillseekbarViewStyle, 0);
-        int mFillColor = R.color.colorPrimaryDark;
         mProgress = attributes.getInt(R.styleable.FillSeekBar_progress, 0);
         attributes.recycle();
         mSolid = new Solid(context, null);
-        mSolid.initPaint(mFillColor);
+      mSolid.initPaint();
         addView(mSolid, 0, LayoutParams.MATCH_PARENT);
 
     }
@@ -69,10 +69,10 @@ public class CustomFillBar extends FrameLayout {
             setLayoutParams(params);
         }
 
-        void initPaint(int mFillColor) {
+      void initPaint() {
             progressPaint = new Paint();
-            progressPaint.setColor(mFillColor);
-            progressPaint.setAlpha(125);
+        progressPaint.setColor(Color.rgb(53, 104, 89));
+        progressPaint.setAlpha(200);
             progressPaint.setStyle(Paint.Style.FILL);
             progressPaint.setAntiAlias(true);
         }
