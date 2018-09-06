@@ -14,7 +14,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -145,7 +144,6 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       handlePlayAudio();
     } else {
       handleRecordingAudio();
-      Log.d("TESA", "handlePlayButtonClick: " + mAudioPresenter.isRecording());
     }
   }
 
@@ -186,6 +184,9 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
         if (mAudioPresenter.isRecording()) {
           mAudioPresenter.stopRecording();
           customHandler.removeCallbacks(updateTimerThread);
+        } else if (mAudioPresenter.isPlaying()) {
+          mAudioPresenter.stopPlaying();
+          customHandler.removeCallbacks(refreshPlayingTimer);
         }
         mPresenter.saveTask(getTask());
       } else {
