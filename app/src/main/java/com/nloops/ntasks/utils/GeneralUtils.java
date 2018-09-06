@@ -23,6 +23,7 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.login.LoginActivity;
 import java.io.File;
@@ -131,6 +132,19 @@ public class GeneralUtils {
     String[] selectionArgs = new String[]{SharedPreferenceHelper.getInstance(context).getUID()};
     return context.getContentResolver().query(TasksDBContract.TaskEntry.CONTENT_TASK_URI,
         null, currentUserSelection, selectionArgs, null);
+  }
+
+  /**
+   * Helper method that grab listTodos data from SQLite database
+   *
+   * @param context passed Context
+   * @return Cursor with {@link Task } that stored into DB
+   */
+  public static Cursor getListData(Context context, long taskID) {
+    String selection = TodoEntry.COLUMN_NAME_TASK_ID + "=?";
+    String[] selectionArgs = new String[]{String.valueOf(taskID)};
+    return context.getContentResolver().query(TodoEntry.CONTENT_TODO_URI,
+        null, selection, selectionArgs, null);
   }
 
   public static List<Todo> getTodoData(Context context, String[] selectionArgs) {

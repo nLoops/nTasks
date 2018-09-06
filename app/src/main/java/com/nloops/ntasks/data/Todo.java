@@ -10,7 +10,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Model that represent task relative TODOs
+ * Model that represent task relative listTODOs
  */
 public class Todo implements Parcelable {
 
@@ -70,6 +70,10 @@ public class Todo implements Parcelable {
 
     public void setTaskID(int mTaskID) {
         this.mTaskID = mTaskID;
+    }
+
+    public void setIsCompleted(int state) {
+        this.mIsCompleted = state;
     }
 
     public Todo(Cursor cursor) {

@@ -77,8 +77,10 @@ public class TaskLoader {
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.DAY_OF_WEEK, +1);
     calendar.add(Calendar.DAY_OF_WEEK, -7);
+    Calendar c = Calendar.getInstance();
+    c.set(Calendar.HOUR_OF_DAY, 24);
     String[] selectionArgs = {String.valueOf(calendar.getTimeInMillis())
-        , String.valueOf(System.currentTimeMillis()),
+        , String.valueOf(c.getTimeInMillis()),
         getUserUID()};
     return new CursorLoader(mContext,
         TasksDBContract.TaskEntry.CONTENT_TASK_URI,
