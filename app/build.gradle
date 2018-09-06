@@ -3,9 +3,9 @@ apply plugin: 'io.fabric'
 android {
     signingConfigs {
         config {
-            keyAlias 'MyAndroidKeys'
+            keyAlias 'key'
             keyPassword '0102010375'
-            storeFile file('../MyKeysStore/keys.jks')
+            storeFile file('/Users/ahmed/AndroidProjects/ntasks/keys.jks')
             storePassword '0102010375'
         }
     }
