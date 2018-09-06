@@ -95,16 +95,19 @@ public class WeeklyTasksReport extends Fragment implements
       entries.add(new PieEntry(values[i], labels[i]));
     }
 
-    PieDataSet dataSet = new PieDataSet(entries, "Tasks Report");
+    PieDataSet dataSet = new PieDataSet(entries, "");
     ArrayList<Integer> colors = new ArrayList<>();
     for (int c : ColorTemplate.JOYFUL_COLORS) {
       colors.add(c);
     }
 
+    mChart.setCenterText("Last 7 Days Tasks Activity");
+    mChart.setCenterTextSize(15);
+
     dataSet.setColors(colors);
     PieData data = new PieData(dataSet);
     data.setValueFormatter(new PercentFormatter());
-    data.setValueTextSize(11f);
+    data.setValueTextSize(13);
     data.setValueTextColor(Color.WHITE);
     mChart.setData(data);
     mChart.highlightValues(null);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.github.mikephil.charting.animation.Easing.EasingOption;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.XAxis.XAxisPosition;
 import com.github.mikephil.charting.data.BarData;
@@ -133,6 +134,8 @@ public class ActiveDaysReport extends Fragment implements
     mChart.getXAxis().setValueFormatter(new IndexAxisValueFormatter(labels));
     /*Finally set data*/
     mChart.setData(data);
+
+    mChart.animateY(1400, EasingOption.EaseInOutQuad);
   }
 
   private void setDaysCount(int week) {
