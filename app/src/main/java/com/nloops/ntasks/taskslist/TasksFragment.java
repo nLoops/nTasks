@@ -34,24 +34,27 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.data.TasksLocalDataSource;
+import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.login.LoginActivity;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.widgets.WidgetIntentService;
 import io.github.yavski.fabspeeddial.FabSpeedDial;
 import io.github.yavski.fabspeeddial.SimpleMenuListenerAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TasksFragment extends Fragment implements TasksListContract.View {
 
-  private TasksListContract.Presenter mPresenter;
   private final int NO_TASK_ID = -1;
-
-  private TaskListAdapter mAdapter;
   @BindView(R.id.tasks_list_recycle)
   RecyclerView mRecyclerView;
   @BindView(R.id.tasks_list_progress)
   ProgressBar mProgressBar;
+  private TasksListContract.Presenter mPresenter;
+  private TaskListAdapter mAdapter;
   private FabSpeedDial fabSpeedDial;
   private final TaskListAdapter.OnItemClickListener onItemClickListener = new TaskListAdapter.OnItemClickListener() {
     @Override
@@ -66,6 +69,30 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
       if (task.getIsRepeated()) {
         long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
         task.setDate(nextDate);
+        assert getActivity() != null;
+        Cursor listData = GeneralUtils.getListData(getActivity()
+            .getApplicationContext(), task.getID());
+//        clear list completed ones
+        if (listData != null && listData.getCount() > 0) {
+          List<Todo> updatedItems = new ArrayList();
+          while (listData.moveToNext()) {
+//            get the current item
+            Todo currentItem = new Todo(listData);
+//            set the state to NOT_COMPLETED
+            currentItem.setIsCompleted(TodoEntry.STATE_NOT_COMPLETED);
+//            if item scheduled time we update it with the same value that task repeated.
+            if (currentItem.getDueDate() != Long.MAX_VALUE) {
+              long nextItemDate = currentItem.getDueDate() +
+                  GeneralUtils.getRepeatedValue(task.getRepeated());
+              currentItem.setDueDate(nextItemDate);
+            }
+//            add to the list.
+            updatedItems.add(currentItem);
+          }
+//          set the list to task.
+          task.setTodos(updatedItems);
+        }
+//        finally update it.
         mPresenter.updateTask(task, TasksDBContract.getTaskUri(task));
       } else {
         long rawID = mAdapter.getItemId(position);
@@ -79,8 +106,10 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     @Override
     public void onSwipeDeleteClick(Uri taskUri) {
       mPresenter.deleteTask(taskUri);
+      fabSpeedDial.show();
     }
   };
+  private View mEmptyView;
 
   /**
    * Empty Constructor required by system.
@@ -91,8 +120,6 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   public static TasksFragment newInstance() {
     return new TasksFragment();
   }
-
-  private View mEmptyView;
 
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {

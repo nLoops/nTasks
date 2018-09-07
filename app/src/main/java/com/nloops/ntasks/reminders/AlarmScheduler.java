@@ -20,8 +20,12 @@ import com.nloops.ntasks.R;
 import com.nloops.ntasks.addedittasks.AddEditTasks;
 import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TasksDBContract;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
+import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.utils.GeneralUtils;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Helper to manage scheduling the reminder alarm
@@ -121,6 +125,28 @@ public class AlarmScheduler {
     if (task.getIsRepeated()) {
       long nextDate = task.getDate() + GeneralUtils.getRepeatedValue(task.getRepeated());
       task.setDate(nextDate);
+      //        clear list completed ones
+      Cursor listData = GeneralUtils.getListData(context, task.getID());
+//        clear list completed ones
+      if (listData != null && listData.getCount() > 0) {
+        List<Todo> updatedItems = new ArrayList();
+        while (listData.moveToNext()) {
+//            get the current item
+          Todo currentItem = new Todo(listData);
+//            set the state to NOT_COMPLETED
+          currentItem.setIsCompleted(TodoEntry.STATE_NOT_COMPLETED);
+//            if item scheduled time we update it with the same value that task repeated.
+          if (currentItem.getDueDate() != Long.MAX_VALUE) {
+            long nextItemDate = currentItem.getDueDate() +
+                GeneralUtils.getRepeatedValue(task.getRepeated());
+            currentItem.setDueDate(nextItemDate);
+          }
+//            add to the list.
+          updatedItems.add(currentItem);
+        }
+//          set the list to task.
+        task.setTodos(updatedItems);
+      }
       completeIntent.setAction(TaskOperationService.ACTION_UPDATE_TASK_NOTIFICATION);
       completeIntent.putExtra(TaskOperationService.EXTRAS_UPDATE_TASK_DATA, task);
       completeIntent.putExtra(TaskOperationService.EXTRAS_NOTIFICATION_ID, NOTIFICATION_ID);
