@@ -21,7 +21,7 @@
   <dimen name="switch_button_text_size">20sp</dimen>
   <dimen name="item_task_date_size">14sp</dimen>
   <dimen name="switch_button_height">56dp</dimen>
-  <dimen name="drawer_header_height">178dp</dimen>
+  <dimen name="drawer_header_height">250dp</dimen>
   <dimen name="drawer_header_text_size">14sp</dimen>
   <dimen name="drawer_header_image_size">50dp</dimen>
   <dimen name="drawer_header_image_margin_top">55dp</dimen>

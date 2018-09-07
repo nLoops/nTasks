@@ -48,6 +48,8 @@
   <string name="rep_weekly">Weekly Tasks</string>
   <string name="rep_active">Active Days</string>
   <string name="cannot_find_audio_file">Cannot find this audio file</string>
+  <string name="task_item_content">Repeatable Task Image View</string>
+  <string name="task_item_delete_button">Task Delete Button</string>
   <!--This string CurrentUser will help when background job runs to backup data under user root-->
   <string name="current_user_firebase">current_user</string>
   <string name="current_user_display_name">user_display_name</string>
@@ -134,11 +136,11 @@
   <string name="backup_restore">Restore</string>
   <string name="backup_cancel">Cancel</string>
   <!--Repeated-->
-  <string name="repeat_none">None</string>
-  <string name="repeat_daily">Daily</string>
-  <string name="repeat_weekly">Weekly</string>
-  <string name="repeat_monthly">Monthly</string>
-  <string name="repeat_yearly">Yearly</string>
+  <string name="repeat_none">Off</string>
+  <string name="repeat_daily">Day</string>
+  <string name="repeat_weekly">Week</string>
+  <string name="repeat_monthly">Month</string>
+  <string name="repeat_yearly">Year</string>
   <!--Register Strings & Login-->
   <string name="str_register">Register</string>
   <string name="str_email_hint">Enter Your Email Address</string>

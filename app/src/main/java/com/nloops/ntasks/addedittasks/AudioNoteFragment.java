@@ -216,10 +216,12 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       public boolean onKey(View v, int keyCode, KeyEvent event) {
 
         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+          assert getActivity() != null;
           // handle back button's click listener
           if (mAudioPresenter.getFileName() != null) {
             mAudioPresenter.deleteAudioFile();
-            assert getActivity() != null;
+            getActivity().finish();
+          } else {
             getActivity().finish();
           }
           return true;

@@ -84,33 +84,38 @@
 
           <RadioButton
             android:id="@+id/rb_none_repeat_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".8"
             android:layout_height="wrap_content"
             android:text="@string/repeat_none"
             />
 
           <RadioButton
             android:id="@+id/rb_daily_repeat_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight=".8"
             android:layout_height="wrap_content"
             android:text="@string/repeat_daily"
             />
 
           <RadioButton
             android:id="@+id/rb_weekly_repeat_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/repeat_weekly"
             />
           <RadioButton
             android:id="@+id/rb_monthly_repeat_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/repeat_monthly"
             />
           <RadioButton
             android:id="@+id/rb_yearly_repeat_audio"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="@string/repeat_yearly"
             />
