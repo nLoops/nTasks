@@ -103,7 +103,8 @@ public class TaskLoader {
   }
 
   public Loader<Cursor> createTODOLoader(String taskID) {
-    String sortOrderItems = String.format("%s ASC", TodoEntry.COLUMN_NAME_COMPLETE);
+    String sortOrderItems = String.format("%s ASC, %s ASC",
+        TodoEntry.COLUMN_NAME_COMPLETE, TodoEntry._ID);
     String[] selectionArgs = new String[]{taskID};
     return new CursorLoader(
         mContext,
