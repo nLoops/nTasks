@@ -193,7 +193,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     void createUser(String email, String password) {
       waitingDialog
-          .setIcon(R.drawable.ic_add)
           .setTitle(getString(R.string.str_msg_loading))
           .setTopColorRes(R.color.colorPrimary)
           .show();
@@ -253,7 +252,6 @@ public class LoginActivity extends AppCompatActivity {
      */
     void signIn(String email, String password) {
       waitingDialog
-          .setIcon(R.drawable.ic_person_low)
           .setTitle(getString(R.string.str_login_process))
           .setTopColorRes(R.color.colorPrimary)
           .show();
@@ -280,7 +278,6 @@ public class LoginActivity extends AppCompatActivity {
                   }
                 }
                     .setTopColorRes(R.color.colorAccent)
-                    .setIcon(R.drawable.ic_person_low)
                     .setTitle(getString(R.string.str_login_failed))
                     .setMessage(getString(R.string.str_login_email_wrong))
                     .setCancelable(false)
@@ -324,7 +321,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
               }
                   .setTopColorRes(R.color.colorPrimary)
-                  .setIcon(R.drawable.ic_pass_reset)
                   .setTitle(getString(R.string.str_reset_okay))
                   .setMessage(getString(R.string.str_reset_okay_message) + " " + email)
                   .setConfirmButtonText(getString(R.string.str_dialog_ok))
@@ -348,7 +344,6 @@ public class LoginActivity extends AppCompatActivity {
                 }
               }
                   .setTopColorRes(R.color.colorAccent)
-                  .setIcon(R.drawable.ic_pass_reset)
                   .setTitle(getString(R.string.str_reset_failed_message))
                   .setMessage(getString(R.string.str_reset_failed_message) + " " + email)
                   .setConfirmButtonText(getString(R.string.str_dialog_ok))

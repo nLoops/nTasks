@@ -3,8 +3,11 @@ package com.nloops.ntasks.addedittasks;
 import android.content.pm.ActivityInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
@@ -31,6 +34,9 @@ public class AddEditTasks extends AppCompatActivity {
   public static int TASK_TYPE = TasksDBContract.TaskEntry.NO_TASK_TYPE;
   private TasksDetailPresenter mPresenter;
 
+  @BindView(R.id.task_detail_fab)
+  FloatingActionButton taskFAB;
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -39,10 +45,15 @@ public class AddEditTasks extends AppCompatActivity {
     setSupportActionBar(toolbar);
     assert getSupportActionBar() != null;
     getSupportActionBar().setDisplayShowTitleEnabled(false);
+    ButterKnife.bind(this);
 //    check first if the user is signed in.
     GeneralUtils.checkIfSingedIn(AddEditTasks.this);
     // get passed intent if available to load task data.
     TASK_URI = getIntent().getData();
+
+    if (TASK_URI != null) {
+      taskFAB.setImageResource(R.drawable.ic_edit_fab);
+    }
     // get Task passed Task Type
     // first Check if the intent has this value.
     if (getIntent().hasExtra(EXTRAS_TASK_TYPE)) {
