@@ -117,6 +117,9 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       if (mAudioPresenter.isRecording()) {
         mAudioPresenter.stopRecording();
         customHandler.removeCallbacks(updateTimerThread);
+      } else if (mAudioPresenter.isPlaying()) {
+        mAudioPresenter.stopPlaying();
+        customHandler.removeCallbacks(refreshPlayingTimer);
       }
     } else {
       if (mAudioPresenter.isPlaying()) {
@@ -217,6 +220,13 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
 
         if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
           assert getActivity() != null;
+          if (mAudioPresenter.isRecording()) {
+            mAudioPresenter.stopRecording();
+            customHandler.removeCallbacks(updateTimerThread);
+          } else if (mAudioPresenter.isPlaying()) {
+            mAudioPresenter.stopPlaying();
+            customHandler.removeCallbacks(refreshPlayingTimer);
+          }
           // handle back button's click listener
           if (mAudioPresenter.getFileName() != null) {
             mAudioPresenter.deleteAudioFile();
