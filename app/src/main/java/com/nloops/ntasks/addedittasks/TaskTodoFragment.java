@@ -15,6 +15,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.support.v7.widget.SwitchCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -45,6 +46,7 @@ import com.nloops.ntasks.data.Task;
 import com.nloops.ntasks.data.TaskLoader;
 import com.nloops.ntasks.data.TasksDBContract;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
@@ -72,7 +74,8 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
   LinearLayout mRepeatsContainer;
   @BindView(R.id.list_repeat_group)
   RadioGroup mRepeatRadioContainer;
-
+  private static final int LOADER_ID = 910;
+  private FloatingActionButton detailFAB;
 
   private TodoListAdapter mAdapter;
   private ArrayList<Todo> mTodoList;
@@ -188,139 +191,29 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
       pickerFragment.show(getActivity().getSupportFragmentManager(), "TimeFragment");
     }
   };
+  private final TodoListAdapter.onItemClickListener onItemClickListener = new TodoListAdapter.onItemClickListener() {
+    @Override
+    public void onItemToggled(boolean active, int position) {
+      mTodoList.get(position).setIsCompleted(getCompleteState(active));
+      mTodoList.get(position).setDueDate(Long.MAX_VALUE);
+      mAdapter.swapTodoList(mTodoList);
+      detailFAB.show();
 
-  @Nullable
-  @Override
-  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-      @Nullable Bundle savedInstanceState) {
-    setHasOptionsMenu(true);
-    View rootView = inflater.inflate(R.layout.frag_todo_note, container, false);
-    ButterKnife.bind(this, rootView);
-    assert getActivity() != null;
-    FloatingActionButton detailFAB = getActivity().findViewById(R.id.task_detail_fab);
-
-    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
-        LinearLayoutManager.VERTICAL, false);
-    mTodoRecycleView.setHasFixedSize(true);
-    mTodoRecycleView.setLayoutManager(layoutManager);
-    mTodoList = new ArrayList<>();
-    mAdapter = new TodoListAdapter(mTodoList);
-    mAdapter.setOnClickListener(onItemClickListener);
-    mTodoRecycleView.setAdapter(mAdapter);
-
-    detailFAB.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (mTitle.length() > 0) {
-          if (mItemEditText.getText().length() > 0) {
-            addOneTodo();
-          } else {
-            if (AddEditTasks.TASK_URI == null) {
-              mPresenter.saveTask(getTask());
-            } else {
-              mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
-            }
-          }
-        } else {
-          showSaveEmptyError();
-        }
-      }
-    });
-
-    mItemEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-      @Override
-      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-        if (actionId == EditorInfo.IME_ACTION_DONE) {
-          if (mItemEditText.getText().length() > 0) {
-            addOneTodo();
-            return true;
-          }
-        }
-        return false;
-      }
-    });
-
-    if (AddEditTasks.TASK_URI != null) {
-      assert getContext() != null;
-      mTaskLoader = new TaskLoader(getContext());
-      getActivity().getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    mDateText.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mPresenter.launchDatePicker();
-      }
-    });
+    @Override
+    public void onAlarmClick(int position) {
+      currentItemPos = position;
+      getListPicker();
+    }
 
-    mRepeatButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        if (mRepeatsContainer.getVisibility() == View.GONE) {
-          mRepeatsContainer.setVisibility(View.VISIBLE);
-          setRadioGroupCheck(mRepeatRadioContainer);
-        } else if (mRepeatsContainer.getVisibility() == View.VISIBLE) {
-          mRepeatsContainer.setVisibility(View.GONE);
-        }
-      }
-    });
-
-    mRepeatRadioContainer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(RadioGroup group, int checkedId) {
-        switch (checkedId) {
-          case R.id.rb_daily_repeat_list:
-            mTaskRepeatType = TaskEntry.REPEAT_DAILY;
-            break;
-          case R.id.rb_weekly_repeat_list:
-            mTaskRepeatType = TaskEntry.REPEAT_WEEKLY;
-
-            break;
-          case R.id.rb_monthly_repeat_list:
-            mTaskRepeatType = TaskEntry.REPEAT_MONTHLY;
-
-            break;
-          case R.id.rb_yearly_repeat_list:
-            mTaskRepeatType = TaskEntry.REPEAT_YEARLY;
-
-            break;
-          case R.id.rb_none_repeat_list:
-            mTaskRepeatType = TaskEntry.REPEAT_NONE;
-            break;
-        }
-      }
-    });
-
-    mItemEditText.addTextChangedListener(new TextWatcher() {
-      @Override
-      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-//later
-      }
-
-      @Override
-      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-        String currentString = charSequence.toString();
-        int lineCounts = currentString.split("[\n]").length;
-        if (lineCounts > 1) {
-          String[] lines = currentString.split("[\n]");
-          for (String line : lines) {
-            mTodoList.add(new Todo(line,
-                TasksDBContract.TodoEntry.STATE_NOT_COMPLETED));
-          }
-
-          mAdapter.swapTodoList(mTodoList);
-          mItemEditText.setText("");
-        }
-      }
-
-      @Override
-      public void afterTextChanged(Editable editable) {
-//later
-      }
-    });
-
-    return rootView;
-  }
+    @Override
+    public void onDeleteClick(int position) {
+      mTodoList.remove(position);
+      mAdapter.swapTodoList(mTodoList);
+      detailFAB.show();
+    }
+  };
 
   private void setRadioGroupCheck(RadioGroup groupContainer) {
     switch (mTaskRepeatType) {
@@ -476,13 +369,153 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     return mTaskLoader.createTODOLoader(taskID);
   }
 
+  @Nullable
   @Override
-  public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
-    if (data != null && data.getCount() > 0) {
-      while (data.moveToNext()) {
-        mTodoList.add(new Todo(data));
+  public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
+      @Nullable Bundle savedInstanceState) {
+    setHasOptionsMenu(true);
+    View rootView = inflater.inflate(R.layout.frag_todo_note, container, false);
+    ButterKnife.bind(this, rootView);
+    assert getActivity() != null;
+    detailFAB = getActivity().findViewById(R.id.task_detail_fab);
+
+    LinearLayoutManager layoutManager = new LinearLayoutManager(getContext(),
+        LinearLayoutManager.VERTICAL, false);
+    mTodoRecycleView.setHasFixedSize(true);
+    mTodoRecycleView.setLayoutManager(layoutManager);
+    mTodoList = new ArrayList<>();
+    mAdapter = new TodoListAdapter(mTodoList);
+    mAdapter.setOnClickListener(onItemClickListener);
+    mTodoRecycleView.setAdapter(mAdapter);
+
+    detailFAB.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mTitle.length() > 0) {
+          if (mItemEditText.getText().length() > 0) {
+            addOneTodo();
+          } else {
+            if (AddEditTasks.TASK_URI == null) {
+              mPresenter.saveTask(getTask());
+            } else {
+              mPresenter.updateTask(getTask(), AddEditTasks.TASK_URI);
+            }
+          }
+        } else {
+          showSaveEmptyError();
+        }
       }
+    });
+
+    mItemEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+      @Override
+      public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_DONE) {
+          if (mItemEditText.getText().length() > 0) {
+            addOneTodo();
+            return true;
+          }
+        }
+        return false;
+      }
+    });
+
+    if (AddEditTasks.TASK_URI != null) {
+      assert getContext() != null;
+      mTaskLoader = new TaskLoader(getContext());
+      getActivity().getSupportLoaderManager().initLoader(LOADER_ID, null, this);
     }
+
+    mDateText.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        mPresenter.launchDatePicker();
+      }
+    });
+
+    mRepeatButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        if (mRepeatsContainer.getVisibility() == View.GONE) {
+          mRepeatsContainer.setVisibility(View.VISIBLE);
+          setRadioGroupCheck(mRepeatRadioContainer);
+        } else if (mRepeatsContainer.getVisibility() == View.VISIBLE) {
+          mRepeatsContainer.setVisibility(View.GONE);
+        }
+      }
+    });
+
+    mRepeatRadioContainer.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+      @Override
+      public void onCheckedChanged(RadioGroup group, int checkedId) {
+        switch (checkedId) {
+          case R.id.rb_daily_repeat_list:
+            mTaskRepeatType = TaskEntry.REPEAT_DAILY;
+            break;
+          case R.id.rb_weekly_repeat_list:
+            mTaskRepeatType = TaskEntry.REPEAT_WEEKLY;
+
+            break;
+          case R.id.rb_monthly_repeat_list:
+            mTaskRepeatType = TaskEntry.REPEAT_MONTHLY;
+
+            break;
+          case R.id.rb_yearly_repeat_list:
+            mTaskRepeatType = TaskEntry.REPEAT_YEARLY;
+
+            break;
+          case R.id.rb_none_repeat_list:
+            mTaskRepeatType = TaskEntry.REPEAT_NONE;
+            break;
+        }
+      }
+    });
+
+    mItemEditText.addTextChangedListener(new TextWatcher() {
+      @Override
+      public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+//later
+      }
+
+      @Override
+      public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        if (charSequence.length() > 0) {
+          detailFAB.hide();
+        } else {
+          detailFAB.show();
+        }
+        String currentString = charSequence.toString();
+        int lineCounts = currentString.split("[\n]").length;
+        if (lineCounts > 1) {
+          String[] lines = currentString.split("[\n]");
+          for (String line : lines) {
+            mTodoList.add(new Todo(line,
+                TasksDBContract.TodoEntry.STATE_NOT_COMPLETED));
+          }
+
+          mAdapter.swapTodoList(mTodoList);
+          mItemEditText.setText("");
+        }
+      }
+
+      @Override
+      public void afterTextChanged(Editable editable) {
+//later
+      }
+    });
+
+    mTodoRecycleView.addOnScrollListener(new OnScrollListener() {
+      @Override
+      public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+        if (dy > 0) {
+          detailFAB.hide();
+        } else if (dy < 0) {
+          detailFAB.show();
+        }
+      }
+    });
+
+    return rootView;
   }
 
   @Override
@@ -490,27 +523,24 @@ public class TaskTodoFragment extends Fragment implements TaskDetailContract.Vie
     mAdapter.swapTodoList(null);
   }
 
-  private final TodoListAdapter.onItemClickListener onItemClickListener = new TodoListAdapter.onItemClickListener() {
-    @Override
-    public void onItemToggled(boolean active, int position) {
-      long rawID = mAdapter.getItemId(position);
-      mPresenter.completeTODO(active, rawID, (long) mAdapter.getItem(position).getTaskID());
-      mTodoList.clear();
-
-    }
-
-    @Override
-    public void onAlarmClick(int position) {
-      currentItemPos = position;
-      getListPicker();
-    }
-
-    @Override
-    public void onDeleteClick(int position) {
-      mTodoList.remove(position);
+  @Override
+  public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
+    if (data != null && data.getCount() > 0) {
+      while (data.moveToNext()) {
+        mTodoList.add(new Todo(data));
+      }
       mAdapter.swapTodoList(mTodoList);
     }
-  };
+  }
+
+  private int getCompleteState(boolean state) {
+    if (state) {
+      return TodoEntry.STATE_COMPLETED;
+    } else {
+      return TodoEntry.STATE_NOT_COMPLETED;
+    }
+  }
+
   private final TimePickerDialog.OnTimeSetListener mListTimePicker = new TimePickerDialog.OnTimeSetListener() {
     @Override
     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {

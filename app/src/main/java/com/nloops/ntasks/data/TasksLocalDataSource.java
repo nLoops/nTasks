@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import com.nloops.ntasks.data.TasksDBContract.TaskEntry;
+import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.reminders.AlarmReceiver;
 import com.nloops.ntasks.reminders.AlarmScheduler;
 import com.nloops.ntasks.utils.DatabaseValues;
@@ -55,10 +56,15 @@ public class TasksLocalDataSource implements TasksDataSource {
       assert uri != null;
       int taskID = Integer.valueOf(uri.getLastPathSegment());
       for (int i = 0; i < task.getTodos().size(); i++) {
-        Todo todo = task.getTodos().get(i);
-        todo.setTaskID(taskID);
-        ContentValues todoValues = DatabaseValues.from(todo);
-        mContentResolver.insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+        Todo item = task.getTodos().get(i);
+        item.setTaskID(taskID);
+        ContentValues todoValues = DatabaseValues.from(item);
+        Uri currentUri = mContentResolver.
+            insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+        if (item.getDueDate() != Long.MAX_VALUE) {
+          AlarmScheduler.scheduleTodoAlarm(mContext, item.getDueDate(), currentUri,
+              AlarmReceiver.class, task.getType());
+        }
       }
     }
     // setup Alarm For this Reminder.
@@ -69,16 +75,6 @@ public class TasksLocalDataSource implements TasksDataSource {
       }
     }
 
-    if (task.getTodos() != null) {
-      for (Todo item : task.getTodos()) {
-        if (item.getDueDate() != Long.MAX_VALUE) {
-          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            AlarmScheduler.scheduleAlarm(mContext,
-                item.getDueDate(), uri, AlarmReceiver.class, task.getType());
-          }
-        }
-      }
-    }
 
     // Update Home Widget
     WidgetIntentService.startActionChangeList(mContext);
@@ -145,8 +141,9 @@ public class TasksLocalDataSource implements TasksDataSource {
   @Override
   public void completeTODO(boolean state, long rawID, long taskID) {
     Uri rawUri = ContentUris.withAppendedId(TasksDBContract.TodoEntry.CONTENT_TODO_URI, rawID);
-    ContentValues values = new ContentValues(1);
+    ContentValues values = new ContentValues(2);
     values.put(TasksDBContract.TodoEntry.COLUMN_NAME_COMPLETE, state ? 1 : 0);
+    values.put(TodoEntry.COLUMN_NAME_LIST_DATE, Long.MAX_VALUE);
     mContentResolver.update(rawUri, values, null, null);
 
     // if this task has scheduled Reminder we will cancel it to prevent notify.
@@ -174,14 +171,30 @@ public class TasksLocalDataSource implements TasksDataSource {
     if (task.getTodos() != null) {
       int taskID = Integer.valueOf(uri.getLastPathSegment());
       String[] selectionArgs = new String[]{String.valueOf(taskID)};
-      // first we will delete old TODOs
+//      remove old schedule alarms
+      for (Todo item : task.getTodos()) {
+        if (item.getDueDate() != Long.MAX_VALUE) {
+          PendingIntent operation =
+              AlarmScheduler.getReminderPendingIntent(mContext,
+                  TasksDBContract.getTodoUri(item), AlarmReceiver.class);
+          AlarmManager manager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+          assert manager != null;
+          manager.cancel(operation);
+        }
+      }
+      // first we will delete old TODOitems
       mContentResolver.delete(TasksDBContract.TodoEntry.CONTENT_TODO_URI, null, selectionArgs);
-      // here we will insert the updates TODOs
+      // here we will insert the updates TODOitems
       for (int i = 0; i < task.getTodos().size(); i++) {
-        Todo todo = task.getTodos().get(i);
-        todo.setTaskID(taskID);
-        ContentValues todoValues = DatabaseValues.from(todo);
-        mContentResolver.insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+        Todo item = task.getTodos().get(i);
+        item.setTaskID(taskID);
+        ContentValues todoValues = DatabaseValues.from(item);
+        Uri currentUri = mContentResolver
+            .insert(TasksDBContract.TodoEntry.CONTENT_TODO_URI, todoValues);
+        if (item.getDueDate() != Long.MAX_VALUE) {
+          AlarmScheduler.scheduleTodoAlarm(mContext, item.getDueDate(), currentUri,
+              AlarmReceiver.class, task.getType());
+        }
       }
 
     }
