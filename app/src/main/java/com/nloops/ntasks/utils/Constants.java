@@ -45,5 +45,8 @@ public final class Constants {
   public static String CURRENT_USERNAME = "";
   public static String CURRENT_USEREMAIL = "";
 
+  //  Action to pass with intent to Alarm Receiver to handle TODOitems notification.
+  public static final String ACTION_SCHUDELE_TODO = "com.nloops.ntasks.ACTION_TODO";
+
 
 }

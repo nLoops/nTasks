@@ -94,6 +94,17 @@ public class TasksProvider extends ContentProvider {
             sortOrder
         );
         break;
+      case TODOS_ITEM:
+        String[] itemID = {uri.getLastPathSegment()};
+        retCursor = mDbHelper.getReadableDatabase().query(
+            TasksDBContract.TodoEntry.TABLE_NAME,
+            projection,
+            TasksDBContract.TodoEntry._ID + " = ?",
+            itemID,
+            null,
+            null,
+            sortOrder);
+        break;
       default:
         throw new UnsupportedOperationException("Unknown uri: " + uri);
     }

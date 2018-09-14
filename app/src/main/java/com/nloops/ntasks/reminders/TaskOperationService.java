@@ -30,6 +30,7 @@ public class TaskOperationService extends IntentService {
   public static final String EXTRAS_TODO_TASK_ID = "item_task_id";
   public static final String EXTRAS_TODO_ID = "todo_id";
   public static final String ACTION_UPDATE_TASK_NOTIFICATION = "notification_update";
+  public static final String ACTION_COMPLETE_ITEM_NOTIFICATION = "notification_item_complete";
 
 
   public TaskOperationService() {
@@ -95,7 +96,13 @@ public class TaskOperationService extends IntentService {
       case ACTION_UPDATE_TASK_NOTIFICATION:
         performUpdateTask(intent);
         break;
+
+      case ACTION_COMPLETE_ITEM_NOTIFICATION:
+        performCompleteTaskNotification(intent);
+        break;
     }
+
+
   }
 
 
@@ -138,6 +145,18 @@ public class TaskOperationService extends IntentService {
         .getInstance(getContentResolver(), this);
     NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     mTasksDataSource.updateTask(data, intent.getData());
+    assert manager != null;
+    manager.cancel(intent.getIntExtra(EXTRAS_NOTIFICATION_ID, 0));
+  }
+
+  private void performCompleteTaskNotification(Intent intent) {
+    boolean state = intent.getBooleanExtra(EXTRAS_TODO_STATE, false);
+    long id = intent.getLongExtra(EXTRAS_TODO_ID, -1);
+    long taskID = intent.getLongExtra(EXTRAS_TODO_TASK_ID, -1);
+    TasksLocalDataSource mTasksDataSource = TasksLocalDataSource
+        .getInstance(getContentResolver(), this);
+    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+    mTasksDataSource.completeTODO(state, id, taskID);
     assert manager != null;
     manager.cancel(intent.getIntExtra(EXTRAS_NOTIFICATION_ID, 0));
   }

@@ -52,6 +52,15 @@ public class TasksDBContract {
   }
 
   /**
+   * We will using this method to help re-schedule the pending Alarms after reboot
+   *
+   * @return todoUri
+   */
+  public static Uri getTodoUri(Todo item) {
+    return ContentUris.withAppendedId(TodoEntry.CONTENT_TODO_URI, item.getID());
+  }
+
+  /**
    * inner class that contains Task Table columns
    */
   public static abstract class TaskEntry implements BaseColumns {
