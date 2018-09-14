@@ -8,6 +8,7 @@
   android:orientation="vertical">
   <android.support.v7.widget.CardView
     style="@style/MyFragmentsCardViewStyle"
+    android:layout_height="wrap_content"
     app:cardBackgroundColor="@color/colorCardForeground"
     app:cardCornerRadius="@dimen/dimen_four_dp">
     <android.support.constraint.ConstraintLayout

@@ -5,6 +5,7 @@
   xmlns:app="http://schemas.android.com/apk/res-auto"
   xmlns:tools="http://schemas.android.com/tools"
   style="@style/MyFragmentsCardViewStyle"
+  android:layout_height="wrap_content"
   app:cardBackgroundColor="@color/colorCardForeground"
   app:cardCornerRadius="@dimen/dimen_four_dp">
 
