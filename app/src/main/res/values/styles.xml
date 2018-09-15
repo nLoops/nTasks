@@ -79,7 +79,7 @@
 
   <style name="MyFragmentsCardViewStyle">
     <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_height">match_parent</item>
     <item name="android:layout_margin">@dimen/dimen_eight_dp</item>
     <item name="android:elevation">@dimen/dimen_four_dp</item>
   </style>
@@ -106,6 +106,7 @@
     <item name="android:inputType">textAutoComplete|text|textCapWords</item>
     <item name="android:textSize">@dimen/title_text_size</item>
     <item name="android:hint">@string/title_hint</item>
+    <item name="android:autoLink">all</item>
   </style>
 
   <style name="MyToolBarStyle">
