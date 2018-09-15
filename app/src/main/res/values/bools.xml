@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <bool name="sync_data">false</bool>
+  <bool name="sync_data">true</bool>
     <bool name="hide_complete_tasks">true</bool>
     <bool name="backup_scheduled">false</bool>
     <bool name="first_run">true</bool>

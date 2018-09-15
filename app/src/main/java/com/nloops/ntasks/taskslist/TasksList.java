@@ -3,15 +3,18 @@ package com.nloops.ntasks.taskslist;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ShortcutInfo;
 import android.content.pm.ShortcutManager;
+import android.database.Cursor;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.Icon;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
@@ -26,6 +29,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Display;
 import android.view.View;
 import com.getkeepsafe.taptargetview.TapTarget;
@@ -65,6 +69,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class TasksList extends AppCompatActivity implements EasyPermissions.PermissionCallbacks,
     SharedPreferences.OnSharedPreferenceChangeListener {
 
+  private static final String TAG = TasksList.class.getSimpleName();
   private static final int PERMISSION_REQ_CODE = 225;
   private static final String SHORTCUT_INTENT_ACTION = "ACTION_TRUE";
   /**
@@ -120,6 +125,10 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
       transaction.commit();
     }
 
+    // if user logged in
+    if (getIntent().hasExtra(Constants.EXTRAS_SIGN_IN_INTENT)) {
+      getDataFromServer();
+    }
     // update Widget List with data.
     WidgetIntentService.startActionChangeList(this);
 
@@ -146,6 +155,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     if (isSyncEnabled() && !isScheduled()) {
       CloudSyncTasks.initialize(TasksList.this);
     }
+
   }
 
   /**
@@ -240,8 +250,12 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
           for (DataSnapshot child : dataSnapshot.getChildren()) {
             /* get CurrentTask*/
             Task task = child.getValue(Task.class);
-            /* Add Current Task to the Array*/
-            serverData.add(task);
+            if (task.getID() != -1 && isTaskExist(task.getID())) {
+              Log.i(TAG, "onDataChange: this task is exist in local database ");
+            } else {
+              /* Add Current Task to the Array*/
+              serverData.add(task);
+            }
           }
           /*Check if the list has data included*/
           if (!serverData.isEmpty()) {
@@ -262,6 +276,24 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
     });
   }
 
+  private boolean isTaskExist(long taskID) {
+    Cursor cursor = null;
+    try {
+      Uri taskUri = ContentUris.withAppendedId(TaskEntry.CONTENT_TASK_URI, taskID);
+      String[] strTaskID = new String[]{TaskEntry._ID};
+      cursor = getContentResolver().query(taskUri, strTaskID, null,
+          null, null);
+      if (cursor.moveToNext()) {
+        return true;
+      } else {
+        return false;
+      }
+    } finally {
+      if (cursor != null) {
+        cursor.close();
+      }
+    }
+  }
 
   /**
    * This method will pop-up to user to get data from server.

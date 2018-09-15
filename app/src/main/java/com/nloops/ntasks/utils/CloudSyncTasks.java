@@ -36,7 +36,12 @@ public class CloudSyncTasks {
   private static int SYNC_FLEXTIME_SECONDS;
 
   public static void syncData(Cursor cursor, Context context) {
-    if (GeneralUtils.isNetworkConnected(context)) {
+    // Check if user allow to sync data with server.
+    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    boolean isEnabled = prefs.getBoolean(context.getString(R.string.settings_sync_key),
+        context.getResources().getBoolean(R.bool.sync_data));
+
+    if (GeneralUtils.isNetworkConnected(context) && isEnabled) {
       // get ref of whole database
       FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
       while (cursor.moveToNext()) {

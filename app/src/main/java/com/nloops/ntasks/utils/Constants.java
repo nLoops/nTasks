@@ -47,6 +47,8 @@ public final class Constants {
 
   //  Action to pass with intent to Alarm Receiver to handle TODOitems notification.
   public static final String ACTION_SCHUDELE_TODO = "com.nloops.ntasks.ACTION_TODO";
+  // this action will fire get data from server if user logged in again.
+  public static final String EXTRAS_SIGN_IN_INTENT = "sign_in_intent";
 
 
 }

@@ -38,6 +38,7 @@ import com.nloops.ntasks.data.TasksDBContract.TodoEntry;
 import com.nloops.ntasks.data.TasksLocalDataSource;
 import com.nloops.ntasks.data.Todo;
 import com.nloops.ntasks.login.LoginActivity;
+import com.nloops.ntasks.utils.CloudSyncTasks;
 import com.nloops.ntasks.utils.GeneralUtils;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.nloops.ntasks.widgets.WidgetIntentService;
@@ -246,6 +247,9 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
   private void prepareUserSignOut() {
     assert getContext() != null;
     assert getActivity() != null;
+    // backup data first.
+    CloudSyncTasks.syncData(GeneralUtils.getData(getActivity().getApplicationContext()),
+        getActivity().getApplicationContext());
     SharedPreferenceHelper.getInstance(getActivity().getApplicationContext()).updateUserUID();
     // Update Home Widget
     WidgetIntentService.startActionChangeList(getActivity().getApplicationContext());

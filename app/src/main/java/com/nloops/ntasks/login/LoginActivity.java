@@ -19,17 +19,13 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.nloops.ntasks.R;
 import com.nloops.ntasks.taskslist.TasksList;
 import com.nloops.ntasks.utils.Constants;
 import com.nloops.ntasks.utils.SharedPreferenceHelper;
 import com.yarolegovich.lovelydialog.LovelyInfoDialog;
 import com.yarolegovich.lovelydialog.LovelyProgressDialog;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -286,7 +282,9 @@ public class LoginActivity extends AppCompatActivity {
               } else {
                 // if we success get sign in we save current user data into SharedPreferences.
                 saveUserInfo();
-                startActivity(new Intent(LoginActivity.this, TasksList.class));
+                Intent intent = new Intent(LoginActivity.this, TasksList.class);
+                intent.putExtra(Constants.EXTRAS_SIGN_IN_INTENT, "logged");
+                startActivity(intent);
                 LoginActivity.this.finish();
               }
             }
@@ -356,25 +354,10 @@ public class LoginActivity extends AppCompatActivity {
      * Get User Data from Server and Save it into Shared Preferences.
      */
     void saveUserInfo() {
-      FirebaseDatabase.getInstance().getReference().child(Constants.USERS_DATABASE_REFERENCE)
-          .child(user.getUid())
-          .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-              waitingDialog.dismiss();
-              HashMap hashUser = (HashMap) dataSnapshot.getValue();
-              LocalUser userInfo = new LocalUser();
-              userInfo.name = (String) hashUser.get("name");
-              userInfo.email = (String) hashUser.get("email");
-              Constants.CURRENT_USERNAME = userInfo.name;
-              Constants.CURRENT_USEREMAIL = userInfo.email;
-              SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(userInfo);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-          });
+      LocalUser newLocalUser = new LocalUser();
+      newLocalUser.email = user.getEmail();
+      newLocalUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+      SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(newLocalUser);
     }
 
     /**
