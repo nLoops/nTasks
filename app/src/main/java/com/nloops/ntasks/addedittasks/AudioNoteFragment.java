@@ -111,8 +111,8 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
   };
 
   @Override
-  public void onStop() {
-    super.onStop();
+  public void onPause() {
+    super.onPause();
     if (AddEditTasks.TASK_URI == null) {
       if (mAudioPresenter.isRecording()) {
         mAudioPresenter.stopRecording();
@@ -218,7 +218,8 @@ public class AudioNoteFragment extends Fragment implements TaskDetailContract.Vi
       @Override
       public boolean onKey(View v, int keyCode, KeyEvent event) {
 
-        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK) {
+        if (event.getAction() == KeyEvent.ACTION_UP && keyCode == KeyEvent.KEYCODE_BACK
+            && AddEditTasks.TASK_URI == null) {
           assert getActivity() != null;
           if (mAudioPresenter.isRecording()) {
             mAudioPresenter.stopRecording();
