@@ -80,11 +80,6 @@
       </intent-filter>
     </service>
 
-    <service
-      android:exported="false"
-      android:name=".utils.CloudOperationsService"
-      />
-
     <activity
       android:name=".UI.SettingsActivity"
       android:screenOrientation="portrait"
