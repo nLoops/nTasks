@@ -143,6 +143,8 @@ public class TasksFragment extends Fragment implements TasksListContract.View {
     super.onResume();
     mPresenter.loadTasks();
     setupRecyclerLayoutAnim();
+    // Make sure that FAB is showen.
+    fabSpeedDial.show();
   }
 
   /**
