@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+  <style name="MyTaskItemCardStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_margin">@dimen/dimen_four_dp</item>
+    <item name="android:foreground">?android:selectableItemBackground</item>
+    <item name="android:stateListAnimator">@animator/card_lift_on_touch</item>
+    <item name="android:visibility">visible</item>
+  </style>
+
+  <style name="MyCustomViewStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">100dp</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:elevation">@dimen/dimen_four_dp</item>
+  </style>
+
+  <style name="MyToolBarStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">?android:attr/actionBarSize</item>
+    <item name="android:elevation">@dimen/dimen_two_dp</item>
+  </style>
+
+  <style name="MyFragmentsCardViewStyle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_margin">@dimen/dimen_eight_dp</item>
+    <item name="android:elevation">@dimen/dimen_four_dp</item>
+  </style>
+</resources>
