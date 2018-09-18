@@ -1,6 +1,7 @@
 package com.nloops.ntasks.taskslist;
 
 import android.Manifest;
+import android.Manifest.permission;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.ContentUris;
@@ -125,16 +126,17 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
       transaction.commit();
     }
 
-    // if user logged in
-    if (getIntent().hasExtra(Constants.EXTRAS_SIGN_IN_INTENT)) {
-      getDataFromServer();
-    }
     // update Widget List with data.
     WidgetIntentService.startActionChangeList(this);
 
     // get Preferences Ref
     preferences = PreferenceManager.getDefaultSharedPreferences(this);
     preferences.registerOnSharedPreferenceChangeListener(this);
+
+    // if user logged in
+    if (getIntent().hasExtra(Constants.EXTRAS_SIGN_IN_INTENT) && !isFirstTimeRun()) {
+      getDataFromServer();
+    }
 
     // Launch first Run Tutorial
     setupFirstRunGuide(mToolbar);
@@ -189,7 +191,7 @@ public class TasksList extends AppCompatActivity implements EasyPermissions.Perm
   @TargetApi(23)
   private void getPermissions() {
     String[] permissions = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE,
-        Manifest.permission.RECORD_AUDIO};
+        Manifest.permission.RECORD_AUDIO, permission.CAMERA};
     if (!EasyPermissions.hasPermissions(TasksList.this, permissions)) {
       EasyPermissions.requestPermissions(this,
           getString(R.string.permissions_required),
