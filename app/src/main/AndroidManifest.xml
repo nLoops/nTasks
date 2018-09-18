@@ -10,10 +10,10 @@
 
   <application
     android:allowBackup="true"
-    android:icon="@mipmap/ic_white_launcher"
+    android:icon="@mipmap/ic_last_launcher"
     android:label="@string/app_name"
     android:name=".TasksApplication"
-    android:roundIcon="@mipmap/ic_white_launcher_round"
+    android:roundIcon="@mipmap/ic_last_launcher_round"
     android:supportsRtl="true"
     android:theme="@style/AppTheme">
 
