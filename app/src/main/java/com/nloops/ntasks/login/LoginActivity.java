@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,6 +32,7 @@ import java.util.regex.Pattern;
 
 public class LoginActivity extends AppCompatActivity {
 
+  private static final String TAG = LoginActivity.class.getSimpleName();
   // ref of Pattern to detect a Valid Email.
   private final Pattern VALID_EMAIL_ADDRESS_REGEX =
       Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
@@ -354,10 +356,14 @@ public class LoginActivity extends AppCompatActivity {
      * Get User Data from Server and Save it into Shared Preferences.
      */
     void saveUserInfo() {
-      LocalUser newLocalUser = new LocalUser();
-      newLocalUser.email = user.getEmail();
-      newLocalUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
-      SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(newLocalUser);
+      try {
+        LocalUser newLocalUser = new LocalUser();
+        newLocalUser.email = user.getEmail();
+        newLocalUser.name = user.getEmail().substring(0, user.getEmail().indexOf("@"));
+        SharedPreferenceHelper.getInstance(LoginActivity.this).saveUserInfo(newLocalUser);
+      } catch (Exception e) {
+        Log.i(TAG, "saveUserInfo: " + e.getMessage());
+      }
     }
 
     /**

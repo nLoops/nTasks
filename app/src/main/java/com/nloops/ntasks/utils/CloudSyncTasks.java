@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import com.firebase.jobdispatcher.Constraint;
 import com.firebase.jobdispatcher.Driver;
 import com.firebase.jobdispatcher.FirebaseJobDispatcher;
@@ -25,7 +26,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class CloudSyncTasks {
 
-
+  private static final String TAG = CloudSyncTasks.class.getSimpleName();
   private static final int TWELVE_HOURS = 12;
   private static final int DAY_HOURS = 24;
   private static final int WEEK_HOURS = 168;
@@ -40,30 +41,33 @@ public class CloudSyncTasks {
     SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
     boolean isEnabled = prefs.getBoolean(context.getString(R.string.settings_sync_key),
         context.getResources().getBoolean(R.bool.sync_data));
-
-    if (GeneralUtils.isNetworkConnected(context) && isEnabled) {
-      // get ref of whole database
-      FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
-      while (cursor.moveToNext()) {
-        Task task = new Task(cursor);
-        /*we got list-todos data if existing*/
-        if (task.getType() == TasksDBContract.TaskEntry.TYPE_TODO_NOTE) {
-          String[] selectionArgs = new String[]{String.valueOf(task.getID())};
-          task.setTodos(GeneralUtils.getTodoData(context, selectionArgs));
+    try {
+      if (GeneralUtils.isNetworkConnected(context) && isEnabled) {
+        // get ref of whole database
+        FirebaseDatabase mFireDataBase = FirebaseDatabase.getInstance();
+        while (cursor.moveToNext()) {
+          Task task = new Task(cursor);
+          /*we got list-todos data if existing*/
+          if (task.getType() == TasksDBContract.TaskEntry.TYPE_TODO_NOTE) {
+            String[] selectionArgs = new String[]{String.valueOf(task.getID())};
+            task.setTodos(GeneralUtils.getTodoData(context, selectionArgs));
+          }
+          // get ref of tasks node in the database.
+          DatabaseReference mFireDatabaseReference =
+              mFireDataBase.getReference().child(Constants.TASKS_DATABASE_REFERENCE)
+                  // The node will be like
+                  // ***tasks root node
+                  //   *****User
+                  //        ***** Tasks Data
+                  .child(SharedPreferenceHelper.getInstance(context).getUID())
+                  .child(String.valueOf(task.getID()));
+          // Push Data to RealTimeDB
+          mFireDatabaseReference.setValue(task);
         }
-        // get ref of tasks node in the database.
-        DatabaseReference mFireDatabaseReference =
-            mFireDataBase.getReference().child(Constants.TASKS_DATABASE_REFERENCE)
-                // The node will be like
-                // ***tasks root node
-                //   *****User
-                //        ***** Tasks Data
-                .child(SharedPreferenceHelper.getInstance(context).getUID())
-                .child(String.valueOf(task.getID()));
-        // Push Data to RealTimeDB
-        mFireDatabaseReference.setValue(task);
-      }
 
+      }
+    } catch (Exception e) {
+      Log.i(TAG, "Cannot able to take backup " + e.getMessage());
     }
   }
 
