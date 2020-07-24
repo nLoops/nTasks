@@ -15,21 +15,31 @@ A task, todo, voice notes app published on 2018
 * Weekly and daily reports to improve productivity.
 
 # Screenshots
+<table>
+  <tr>
+    <td><img src="screens/1.png"></td>
+    <td><img src="screens/2.png"></td>
+     <td><img src="screens/3.png"></td>
+     <td><img src="screens/4.png"></td>
+  </tr>
+  <tr>
+    <td><img src="screens/5.png"></td>
+    <td><img src="screens/6.png"></td>
+    <td><img src="screens/7.png"></td>
+    <td><img src="screens/8.png"></td>
+  </tr>
+  <tr>
+    <td><img src="screens/9.png"></td>
+    <td><img src="screens/10.png"></td>
+    <td><img src="screens/11.png"></td>
+    <td><img src="screens/12.png"></td>
+  </tr>
+    <tr>
+    <td><img src="screens/13.png"></td>
+    <td><img src="screens/14.png"></td>
+  </tr>
+</table>
 
-![s1](screens/1.png)
-![s2](screens/2.png)
-![s3](screens/3.png)
-![s4](screens/4.png)
-![s5](screens/5.png)
-![s6](screens/6.png)
-![s7](screens/7.png)
-![s8](screens/8.png)
-![s9](screens/9.png)
-![s10](screens/10.png)
-![s11](screens/11.png)
-![s12](screens/12.png)
-![s13](screens/13.png)
-![s14](screens/14.png)
 
 # Contribution
 
